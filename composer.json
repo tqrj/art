@@ -10,5 +10,8 @@
             "name": "porty",
             "email": "2816869721@qq.com"
         }
-    ]
+    ],
+    "require-dev": {
+        "eaglewu/swoole-ide-helper": "dev-master"
+    }
 }
