@@ -9,7 +9,7 @@ require 'vendor/autoload.php';
 
 
 //多进程管理模块
-$pool = new Swoole\Process\Pool(2);
+$pool = new Pool();
 //让每个OnWorkerStart回调都自动创建一个协程
 $pool->set(['enable_coroutine' => true]);
 $pool->on('workerStart', function ($pool, $id) {
