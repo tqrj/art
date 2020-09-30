@@ -14,7 +14,7 @@ $pool = new Pool(2);
 $pool->set(['enable_coroutine' => true]);
 $pool->on('workerStart', function ($pool, $id) {
     //每个进程都监听9501端口
-    $server = new \Swoole\Coroutine\Http\Server('127.0.0.1', '9501' , false, true);
+    $server = new \Swoole\Coroutine\Http\Server('47.242.23.154', '9501' , false, true);
 
     $server->handle('/', function ($request, $response) {
         $response->end("<h1>Index</h1>");
