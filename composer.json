@@ -1,0 +1,14 @@
+{
+    "name": "porty/art",
+    "type": "project",
+    "require": {
+        "php": ">=7.1",
+	"ext-swoole": ">=4.4"
+    },
+    "authors": [
+        {
+            "name": "porty",
+            "email": "2816869721@qq.com"
+        }
+    ]
+}
