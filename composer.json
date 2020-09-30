@@ -2,8 +2,7 @@
     "name": "porty/art",
     "type": "project",
     "require": {
-        "php": ">=7.1",
-	"ext-swoole": ">=4.4"
+        "php": ">=7.2"
     },
     "authors": [
         {
