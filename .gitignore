@@ -1,5 +1,4 @@
 /.idea
 /.vscode
 *.log
-/vendor
 /runtime
