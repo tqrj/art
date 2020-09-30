@@ -13,7 +13,7 @@ require 'vendor/autoload.php';
 //多进程管理模块
 $pool = new Pool(2);
 //让每个OnWorkerStart回调都自动创建一个协程
-$pool->set(['enable_coroutine' => true,'daemonize'=>1]);
+$pool->set(['enable_coroutine' => true,'daemonize'=>true]);
 $pool->on('workerStart', function ($pool, $id) {
     //每个进程都监听9501端口
     $server = new \Swoole\Coroutine\Http\Server('0.0.0.0', '9502' , false, true);
