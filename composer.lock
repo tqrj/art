@@ -19,13 +19,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/wudi/swoole-ide-helper/zipball/e9e0575b6acb5eb1cd8af3fa7b292eb57ec88497",
                 "reference": "e9e0575b6acb5eb1cd8af3fa7b292eb57ec88497",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
+                "shasum": ""
             },
             "require": {
                 "php": ">=7.0"
