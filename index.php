@@ -17,7 +17,7 @@ $pool->on('workerStart', function ($pool, $id) {
     //每个进程都监听9501端口
     $server = new \Swoole\Coroutine\Http\Server('0.0.0.0', '9502' , false, true);
     $server->handle('/', function (Request $request, $response) {
-        $response->end($request->server['PATH_INFO']);
+        $response->end($request->server['request_uri']);
     });
     $server->handle('/test', function (Request $request, $response) {
         $response->end("<h1>Test</h1>");
