@@ -10,6 +10,14 @@
             "email": "2816869721@qq.com"
         }
     ],
+    "autoload": {
+        "psr-4": {
+            "app\\": "app"
+        },
+        "files": [
+            "app/functions.php"
+        ]
+    },
     "require-dev": {
         "eaglewu/swoole-ide-helper": "dev-master"
     }
