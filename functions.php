@@ -1,5 +1,5 @@
 <?php
-namespace app;
+
 
 function test()
 {
