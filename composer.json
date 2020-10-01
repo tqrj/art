@@ -15,7 +15,7 @@
             "app\\": "app"
         },
         "files": [
-            "app/functions.php"
+            "functions.php"
         ]
     },
     "require-dev": {
