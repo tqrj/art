@@ -1,8 +1,8 @@
 <?php
 namespace art;
 
+use Swoole\Coroutine\Http\Request;
 use Swoole\Coroutine\Server;
-use Swoole\Http\Request;
 use Swoole\Http\Response;
 use Swoole\Process\Pool;
 use Swoole\Redis;
@@ -18,13 +18,13 @@ $pool->on('workerStart', function ($pool, $id) {
     //每个进程都监听9501端口
     $server = new \Swoole\Coroutine\Http\Server('0.0.0.0', '9502' , false, true);
     $server->handle('*', function (Request $request, $response) {
-        echo 'qwq';
+        echo $request->path;
         $response->end("<h1>Index</h1>");
     });
     $server->handle('/test', function (Request $request, Response $response) {
         $response->end("<h1>Test</h1>");
     });
-    $server->handle('/stop', function ($request, $response) use ($server) {
+    $server->handle('/stop', function (Request $request, $response) use ($server) {
         $response->end("<h1>Stop</h1>");
         $server->shutdown();
     });
