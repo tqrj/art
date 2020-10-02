@@ -33,15 +33,10 @@ class AppHttp extends AppBase
     protected function init()
     {
         $pathInfo = $this->request->server['request_uri'];
-        print_r($pathInfo);
         $pathInfo = explode('/', $pathInfo);
-        print_r(count($pathInfo) < 3);
         if (count($pathInfo) < 3) {
-
             throw new HttpException(404, 'App not find');
         }
-        print_r(count($pathInfo));
-        print_r($pathInfo);
         // 获取应用名
         $app = strip_tags($pathInfo[1]);
         $this->appName = Str::camel($app);
