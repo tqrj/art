@@ -55,7 +55,8 @@ class AppHttp extends AppBase
 
     protected function controller():object
     {
-        $class = $this->parseClass('controller', $this->controllerName);
+        //$class = $this->parseClass('controller', );
+        $class='app\controller\Api'.'\\'.$this->controllerName;
         if (class_exists($class)) {
             try {
                 $reflect = new \ReflectionClass($class);
@@ -64,7 +65,6 @@ class AppHttp extends AppBase
                 throw new ClassNotFoundException('class not exists: ' . $class, $class, $e);
             }
         } else {
-            print_r($class);
             throw new ClassNotFoundException('class not exists: ' . $class);
         }
         return $object;
