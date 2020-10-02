@@ -6,7 +6,7 @@ namespace app\api\controller;
 
 use app\BaseController;
 
-class test extends BaseController
+class Test extends BaseController
 {
     public function hello()
     {

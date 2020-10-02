@@ -57,7 +57,7 @@ class AppHttp extends AppBase
     protected function controller():object
     {
         //$class = $this->parseClass('controller', );
-        $class='app\controller'.'\\'.$this->appName.'\\'.$this->controllerName;
+        $class='app'.'\\'.$this->appName.'controller'.'\\'.$this->controllerName;
         if (class_exists($class)) {
             try {
                 $reflect = new \ReflectionClass($class);
