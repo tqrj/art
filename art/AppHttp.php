@@ -33,13 +33,13 @@ class AppHttp extends AppBase
     protected function init()
     {
         $pathInfo = $this->request->server['request_uri'];
-        echo $pathInfo;
         $pathInfo = explode('/', $pathInfo);
 
         if (count($pathInfo) < 3) {
 
             throw new HttpException(404, 'App not find');
         }
+        print_r(count($pathInfo));
         print_r($pathInfo);
         // 获取应用名
         $app = strip_tags($pathInfo[1]);
