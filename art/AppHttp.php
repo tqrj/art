@@ -33,21 +33,22 @@ class AppHttp extends AppBase
     protected function init()
     {
         $pathInfo = $this->request->server['request_uri'];
+        echo $pathInfo;
         $pathInfo = explode('/', $pathInfo);
 
         if (count($pathInfo) < 3) {
-            print_r($pathInfo);
+
             throw new HttpException(404, 'App not find');
         }
-
+        print_r($pathInfo);
         // 获取应用名
-        $app = strip_tags($pathInfo[0]);
+        $app = strip_tags($pathInfo[1]);
         $this->appName = Str::camel($app);
         // 获取控制器名
-        $controller = strip_tags($pathInfo[1]);
+        $controller = strip_tags($pathInfo[2]);
         $this->controllerName = Str::studly($controller);
         // 获取方法名
-        $action = strip_tags($pathInfo[2]);
+        $action = strip_tags($pathInfo[3]);
         $this->actionName = Str::camel($action);
 
 
@@ -56,7 +57,7 @@ class AppHttp extends AppBase
     protected function controller():object
     {
         //$class = $this->parseClass('controller', );
-        $class='app\controller\Api'.'\\'.$this->controllerName;
+        $class='app\controller'.'\\'.$this->appName.'\\'.$this->controllerName;
         if (class_exists($class)) {
             try {
                 $reflect = new \ReflectionClass($class);
