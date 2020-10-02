@@ -34,6 +34,7 @@ class AppHttp extends AppBase
     {
         $pathInfo = $this->request->header['request_uri'];
         $pathInfo = explode('/', $pathInfo);
+        print_r($pathInfo);
         if (count($pathInfo) < 3) {
             throw new HttpException(404, 'App not find');
         }
