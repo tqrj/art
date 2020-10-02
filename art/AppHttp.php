@@ -64,6 +64,7 @@ class AppHttp extends AppBase
                 throw new ClassNotFoundException('class not exists: ' . $class, $class, $e);
             }
         } else {
+            print_r($class);
             throw new ClassNotFoundException('class not exists: ' . $class);
         }
         return $object;
