@@ -32,7 +32,7 @@ class AppHttp extends AppBase
 
     protected function init()
     {
-        $pathInfo = $this->request['request_uri'];
+        $pathInfo = $this->request->header['request_uri'];
         $pathInfo = explode('/', $pathInfo);
         if (count($pathInfo) < 3) {
             throw new HttpException(404, 'App not find');
