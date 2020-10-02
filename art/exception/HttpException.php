@@ -10,7 +10,7 @@
 // +----------------------------------------------------------------------
 declare (strict_types = 1);
 
-namespace think\exception;
+namespace art\exception;
 
 use Exception;
 

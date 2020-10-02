@@ -5,10 +5,10 @@ namespace art;
 
 
 use art\exception\ClassNotFoundException;
+use art\exception\HttpException;
 use art\helper\Str;
 use Swoole\Http\Request;
 use Swoole\Http\Response;
-use think\exception\HttpException;
 
 
 class AppHttp extends AppBase
