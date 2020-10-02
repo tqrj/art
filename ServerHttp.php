@@ -20,13 +20,10 @@ $pool->on('workerStart', function ($pool, $id) {
     $server->handle('/', function (Request $request,Response $response) {
         (new AppHttp($request,$response))->run();
     });
-//    $server->handle('/test', function (Request $request, $response) {
-//        $response->end("<h1>Test</h1>");
-//    });
-//    $server->handle('/stop', function (Request $request, $response) use ($server) {
-//        $response->end("<h1>Stop</h1>");
-//        $server->shutdown();
-//    });
+    $server->handle('/stop', function (Request $request, $response) use ($server) {
+        $response->end("<h1>Stop</h1>");
+        $server->shutdown();
+    });
     $server->start();
 });
 $pool->start();

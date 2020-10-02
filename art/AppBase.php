@@ -30,13 +30,24 @@ class AppBase
      */
     protected $appPath = '';
 
+    protected $appName = '';
+
+    protected $controllerName = '';
+
+    protected $actionName = '';
+
+    /**
+     * @var \ReflectionClass
+     */
+    protected $instance = null;
+
     public function __construct()
     {
         $this->artPath = dirname(__DIR__) . DIRECTORY_SEPARATOR;
         $this->rootPath = $this->getDefaultRootPath();
         $this->appPath = $this->rootPath . 'app' . DIRECTORY_SEPARATOR;
-
     }
+
 
     /**
      * 获取应用根目录
