@@ -14,9 +14,15 @@ use Swoole\Http\Response;
 
 class HttpApp extends BaseApp
 {
-    public function init(Request $request,Response $response)
+
+    private function __construct()
     {
-        parent::__construct();
+
+    }
+
+    public static function init(Request $request,Response $response)
+    {
+        self::initBase();
         Context::put('request',$request);
         Context::put('response',$response);
         $pathInfo = $request->server['request_uri'];
@@ -26,21 +32,19 @@ class HttpApp extends BaseApp
         }
         // 获取应用名
         $app = strip_tags($pathInfo[1]);
-        $this->putAppName(Str::camel($app));
+        self::putAppName(Str::camel($app));
         // 获取控制器名
         $controller = strip_tags($pathInfo[2]);
-        $this->putControllerName(Str::studly($controller));
+        self::putControllerName(Str::studly($controller));
         // 获取方法名
         $action = strip_tags($pathInfo[3]);
-        $this->putActionName(Str::camel($action));
-
-
+        self::putActionName(Str::camel($action));
     }
 
-    private function controller():object
+    private static function controller():object
     {
         //$class = $this->parseClass('controller', );
-        $class= $this->parseClass();
+        $class= self::parseClass();
         if (class_exists($class)) {
             try {
                 $reflect = new \ReflectionClass($class);
@@ -54,18 +58,18 @@ class HttpApp extends BaseApp
         return $reflect;
     }
 
-    public function run()
+    public static function run()
     {
-        $instance = $this->controller();
-        if (!is_callable([$instance, $this->getActionName()])) {
-            throw new HttpException(404, 'method not exists:' . get_class($instance) . '->' . $this->actionName . '()');
+        $instance = self::controller();
+        if (!is_callable([$instance, self::getActionName()])) {
+            throw new HttpException(404, 'method not exists:' . get_class($instance) . '->' . self::getActionName() . '()');
         }
         try {
-            $reflect = new \ReflectionMethod($instance, $this->getActionName());
+            $reflect = new \ReflectionMethod($instance, self::getActionName());
             // 严格获取当前操作方法名
-            $this->putActionName($reflect->getName());
+            self::putActionName($reflect->getName());
         } catch (\ReflectionException $e) {
-            throw new HttpException(404, 'method not exists:' . get_class($instance) . '->' . $this->getActionName() . '()');
+            throw new HttpException(404, 'method not exists:' . get_class($instance) . '->' . self::getActionName() . '()');
         }
         $reflect->invokeArgs($instance,[]);
         //$this->response->end('qwq');
