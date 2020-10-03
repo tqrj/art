@@ -27,10 +27,6 @@ $pool->on('workerStart', function ($pool, $id) {
     $server->handle('/favicon.ico',function (Request $request,Response $response){
         $response->end('');
     });
-    $server->handle('/stop', function (Request $request, $response) use ($server) {
-        $response->end("<h1>Stop</h1>");
-        $server->shutdown();
-    });
     $server->start();
 });
 $pool->start();

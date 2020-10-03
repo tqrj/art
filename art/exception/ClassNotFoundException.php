@@ -28,7 +28,7 @@ class ClassNotFoundException extends RuntimeException
         parent::__construct($message, 0, $previous);
         $response = Context::get('response');
         $response->status(404);
-        $response->end($message);
+        $response->end("<h1>Not Found</h1>");
     }
 
     /**
