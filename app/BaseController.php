@@ -20,7 +20,7 @@ class BaseController
      */
     protected $response = null;
 
-    public function __construct(Request $request,Response $response)
+    public function __construct()
     {
         $this->request = Context::get('request');;
         $this->response = Context::get('response');
