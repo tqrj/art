@@ -20,7 +20,7 @@ $pool->on('workerStart', function ($pool, $id) {
     //每个进程都监听9501端口
     $server = new Server('0.0.0.0', '9502' , false, true);
     $server->handle('/', function (Request $request,Response $response) {
-        //有优化空间 使用context来管理 变成单例，不用每次加载
+        //有优化空间 使用context来管理 变成单例，不用每次加载  已经处理，全部换成静态的方法了 使用context管理上下文
          HttpApp::init($request,$response);
          HttpApp::run();
     });

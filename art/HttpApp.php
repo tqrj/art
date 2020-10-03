@@ -73,6 +73,8 @@ class HttpApp extends BaseApp
             throw new HttpException(404, 'method not exists:' . get_class($instance) . '->' . self::getActionName() . '()');
         }
         $reflect->invokeArgs($instance,[]);
+        Context::delete();
+        print_r('ojbk');
         //$this->response->end('qwq');
     }
 
