@@ -48,14 +48,15 @@ class HttpApp extends BaseApp
         if (class_exists($class)) {
             try {
                 $reflect = new \ReflectionClass($class);
-                //$object = $reflect->newInstanceArgs([$request,$response]);
+                $object = $reflect->newInstance();
+//                $object = $reflect->newInstance([$request,$response]);
             } catch (\ReflectionException $e) {
                 throw new ClassNotFoundException('class not exists: ' . $class, $class, $e);
             }
         } else {
             throw new ClassNotFoundException('class not exists: ' . $class);
         }
-        return $reflect;
+        return $object;
     }
 
     public static function run()
