@@ -34,7 +34,7 @@ class AppHttp extends AppBase
     {
         $pathInfo = $this->request->server['request_uri'];
         $pathInfo = explode('/', $pathInfo);
-        if (count($pathInfo) < 3) {
+        if (count($pathInfo) < 4) {
             throw new HttpException(404, 'App not find');
         }
         // 获取应用名
@@ -53,7 +53,7 @@ class AppHttp extends AppBase
     protected function controller():object
     {
         //$class = $this->parseClass('controller', );
-        $class='app'.'\\'.$this->appName.'\\'.'controller'.'\\'.$this->controllerName;
+        $class= $this->parseClass();
         if (class_exists($class)) {
             try {
                 $reflect = new \ReflectionClass($class);
@@ -67,26 +67,21 @@ class AppHttp extends AppBase
         return $object;
     }
 
+
     /**
-     * 解析应用类的类名
-     * @access public
-     * @param string $layer 层名 controller model ...
-     * @param string $name 类名
      * @return string
      */
-    public function parseClass(string $layer, string $name): string
+    public function parseClass(): string
     {
-        $name = str_replace(['/', '.'], '\\', $name);
-        $array = explode('\\', $name);
-        $class = Str::studly(array_pop($array));
-        $path = $array ? implode('\\', $array) . '\\' : '';
+//        $name = str_replace(['/', '.'], '\\', $name);
+//        $array = explode('\\', $name);
+//        $class = Str::studly(array_pop($array));
+//        $path = $array ? implode('\\', $array) . '\\' : '';
 
-        return $this->namespace . '\\' . $layer . '\\' . $path . $class;
+        return 'app'.'\\'.$this->appName.'\\'.'controller'.'\\'.$this->controllerName;
     }
 
-    /**
-     *
-     */
+
     public function run()
     {
         $this->init();
