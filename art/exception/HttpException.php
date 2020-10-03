@@ -12,6 +12,7 @@ declare (strict_types = 1);
 
 namespace art\exception;
 
+use art\context\Context;
 use Exception;
 
 /**
@@ -28,6 +29,9 @@ class HttpException extends \RuntimeException
         $this->headers    = $headers;
 
         parent::__construct($message, $code, $previous);
+        $response = Context::get('response');
+        $response->status('404');
+        $response->end($message);
     }
 
     public function getStatusCode()

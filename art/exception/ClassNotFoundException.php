@@ -11,7 +11,9 @@
 
 namespace art\exception;
 
+use art\context\Context;
 use RuntimeException;
+use Swoole\Http\Response;
 use Throwable;
 
 class ClassNotFoundException extends RuntimeException
@@ -24,6 +26,9 @@ class ClassNotFoundException extends RuntimeException
         $this->class   = $class;
 
         parent::__construct($message, 0, $previous);
+        $response = Context::get('response');
+        $response->status('404');
+        $response->end($message);
     }
 
     /**
