@@ -74,7 +74,6 @@ class HttpApp extends BaseApp
         }
         $reflect->invokeArgs($instance,[]);
         Context::delete();
-        print_r('ojbk');
         //$this->response->end('qwq');
     }
 
