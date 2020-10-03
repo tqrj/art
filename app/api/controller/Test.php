@@ -10,7 +10,8 @@ class Test extends BaseController
 {
     public function hello()
     {
-        $this->response->end('<h1>hello</h1>');
+
+        $this->response->end(json_encode(art_verify()));
 
     }
 }
