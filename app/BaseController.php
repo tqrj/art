@@ -4,6 +4,7 @@
 namespace app;
 
 
+use art\context\Context;
 use Swoole\Http\Request;
 use Swoole\Http\Response;
 
@@ -21,7 +22,7 @@ class BaseController
 
     public function __construct(Request $request,Response $response)
     {
-        $this->request = $request;
-        $this->response = $response;
+        $this->request = Context::get('request');;
+        $this->response = Context::get('response');
     }
 }

@@ -4,7 +4,7 @@
 namespace art;
 
 
-class AppTcp extends AppBase
+class TcpApp extends BaseApp
 {
 
 }

@@ -18,9 +18,12 @@ $pool = new Pool(swoole_cpu_num() + 2);
 $pool->set(['enable_coroutine' => true]);
 $pool->on('workerStart', function ($pool, $id) {
     //每个进程都监听9501端口
+    $appHttp = new HttpApp();
     $server = new Server('0.0.0.0', '9502' , false, true);
-    $server->handle('/', function (Request $request,Response $response) {
-        (new AppHttp($request,$response))->run();
+    $server->handle('/', function (Request $request,Response $response) use($appHttp) {
+        //有优化空间 使用context来管理 变成单例，不用每次加载
+         $appHttp->init($request,$response);
+         $appHttp->run();
     });
     $server->handle('/favicon.ico',function (Request $request,Response $response){
         $response->end('');
