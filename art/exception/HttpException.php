@@ -30,7 +30,7 @@ class HttpException extends \RuntimeException
 
         parent::__construct($message, $code, $previous);
         $response = Context::get('response');
-        $response->status('404');
+        $response->status(404);
         $response->end($message);
     }
 
