@@ -5,13 +5,14 @@ namespace app\api\controller;
 
 
 use app\BaseController;
+use art\request\Request;
 
 class Test extends BaseController
 {
     public function hello()
     {
-
-        $this->response->end(json_encode(art_verify()));
+        $params = Request::only(['pp','cc']);
+        $this->response->end(json_encode($params));
 
     }
 }

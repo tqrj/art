@@ -1,9 +1,5 @@
 <?php
 
-function test()
-{
-    return 'biubiubiu';
-}
 
 function art_rand_mobile()
 {
