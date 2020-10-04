@@ -30,17 +30,16 @@ class Request
          $post = $request->post;
          $get = $request->get;
          $params = [];
-         print_r($post);
-         print_r($get);
-         if (!empty($post) && !empty($get)){
+
+         if (!is_null($post) && !is_null($get)){
              $params = array_merge($get,$post);
-         }elseif (!empty($post)){
+         }elseif (!is_null($post)){
              $params = $post;
-         }elseif(!empty($get)){
+         }elseif(!is_null($get)){
              $params = $get;
          }
          $result = [];
-         if (empty($params)){
+         if (is_null($params)){
              return $result;
          }
          array_walk($keys,function ($item) use($params,&$result)
