@@ -30,8 +30,8 @@ class Request
          $post = $request->post;
          $get = $request->get;
          $params = [];
-         print_r($post.PHP_EOL);
-         print_r($get.PHP_EOL);
+         print_r($post);
+         print_r($get);
          if (!empty($post) && !empty($get)){
              $params = array_merge($get,$post);
          }elseif (!empty($post)){
