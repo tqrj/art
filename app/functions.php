@@ -118,7 +118,11 @@ function art_validate(array $data, $validate, array $message = [], bool $batch =
     if ($batch) {
         $v->batch(true);
     }
-    $v->failException(true)->check($data);
+    try {
+        $v->failException(true)->check($data);
+    }catch (Exception $e){
+        art_assign(202,$e->getMessage());
+    }
     //return $v->failException(true)->check($data);
 }
 
