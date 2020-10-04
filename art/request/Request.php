@@ -30,6 +30,7 @@ class Request
          $post = $request->post;
          $get = $request->get;
          $params = array_merge($get,$post);
+         var_dump($params);
          $result = [];
          array_walk($keys,function ($item) use($params,&$result)
          {
