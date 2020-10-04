@@ -8,36 +8,35 @@
 // +----------------------------------------------------------------------
 // | Author: yunwuxin <448901948@qq.com>
 // +----------------------------------------------------------------------
+declare (strict_types = 1);
 
 namespace art\exception;
 
 use art\context\Context;
-use RuntimeException;
-use Swoole\Http\Response;
-use Throwable;
 
-class ClassNotFoundException extends RuntimeException
+/**
+ * 数据验证异常
+ */
+class ValidateException extends \RuntimeException
 {
-    protected $class;
+    protected $error;
 
-    public function __construct(string $message, string $class = '', Throwable $previous = null)
+    public function __construct($error)
     {
-        $this->message = $message;
-        $this->class   = $class;
-
-        parent::__construct($message, 0, $previous);
+        $this->error   = $error;
+        $this->message = is_array($error) ? implode(PHP_EOL, $error) : $error;
         $response = Context::get('response');
-        $response->status(404);
-        $response->end(art_assign(404,$message));
+        $response->status(202);
+        $response->end(art_assign(202,$this->message));
     }
 
     /**
-     * 获取类名
+     * 获取验证错误信息
      * @access public
-     * @return string
+     * @return array|string
      */
-    public function getClass()
+    public function getError()
     {
-        return $this->class;
+        return $this->error;
     }
 }

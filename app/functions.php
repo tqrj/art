@@ -96,3 +96,53 @@ function art_verify($width = 100, $height = 40, $num = 5, $type = 3, $font_name 
     unset($image_data);
     return ['base64' => 'data:image/jpeg;base64,' . $image_data_base64, 'deCode' => implode('', $char_arr)];
 }
+
+/**
+ * 验证数据
+ * @access protected
+ * @param array $data 数据
+ * @param array $validate 验证规则数组
+ * @param array $message 提示信息
+ * @param bool $batch 是否批量验证
+ * @return array|string|true
+ * @throws ValidateException
+ */
+function art_validate(array $data, $validate, array $message = [], bool $batch = false)
+{
+    if (is_array($validate)) {
+        $v = new \art\validate\Validate();
+        $v->rule($validate);
+    }
+    $v->message($message);
+    // 是否批量验证
+    if ($batch) {
+        $v->batch(true);
+    }
+    $v->failException(true)->check($data);
+    //return $v->failException(true)->check($data);
+}
+
+/**
+ * 返回json数据，用于接口
+ * @Author   听雨
+ * @DateTime 2020-03-31
+ * @param integer $code [description]
+ * @param string $msg [description]
+ * @param array $data [description]
+ * @param string $url [description]
+ * @param integer $httpCode [description]
+ * @param array $header [description]
+ * @param array $options [description]
+ * @return string
+ */
+function art_assign($code = 200, $msg = "success", $data = [], $url = '', $httpCode = 200, $header = [], $options = [])
+{
+    $res = ['code' => $code];
+    $res['msg'] = $msg;
+    $res['url'] = $url;
+    /*    if (is_object($data)) {
+            $data = $data->toArray();
+        }*/
+    $res['data'] = $data;
+    return json_encode($res);
+}

@@ -30,8 +30,8 @@ class HttpException extends \RuntimeException
 
         parent::__construct($message, $code, $previous);
         $response = Context::get('response');
-        $response->status(404);
-        $response->end("<h1>Not Found</h1>");
+        $response->status($statusCode);
+        $response->end(art_assign($statusCode,$message));
     }
 
     public function getStatusCode()
