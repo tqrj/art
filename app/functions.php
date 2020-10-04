@@ -123,7 +123,6 @@ function art_validate(array $data, $validate, array $message = [], bool $batch =
     try {
         $v->failException(true)->check($data);
     }catch (\art\exception\ValidateException $e){
-        echo 'mlgb';
         art_assign(202,$e->getMessage());
     }
     //return $v->failException(true)->check($data);
@@ -153,5 +152,5 @@ function art_assign($code = 200, $msg = "success", $data = [], $url = '', $httpC
     $res['data'] = $data;
     $response = Context::get('response');
     $response->status(202);
-    $response->end($res);;
+    $response->end(json_encode($res));;
 }
