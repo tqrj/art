@@ -9,7 +9,20 @@ use art\context\Context;
 class BaseApp
 {
 
+    private function __construct()
+    {
 
+    }
+
+    private function __clone()
+    {
+
+    }
+
+    private function __wakeup()
+    {
+        // TODO: Implement __wakeup() method.
+    }
     protected static function initBase()
     {
         $artPath = dirname(__DIR__) . DIRECTORY_SEPARATOR;

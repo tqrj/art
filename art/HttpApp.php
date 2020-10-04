@@ -20,6 +20,16 @@ class HttpApp extends BaseApp
 
     }
 
+    private function __clone()
+    {
+
+    }
+
+    private function __wakeup()
+    {
+        // TODO: Implement __wakeup() method.
+    }
+
     public static function init(Request $request,Response $response)
     {
         self::initBase();
