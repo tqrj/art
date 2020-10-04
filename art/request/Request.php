@@ -29,13 +29,15 @@ class Request
          $request = Context::get('request');
          $post = $request->post;
          $get = $request->get;
-         if (count($post) != 0 && count($get) != 0){
-             $params = array_merge($get,$post);
-         }elseif (count($post) != 0){
-             $params = $post;
-         }else{
-             $params = $get;
-         }
+//         $params = [];
+//         if (count($post) != 0 && count($get) != 0){
+//             $params = array_merge($get,$post);
+//         }elseif (count($post) != 0){
+//             $params = $post;
+//         }else{
+//             $params = $get;
+//         }
+         $params = array_merge($get,$post);
          $result = [];
          if (count($params) == 0){
              return $result;
