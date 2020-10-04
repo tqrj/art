@@ -25,9 +25,6 @@ class ValidateException extends \RuntimeException
     {
         $this->error   = $error;
         $this->message = is_array($error) ? implode(PHP_EOL, $error) : $error;
-        $response = Context::get('response');
-        $response->status(202);
-        $response->end(art_assign(202,$this->message));
     }
 
     /**
