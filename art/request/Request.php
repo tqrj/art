@@ -27,7 +27,7 @@ class Request
     public static function only(array $keys):array
     {
          $request = Context::get('request');
-         $post = $request;
+         $post = $request->post;
          $get = $request->get;
          is_null($post)?$post=[]:true;
          is_null($get)?$get=[]:true;
