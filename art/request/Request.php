@@ -39,7 +39,7 @@ class Request
              $params = $get;
          }
          $result = [];
-         if (is_null($params)){
+         if (count($params) == 0){
              return $result;
          }
          array_walk($keys,function ($item) use($params,&$result)
