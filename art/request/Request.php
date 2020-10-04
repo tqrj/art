@@ -29,12 +29,12 @@ class Request
          $request = Context::get('request');
          $post = $request->post;
          $get = $request->get;
-         if (count($post) == 0){
-             $params = $get;
-         }elseif (count($post)==0){
+         if (count($post) != 0 && count($get) != 0){
+             $params = array_merge($get,$post);
+         }elseif (count($post) != 0){
              $params = $post;
          }else{
-             $params = array_merge($get,$post);
+             $params = $get;
          }
          $result = [];
          array_walk($keys,function ($item) use($params,&$result)
