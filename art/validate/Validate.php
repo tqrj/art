@@ -60,56 +60,50 @@ class Validate
      * @var array
      */
     protected $typeMsg = [
-        'require'     => ':attribute require',
-        'must'        => ':attribute must',
-        'number'      => ':attribute must be numeric',
-        'integer'     => ':attribute must be integer',
-        'float'       => ':attribute must be float',
-        'boolean'     => ':attribute must be bool',
-        'email'       => ':attribute not a valid email address',
-        'mobile'      => ':attribute not a valid mobile',
-        'array'       => ':attribute must be a array',
-        'accepted'    => ':attribute must be yes,on or 1',
-        'date'        => ':attribute not a valid datetime',
-        'file'        => ':attribute not a valid file',
-        'image'       => ':attribute not a valid image',
-        'alpha'       => ':attribute must be alpha',
-        'alphaNum'    => ':attribute must be alpha-numeric',
-        'alphaDash'   => ':attribute must be alpha-numeric, dash, underscore',
-        'activeUrl'   => ':attribute not a valid domain or ip',
-        'chs'         => ':attribute must be chinese',
-        'chsAlpha'    => ':attribute must be chinese or alpha',
-        'chsAlphaNum' => ':attribute must be chinese,alpha-numeric',
-        'chsDash'     => ':attribute must be chinese,alpha-numeric,underscore, dash',
-        'url'         => ':attribute not a valid url',
-        'ip'          => ':attribute not a valid ip',
-        'dateFormat'  => ':attribute must be dateFormat of :rule',
-        'in'          => ':attribute must be in :rule',
-        'notIn'       => ':attribute be notin :rule',
-        'between'     => ':attribute must between :1 - :2',
-        'notBetween'  => ':attribute not between :1 - :2',
-        'length'      => 'size of :attribute must be :rule',
-        'max'         => 'max size of :attribute must be :rule',
-        'min'         => 'min size of :attribute must be :rule',
-        'after'       => ':attribute cannot be less than :rule',
-        'before'      => ':attribute cannot exceed :rule',
-        'expire'      => ':attribute not within :rule',
-        'allowIp'     => 'access IP is not allowed',
-        'denyIp'      => 'access IP denied',
-        'confirm'     => ':attribute out of accord with :2',
-        'different'   => ':attribute cannot be same with :2',
-        'egt'         => ':attribute must greater than or equal :rule',
-        'gt'          => ':attribute must greater than :rule',
-        'elt'         => ':attribute must less than or equal :rule',
-        'lt'          => ':attribute must less than :rule',
-        'eq'          => ':attribute must equal :rule',
-        'unique'      => ':attribute has exists',
+        'require'     => ':attribute 不能为空',
+        'must'        => ':attribute 必须',
+        'number'      => ':attribute 必须是数字',
+        'integer'     => ':attribute 必须是整数',
+        'float'       => ':attribute 必须是浮点数',
+        'boolean'     => ':attribute 必须是布尔值',
+        'email'       => ':attribute 格式不符',
+        'mobile'      => ':attribute 不是有效的手机号',
+        'array'       => ':attribute 必须是数组',
+        'accepted'    => ':attribute 必须是yes、on或者1',
+        'date'        => ':attribute 不是一个有效的日期或时间格式',
+        'alpha'       => ':attribute 只能是字母',
+        'alphaNum'    => ':attribute 只能是字母和数字',
+        'alphaDash'   => ':attribute 只能是字母、数字和下划线_及破折号-',
+        'activeUrl'   => ':attribute 不是有效的域名或者IP',
+        'chs'         => ':attribute 只能是汉字',
+        'chsAlpha'    => ':attribute 只能是汉字、字母',
+        'chsAlphaNum' => ':attribute 只能是汉字、字母和数字',
+        'chsDash'     => ':attribute 只能是汉字、字母、数字和下划线_及破折号-',
+        'url'         => ':attribute 不是有效的URL地址',
+        'ip'          => ':attribute 不是有效的IP地址',
+        'dateFormat'  => ':attribute 必须使用日期格式 :rule',
+        'in'          => ':attribute 必须在 :rule 范围内',
+        'notIn'       => ':attribute 不能在 :rule 范围内',
+        'between'     => ':attribute 只能在 :1 - :2 之间',
+        'notBetween'  => ':attribute 只能在 :1 - :2 之间',
+        'length'      => ':attribute 长度必须为 :rule',
+        'max'         => ':attribute 长度不能超过 :rule',
+        'min'         => ':attribute 长度不能小于 :rule',
+        'after'       => ':attribute 日期不能小于 :rule',
+        'before'      => ':attribute 日期不能超过 :rule',
+        'expire'      => '不在有效期内 :rule',
+        'allowIp'     => '不允许的IP访问',
+        'denyIp'      => '禁止的IP访问',
+        'confirm'     => ':attribute 和确认字段:2不一致',
+        'different'   => ':attribute 和比较字段:2不能相同',
+        'egt'         => ':attribute 必须大于等于 :rule',
+        'gt'          => ':attribute 必须大于 :rule',
+        'elt'         => ':attribute 必须小于等于 :rule',
+        'lt'          => ':attribute 必须小于 :rule',
+        'eq'          => ':attribute 必须等于 :rule',
+        'unique'      => ':attribute 已存在',
         'regex'       => ':attribute not conform to the rules',
         'method'      => 'invalid Request method',
-        'token'       => 'invalid token',
-        'fileSize'    => 'filesize not match',
-        'fileExt'     => 'extensions to upload is not allowed',
-        'fileMime'    => 'mimetype to upload is not allowed',
     ];
 
     /**
@@ -811,15 +805,6 @@ class Validate
                 // 是否为数组
                 $result = is_array($value);
                 break;
-            case 'file':
-                $result = $value instanceof File;
-                break;
-            case 'image':
-                $result = $value instanceof File && in_array($this->getImageType($value->getRealPath()), [1, 2, 3, 6]);
-                break;
-            case 'token':
-                $result = $this->token($value, '__token__', $data);
-                break;
             default:
                 if (isset($this->type[$rule])) {
                     // 注册的验证规则
@@ -855,20 +840,7 @@ class Validate
         }
     }
 
-    /**
-     * 验证表单令牌
-     * @access public
-     * @param mixed $value 字段值
-     * @param mixed $rule  验证规则
-     * @param array $data  数据
-     * @return bool
-     */
-    public function token($value, string $rule, array $data): bool
-    {
-//        $rule = !empty($rule) ? $rule : '__token__';
-//        return $this->request->checkToken($rule, $data);
-          return false;
-    }
+
 
     /**
      * 验证是否为合格的域名或者IP 支持A，MX，NS，SOA，PTR，CNAME，AAAA，A6， SRV，NAPTR，TXT 或者 ANY类型
@@ -900,157 +872,6 @@ class Validate
         }
 
         return $this->filter($value, [FILTER_VALIDATE_IP, 'ipv6' == $rule ? FILTER_FLAG_IPV6 : FILTER_FLAG_IPV4]);
-    }
-
-    /**
-     * 检测上传文件后缀
-     * @access public
-     * @param File         $file
-     * @param array|string $ext 允许后缀
-     * @return bool
-     */
-    protected function checkExt(File $file, $ext): bool
-    {
-        if (is_string($ext)) {
-            $ext = explode(',', $ext);
-        }
-
-        return in_array(strtolower($file->extension()), $ext);
-    }
-
-    /**
-     * 检测上传文件大小
-     * @access public
-     * @param File    $file
-     * @param integer $size 最大大小
-     * @return bool
-     */
-    protected function checkSize(File $file, $size): bool
-    {
-        return $file->getSize() <= (int) $size;
-    }
-
-    /**
-     * 检测上传文件类型
-     * @access public
-     * @param File         $file
-     * @param array|string $mime 允许类型
-     * @return bool
-     */
-    protected function checkMime(File $file, $mime): bool
-    {
-        if (is_string($mime)) {
-            $mime = explode(',', $mime);
-        }
-
-        return in_array(strtolower($file->getMime()), $mime);
-    }
-
-    /**
-     * 验证上传文件后缀
-     * @access public
-     * @param mixed $file 上传文件
-     * @param mixed $rule 验证规则
-     * @return bool
-     */
-    public function fileExt($file, $rule): bool
-    {
-        if (is_array($file)) {
-            foreach ($file as $item) {
-                if (!($item instanceof File) || !$this->checkExt($item, $rule)) {
-                    return false;
-                }
-            }
-            return true;
-        } elseif ($file instanceof File) {
-            return $this->checkExt($file, $rule);
-        }
-
-        return false;
-    }
-
-    /**
-     * 验证上传文件类型
-     * @access public
-     * @param mixed $file 上传文件
-     * @param mixed $rule 验证规则
-     * @return bool
-     */
-    public function fileMime($file, $rule): bool
-    {
-        if (is_array($file)) {
-            foreach ($file as $item) {
-                if (!($item instanceof File) || !$this->checkMime($item, $rule)) {
-                    return false;
-                }
-            }
-            return true;
-        } elseif ($file instanceof File) {
-            return $this->checkMime($file, $rule);
-        }
-
-        return false;
-    }
-
-    /**
-     * 验证上传文件大小
-     * @access public
-     * @param mixed $file 上传文件
-     * @param mixed $rule 验证规则
-     * @return bool
-     */
-    public function fileSize($file, $rule): bool
-    {
-        if (is_array($file)) {
-            foreach ($file as $item) {
-                if (!($item instanceof File) || !$this->checkSize($item, $rule)) {
-                    return false;
-                }
-            }
-            return true;
-        } elseif ($file instanceof File) {
-            return $this->checkSize($file, $rule);
-        }
-
-        return false;
-    }
-
-    /**
-     * 验证图片的宽高及类型
-     * @access public
-     * @param mixed $file 上传文件
-     * @param mixed $rule 验证规则
-     * @return bool
-     */
-    public function image($file, $rule): bool
-    {
-        if (!($file instanceof File)) {
-            return false;
-        }
-
-        if ($rule) {
-            $rule = explode(',', $rule);
-
-            [$width, $height, $type] = getimagesize($file->getRealPath());
-
-            if (isset($rule[2])) {
-                $imageType = strtolower($rule[2]);
-
-                if ('jpg' == $imageType) {
-                    $imageType = 'jpeg';
-                }
-
-                if (image_type_to_extension($type, false) != $imageType) {
-                    return false;
-                }
-            }
-
-            [$w, $h] = $rule;
-
-            return $w == $width && $h == $height;
-        }
-
-        return in_array($this->getImageType($file->getRealPath()), [1, 2, 3, 6]);
     }
 
     /**
@@ -1232,8 +1053,6 @@ class Validate
     {
         if (is_array($value)) {
             $length = count($value);
-        } elseif ($value instanceof File) {
-            $length = $value->getSize();
         } else {
             $length = mb_strlen((string) $value);
         }
@@ -1259,8 +1078,6 @@ class Validate
     {
         if (is_array($value)) {
             $length = count($value);
-        } elseif ($value instanceof File) {
-            $length = $value->getSize();
         } else {
             $length = mb_strlen((string) $value);
         }
@@ -1279,8 +1096,6 @@ class Validate
     {
         if (is_array($value)) {
             $length = count($value);
-        } elseif ($value instanceof File) {
-            $length = $value->getSize();
         } else {
             $length = mb_strlen((string) $value);
         }
