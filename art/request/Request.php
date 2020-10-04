@@ -37,6 +37,9 @@ class Request
              $params = $get;
          }
          $result = [];
+         if (count($params)){
+             return $result;
+         }
          array_walk($keys,function ($item) use($params,&$result)
          {
              if (array_key_exists($item,$params)){
