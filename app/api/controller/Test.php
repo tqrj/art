@@ -12,9 +12,13 @@ class Test extends BaseController
     public function hello()
     {
         $params = Request::only(['pp','cc']);
-        art_validate($params,[
+        $message = art_validate($params,[
             'cc'=>'require|mobile'
         ]);
+        if ($message!=true){
+            art_assign(202,$message);
+            return;
+        }
         $this->response->end(json_encode($params));
 
     }

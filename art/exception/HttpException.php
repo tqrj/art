@@ -29,9 +29,6 @@ class HttpException extends \RuntimeException
         $this->headers    = $headers;
 
         parent::__construct($message, $code, $previous);
-        $response = Context::get('response');
-        $response->status($statusCode);
-        $response->end(art_assign($statusCode,$message));
     }
 
     public function getStatusCode()
