@@ -15,7 +15,7 @@ class Test extends BaseController
         $message = art_validate($params,[
             'cc'=>'require|mobile'
         ]);
-        if ($message!=true){
+        if ($message !== true){
             art_assign(202,$message);
             return;
         }
