@@ -27,9 +27,9 @@ $pool->on('workerStart', function ($pool, $id) {
             HttpApp::init($request, $response);
             HttpApp::run();
         } catch (HttpException $e) {
-            art_assign($e->getCode(), $e->getMessage());
+            art_assign($e->getStatusCode(), $e->getMessage());
         } catch (ClassNotFoundException $e) {
-            art_assign($e->getCode(), $e->getMessage());
+            art_assign(404, $e->getMessage());
         }
 
     });
