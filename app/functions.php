@@ -123,7 +123,7 @@ function art_validate(array $data, $validate, array $message = [], bool $batch =
     try {
         $v->failException(true)->check($data);
     }catch (\art\exception\ValidateException $e){
-        return $e->getMessage();
+        throw new \art\exception\HttpException(202,$e->getMessage());
     }
     return true;
     //return $v->failException(true)->check($data);

@@ -26,6 +26,7 @@ $pool->on('workerStart', function ($pool, $id) {
         try {
             HttpApp::init($request, $response);
             HttpApp::run();
+            HttpApp::end();
         } catch (HttpException $e) {
             art_assign($e->getStatusCode(), $e->getMessage());
         } catch (ClassNotFoundException $e) {
