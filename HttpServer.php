@@ -8,6 +8,8 @@ use art\exception\HttpException;
 use Swoole\Coroutine\Http\Server;
 use Swoole\Http\Request;
 use Swoole\Http\Response;
+use Swoole\Database\PDOConfig;
+use Swoole\Database\PDOPool;
 
 use Swoole\Process\Pool;
 
@@ -19,6 +21,16 @@ $pool = new Pool(swoole_cpu_num() + 2);
 //让每个OnWorkerStart回调都自动创建一个协程
 $pool->set(['enable_coroutine' => true]);
 $pool->on('workerStart', function ($pool, $id) {
+    $pdoPool = new PDOPool((new PDOConfig)
+        ->withHost('127.0.0.1')
+        ->withPort(3306)
+        // ->withUnixSocket('/tmp/mysql.sock')
+        ->withDbName('art')
+        ->withCharset('utf8mb4')
+        ->withUsername('art')
+        ->withPassword('dc4fJmEXaZffiAEs')
+    );
+    print_r($pdoPool);
     //每个进程都监听9501端口
     $server = new Server('0.0.0.0', '9502', false, true);
     $server->handle('/', function (Request $request, Response $response) {

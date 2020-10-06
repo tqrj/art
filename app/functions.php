@@ -144,7 +144,7 @@ function art_validate(array $data, $validate, array $message = [], bool $batch =
  */
 function art_assign($code = 200, $msg = "success", $data = [], $url = '', $httpCode = 200, $header = [], $options = [])
 {
-    $res = ['code' => $code];
+    $res['code']= $code;
     $res['msg'] = $msg;
     $res['url'] = $url;
     /*    if (is_object($data)) {
