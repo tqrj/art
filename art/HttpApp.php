@@ -30,11 +30,12 @@ class HttpApp extends BaseApp
         // TODO: Implement __wakeup() method.
     }
 
-    public static function init(Request $request,Response $response)
+    public static function init(Request $request,Response $response,$pdoPool)
     {
         self::initBase();
         Context::put('request',$request);
         Context::put('response',$response);
+        Context::put('pdoPool',$pdoPool);
         $pathInfo = $request->server['request_uri'];
         $pathInfo = explode('/', $pathInfo);
         if (count($pathInfo) < 4) {
