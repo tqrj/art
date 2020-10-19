@@ -13,11 +13,10 @@ Co\run(function(){
         echo "connect failed. Error: {$client->errCode}\n";
     }
     while (true){
-        \Swoole\Coroutine\System::sleep(rand(1,10)/10);
         $result = $client->recv();
         if ($result==false){
             echo $client->errMsg;
-            continue;
+            break;
         }
         echo $result.PHP_EOL;
     }
