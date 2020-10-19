@@ -5,6 +5,7 @@ namespace app\api\controller;
 
 
 use app\BaseController;
+use art\db\DB;
 use art\request\Request;
 use http\Exception\RuntimeException;
 
@@ -16,18 +17,9 @@ class Test extends BaseController
         art_validate($params,[
             'cc'=>'require|mobile'
         ]);
-        $pdo = $this->pdoPool->get();
-        $statement = $pdo->prepare('SELECT * FROM test');
-        if (!$statement) {
-            throw new RuntimeException('Prepare failed');
-        }
-        $result = $statement->execute([$a, $b]);
-        if (!$result) {
-            throw new RuntimeException('Execute failed');
-        }
-        $result = $statement->fetchAll();
+        $db = new  DB();
+        $result = $db->insert('vae_test',['money'=>12]);
         print_r($result);
-        $this->pdoPool->put($pdo);
         art_assign(200,json_encode($params));
 
     }

@@ -21,15 +21,9 @@ class BaseController
      */
     protected $response = null;
 
-    /**
-     * @var PDOPool|null
-     */
-    protected $pdoPool = null;
-
     public function __construct()
     {
         $this->request = Context::get('request');;
         $this->response = Context::get('response');
-        $this->pdoPool = Context::get('pdoPool');
     }
 }

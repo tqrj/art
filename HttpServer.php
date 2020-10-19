@@ -6,6 +6,7 @@ namespace art;
 use app\config\Database;
 use art\exception\ClassNotFoundException;
 use art\exception\HttpException;
+use http\Exception\RuntimeException;
 use Swoole\Coroutine\Http\Server;
 use Swoole\Database\PDOConfig;
 use Swoole\Database\PDOPool;
@@ -15,7 +16,6 @@ use Swoole\Http\Response;
 use Swoole\Process\Pool;
 
 require 'vendor/autoload.php';
-
 
 //多进程管理模块
 $pidPool = new Pool(swoole_cpu_num() + 2);
@@ -32,16 +32,18 @@ $pidPool->on('workerStart', function ($pidPool, $id) {
         ->withPassword(Database::$password);
     $pdoPool = new PDOPool($pdoConfig,Database::$size);
     $server = new Server('0.0.0.0', '9502', false, true);
-    $server->handle('/', function (Request $request, Response $response) use ($pdoPool) {
+    $server->handle('/', function (Request $request, Response $response) {
         //有优化空间 使用context来管理 变成单例，不用每次加载  已经处理，全部换成静态的方法了 cocomposer require --dev "eaglewu/swoole-ide-helper:dev-master"使用context管理上下文
         try {
-            HttpApp::init($request, $response,$pdoPool);
+            HttpApp::init($request, $response);
             HttpApp::run();
             HttpApp::end();
         } catch (HttpException $e) {
             art_assign($e->getStatusCode(), $e->getMessage());
         } catch (ClassNotFoundException $e) {
             art_assign(404, $e->getMessage());
+        } catch (RuntimeException $e){
+            art_assign(500, $e->getMessage());
         }
 
     });
