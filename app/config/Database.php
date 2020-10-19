@@ -7,7 +7,7 @@ namespace app\config;
 class Database
 {
     /** @var string */
-    public static $host = 'localhost';
+    public static $host = '127.0.0.1';
 
     /** @var int */
     public static $port = 3306;
