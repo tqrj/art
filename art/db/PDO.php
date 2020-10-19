@@ -11,10 +11,8 @@ declare(strict_types=1);
 namespace art\db;
 
 use config\Database;
-use RuntimeException;
 use Swoole\Database\PDOConfig;
 use Swoole\Database\PDOPool;
-use Swoole\FastCGI\Record\Data;
 
 class PDO
 {
