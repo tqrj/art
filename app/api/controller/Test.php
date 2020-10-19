@@ -18,7 +18,7 @@ class Test extends BaseController
             'cc'=>'require|mobile'
         ]);
         $db = new  DB();
-        $result = $db->insert('INSERT INTO vae_test (money) values (?)',[1=>12]);
+        $result = $db->insert('SELECT * FROM vae_test');
         print_r($result);
         art_assign(200,json_encode($params));
 
