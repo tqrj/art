@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace art\db;
 
-use app\config\Database;
+use config\Database;
 use RuntimeException;
 use Swoole\Database\PDOConfig;
 use Swoole\Database\PDOPool;

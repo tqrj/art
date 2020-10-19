@@ -1,7 +1,7 @@
 <?php
 
 
-namespace app\config;
+namespace config;
 
 
 class Database

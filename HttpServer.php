@@ -8,8 +8,6 @@ use art\exception\ClassNotFoundException;
 use art\exception\HttpException;
 use http\Exception\RuntimeException;
 use Swoole\Coroutine\Http\Server;
-use Swoole\Database\PDOConfig;
-use Swoole\Database\PDOPool;
 use Swoole\Http\Request;
 use Swoole\Http\Response;
 
