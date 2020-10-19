@@ -18,7 +18,7 @@ class Test extends BaseController
             'cc'=>'require|mobile'
         ]);
         $db = new  DB();
-        $result = $db->insert('SELECT * FROM vae_test');
+        $result = $db->query('SELECT * FROM vae_test');
         print_r($result);
         art_assign(200,json_encode($params));
 
