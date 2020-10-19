@@ -23,14 +23,6 @@ $pidPool = new Pool(swoole_cpu_num() * 2);
 $pidPool->set(['enable_coroutine' => true]);
 $pidPool->on('workerStart', function ($pidPool, $id) {
     //每个进程都监听9501端口
-    $pdoConfig = new PDOConfig();
-    $pdoConfig->withHost(Database::$host)
-        ->withPort(Database::$port)
-        // ->withUnixSocket('/tmp/mysql.sock')
-        ->withDbName(Database::$dbname)
-        ->withUsername(Database::$username)
-        ->withPassword(Database::$password);
-    $pdoPool = new PDOPool($pdoConfig,Database::$size);
     $server = new Server('0.0.0.0', '9502', false, true);
     $server->handle('/', function (Request $request, Response $response) {
         //有优化空间 使用context来管理 变成单例，不用每次加载  已经处理，全部换成静态的方法了 cocomposer require --dev "eaglewu/swoole-ide-helper:dev-master"使用context管理上下文
