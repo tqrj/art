@@ -23,7 +23,6 @@ $pidPool->on('workerStart', function ($pidPool, $id) {
     $server->handle('/', function (Request $request, Response $response) {
         //有优化空间 使用context来管理 变成单例，不用每次加载  已经处理，全部换成静态的方法了 cocomposer require --dev "eaglewu/swoole-ide-helper:dev-master"使用context管理上下文
         try {
-
             HttpApp::init($request, $response);
             HttpApp::run();
             HttpApp::end();
