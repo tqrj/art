@@ -5,7 +5,7 @@ use Swoole\Process\Pool;
 class eq{
     static $a;
 }
-eq::$a =2;
+eq::$a = 2;
 
 require 'vendor/autoload.php';
 //多进程管理模块
