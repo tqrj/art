@@ -146,6 +146,7 @@ function art_assign($code = 200, $msg = "success", $data = [], $url = '', $httpC
 {
     $res['code']= $code;
     $res['msg'] = $msg;
+    $res['data'] = $data;
     $res['url'] = $url;
     /*    if (is_object($data)) {
             $data = $data->toArray();

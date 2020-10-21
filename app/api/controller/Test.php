@@ -17,7 +17,7 @@ class Test extends BaseController
 //        ]);
         $db = new  DB();
         $result = $db->query('SELECT * FROM vae_test');
-        art_assign(200,$result);
+        art_assign(200,'',$result);
 
     }
 }
