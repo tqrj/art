@@ -6,8 +6,6 @@ namespace app\api\controller;
 
 use app\BaseController;
 use art\db\DB;
-use art\request\Request;
-use http\Exception\RuntimeException;
 
 class Test extends BaseController
 {
