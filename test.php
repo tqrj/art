@@ -25,8 +25,8 @@ Co\run(function(){
             break;
         }
         echo $result.PHP_EOL;*/
-        $str = 'qwq';
-        $len  = pack('i',strlen($str) + 8);
+        $str = 'hello tcp';
+        $len  = pack('i',strlen($str) + 4);
         $client->send($len.$str);
         sleep(1);
     }
