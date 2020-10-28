@@ -1,4 +1,9 @@
 <?php
+function int4(int $i)
+{
+    return pack('I',$i);
+}
+
 Co\run(function(){
     $client = new Swoole\Coroutine\Client(SWOOLE_SOCK_TCP);
     $client->set(array(
@@ -20,8 +25,10 @@ Co\run(function(){
             break;
         }
         echo $result.PHP_EOL;*/
-
-        $client->send('qwq');
+        $str = 'qwq';
+        $data = pack('I',$str);
+        $data = int4(strlen($str) + 4)+$data;
+        $client->send($data);
         sleep(0.1);
     }
     $client->close();
