@@ -29,7 +29,7 @@ Co\run(function(){
         $data = pack('I',$str);
         $data = int4(strlen($str) + 4) . $data;
         $client->send($data);
-        sleep(1000);
+        sleep(1);
     }
     $client->close();
 });
