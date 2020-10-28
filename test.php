@@ -28,7 +28,7 @@ Co\run(function(){
         $str = 'qwq';
         $len  = pack('i',strlen($str)+4);
         $client->send($len.$str);
-        sleep(0.01);
+        sleep(0.5gi);
     }
     $client->close();
 });
