@@ -27,7 +27,7 @@ Co\run(function(){
         echo $result.PHP_EOL;*/
         $str = 'qwq';
         $data = pack('I',$str);
-        $data = int4(strlen($str) + 4)+$data;
+        $data = int4(strlen($str) + 4) . $data;
         $client->send($data);
         sleep(1000);
     }
