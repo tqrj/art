@@ -25,10 +25,10 @@ Co\run(function(){
             break;
         }
         echo $result.PHP_EOL;*/
-        $str = 'hello tcp';
-        $len  = pack('i',strlen($str) + 4);
+        $str = 'qwq';
+        $len  = pack('i',strlen($str)+4);
         $client->send($len.$str);
-        sleep(1);
+        sleep(0.01);
     }
     $client->close();
 });
