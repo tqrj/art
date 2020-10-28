@@ -11,14 +11,18 @@ Co\run(function(){
     if (!$client->connect('39.101.214.137', 9501))
     {
         echo "connect failed. Error: {$client->errCode}\n";
+        return;
     }
     while (true){
-        $result = $client->recv();
+/*        $result = $client->recv();
         if ($result==false){
             echo $client->errMsg;
             break;
         }
-        echo $result.PHP_EOL;
+        echo $result.PHP_EOL;*/
+
+        $client->send('qwq');
+        sleep(0.01);
     }
     $client->close();
 });
