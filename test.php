@@ -22,7 +22,7 @@ Co\run(function(){
         echo $result.PHP_EOL;*/
 
         $client->send('qwq');
-        sleep(0.01);
+        sleep(0.1);
     }
     $client->close();
 });
