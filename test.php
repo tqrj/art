@@ -19,12 +19,12 @@ Co\run(function(){
         return;
     }
     while (true){
-        $result = $client->recv();
-        if ($result==false){
-            echo $client->errMsg;
-            break;
-        }
-        echo $result.PHP_EOL;
+//        $result = $client->recv();
+//        if ($result == false){
+//            echo $client->errMsg;
+//            break;
+//        }
+//        echo $result.PHP_EOL;
 //        $str = 'qwq';
 //        $len  = pack('i',strlen($str)+4);
 //        $client->send($len.$str);
