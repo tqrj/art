@@ -157,3 +157,12 @@ function art_assign($code = 200, $msg = "success", $data = [], $url = '', $httpC
     $response->end(json_encode($res));;
     Context::delete();
 }
+
+function getObjectId(\Swoole\Http\Response $response) {
+    if (PHP_VERSION_ID < 70200) {
+        $id = spl_object_hash($response);
+    } else {
+        $id = spl_object_id($response);
+    }
+    return $id;
+}
