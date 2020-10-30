@@ -42,6 +42,7 @@ $pidPool->on('workerStart', function ($pidPool,int $id) {
             return;
         }
         $wsId = getObjectId($ws);
+        global $wsObjList;
         $wsObjList[$wsId] = $ws;
         while (true){
             $frame = $ws->recv();
