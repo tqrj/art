@@ -5,6 +5,7 @@ namespace art;
 
 use art\exception\ClassNotFoundException;
 use art\exception\HttpException;
+use Co\System;
 use Swoole\Coroutine\Http\Server;
 use Swoole\Http\Request;
 use Swoole\Http\Response;
@@ -27,7 +28,7 @@ $pidPool->on('workerStart', function ($pidPool,int $id) {
     print_r($id);
     global $table;
     $table->set($id,['poolID',$id]);
-    Swoole\Coroutine\System::sleep(5);
+    System::sleep(5);
     foreach ($table as $row){
         var_dump($row);
     }
