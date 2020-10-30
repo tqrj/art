@@ -17,7 +17,7 @@ require 'vendor/autoload.php';
 
 
 $table = new Table(1024 * 20);
-$table->column('poolID',Table::TYPE_INT);
+$table->column('ws',Table::TYPE_INT);
 $table->create();
 //多进程管理模块
 $pidPool = new Pool(swoole_cpu_num() * 2);
@@ -25,13 +25,6 @@ $pidPool = new Pool(swoole_cpu_num() * 2);
 $pidPool->set(['enable_coroutine' => true]);
 $pidPool->on('workerStart', function ($pidPool,int $id) {
     //每个进程都监听9501端口
-    print_r($id);
-    global $table;
-    $table->set($id,['poolID'=>(int)$id]);
-    System::sleep(5);
-    foreach ($table as $row){
-        var_dump($row);
-    }
     $server = new Server('0.0.0.0', '9502', false, true);
     $server->handle('/', function (Request $request,Response $response) {
         //有优化空间 使用context来管理 变成单例，不用每次加载  已经处理，全部换成静态的方法了 cocomposer require --dev "eaglewu/swoole-ide-helper:dev-master"使用context管理上下文
@@ -50,17 +43,25 @@ $pidPool->on('workerStart', function ($pidPool,int $id) {
         if ($bool == false){
             return;
         }
+        global $table;
+        $wsId = getObjectId($ws);
         while (true){
             $frame = $ws->recv();
             if ($frame === ''){
                 echo '关闭了'.PHP_EOL;
+                $table->del($wsId);
                 $ws->close();
                 break;
             } else if ($frame === false) {
+                $table->del($wsId);
                 echo "error : " . swoole_last_error() . "\n";
                 break;
             } else {
-                $ws->push("Server：{$frame->data}");
+                $table->set(getObjectId($ws),['ws'=>$ws]);
+                foreach ($table as $item){
+                    $item['ws']->push("Server：{$frame->data}");
+                }
+                //$ws->push("Server：{$frame->data}");
             }
         }
 
