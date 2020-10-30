@@ -15,7 +15,7 @@ use Swoole\Table;
 require 'vendor/autoload.php';
 
 
-$table = new Table(1024 * 1024 * 20);
+$table = new Table(1024 * 20);
 $table->column('poolID',Table::TYPE_INT);
 $table->create();
 //多进程管理模块
