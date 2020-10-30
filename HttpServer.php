@@ -27,7 +27,7 @@ $pidPool->on('workerStart', function ($pidPool,int $id) {
     //每个进程都监听9501端口
     print_r($id);
     global $table;
-    $table->set($id,['poolID',(int)$id]);
+    $table->set($id,['poolID'=>(int)$id]);
     System::sleep(5);
     foreach ($table as $row){
         var_dump($row);
