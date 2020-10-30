@@ -24,6 +24,7 @@ $pidPool = new Pool(swoole_cpu_num() * 2);
 $pidPool->set(['enable_coroutine' => true]);
 $pidPool->on('workerStart', function ($pidPool, $id) {
     //每个进程都监听9501端口
+    echo $id;
     global $table;
     $table->set($id,['poolID',$id]);
     foreach ($table as $row){
