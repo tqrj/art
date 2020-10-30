@@ -21,7 +21,7 @@ $table->create();
 //多进程管理模块
 $pidPool = new Pool(swoole_cpu_num() * 2);
 //让每个OnWorkerStart回调都自动创建一个协程
-$pidPool->set(['enable_coroutine' => true,'task_worker_num'=>2]);
+$pidPool->set(['enable_coroutine' => true]);
 $pidPool->on('workerStart', function ($pidPool, $id) {
     //每个进程都监听9501端口
     global $table;
