@@ -16,6 +16,8 @@ use Swoole\Table;
 require 'vendor/autoload.php';
 
 
+$table = new Table(1024*5);
+$table->column('ws',Table::TYPE_STRING);
 
 //多进程管理模块
 $pidPool = new Pool(swoole_cpu_num() * 2);
@@ -42,8 +44,8 @@ $pidPool->on('workerStart', function ($pidPool,int $id) {
             return;
         }
         $wsId = getObjectId($ws);
-        global $wsObjList;
-        $wsObjList[$wsId] = $ws;
+        global $table;
+        $table->set($wsId,['ws'=>serialize($ws)]);
         while (true){
             $frame = $ws->recv();
             if ($frame === ''){
@@ -54,9 +56,10 @@ $pidPool->on('workerStart', function ($pidPool,int $id) {
                 echo "error : " . swoole_last_error() . "\n";
                 break;
             } else {
-                foreach ($wsObjList as $item)
+                foreach ($table as $item)
                 {
-                    $item->push("Server：{$frame->data}");
+                    $temp = unserialize($item['ws']);
+                    $temp->push("Server：{$frame->data}");
                 }
                 //$ws->push("Server：{$frame->data}");
             }
