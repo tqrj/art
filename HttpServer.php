@@ -27,6 +27,7 @@ $pidPool->on('workerStart', function ($pidPool,int $id) {
     print_r($id);
     global $table;
     $table->set($id,['poolID',$id]);
+    Swoole\Coroutine\System::sleep(5);
     foreach ($table as $row){
         var_dump($row);
     }
