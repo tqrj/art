@@ -33,6 +33,24 @@ $pidPool->on('workerStart', function ($pidPool, $id) {
             art_assign(404, $e->getMessage());
         }
     });
+    $server->handle('/so',function (Request $request,Response $ws){
+        $ws->upgrade();
+        while (true){
+            $frame = $ws->recv();
+            if ($frame === ''){
+                echo '关闭了'.PHP_EOL;
+                $ws->close();
+                break;
+            } else if ($frame === false) {
+                echo "error : " . swoole_last_error() . "\n";
+                break;
+            } else {
+                $ws->push("Server：{$frame->data}");
+            }
+        }
+
+
+    });
     $server->handle('/favicon.ico', function (Request $request, Response $response) {
         $response->end('');
     });
