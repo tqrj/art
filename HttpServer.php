@@ -16,9 +16,7 @@ use Swoole\Table;
 require 'vendor/autoload.php';
 
 
-$table = new Table(1024 * 20);
-$table->column('ws',Table::TYPE_INT);
-$table->create();
+
 //多进程管理模块
 $pidPool = new Pool(swoole_cpu_num() * 2);
 //让每个OnWorkerStart回调都自动创建一个协程
@@ -43,23 +41,21 @@ $pidPool->on('workerStart', function ($pidPool,int $id) {
         if ($bool == false){
             return;
         }
-        global $table;
         $wsId = getObjectId($ws);
+        $wsObjList[$wsId] = $ws;
         while (true){
             $frame = $ws->recv();
             if ($frame === ''){
                 echo '关闭了'.PHP_EOL;
-                $table->del($wsId);
                 $ws->close();
                 break;
             } else if ($frame === false) {
-                $table->del($wsId);
                 echo "error : " . swoole_last_error() . "\n";
                 break;
             } else {
-                $table->set(getObjectId($ws),['ws'=>$ws]);
-                foreach ($table as $item){
-                    $item['ws']->push("Server：{$frame->data}");
+                foreach ($wsObjList as $item)
+                {
+                    $item->push("Server：{$frame->data}");
                 }
                 //$ws->push("Server：{$frame->data}");
             }
