@@ -115,6 +115,7 @@ class ArtWs
 //                    $item = self::$wsTable->get($key);
 //                }
                 var_dump($message);
+                var_dump($key);
                 $item['msg'] = $message;
                 $item['sender'] = $selfWsId;
                 $item['recver'] = $recvId;
