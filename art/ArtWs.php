@@ -35,7 +35,7 @@ class ArtWs
 
     private static Table $wsTable;
 
-    private static array $WsObject = [];
+    private static array $wsObject = [];
 
     public static function init()
     {
@@ -52,7 +52,7 @@ class ArtWs
         return new static();
     }
 
-    public static function initPool($poolId)
+    public static function widthPool($poolId)
     {
         self::$wsTable->set($poolId, ['msg' => '','sender'=>0,'recver'=>0,'status' => 1]);
         Timer::tick(10, function ($timerId, $poolId) {
@@ -60,7 +60,7 @@ class ArtWs
             if ($row['status'] == 1 or empty($row['msg'])) {
                 return;
             }
-            foreach (self::$WsObject as $key=>$ws){
+            foreach (self::$wsObject as $key=>$ws){
                 if ($key === $row['sender']){
                     continue;
                 }elseif ($row['recver']== -1 ){
@@ -78,21 +78,21 @@ class ArtWs
                 $pingFrame = new Frame();
                 $pingFrame->opcode = WEBSOCKET_OPCODE_PING;
                 $ws->push($pingFrame);
-            }, self::$WsObject);
+            }, self::$wsObject);
         });
     }
 
     public static function setWs(Response $ws):int
     {
         $wsId = getObjectId($ws);
-        self::$WsObject[$wsId] = $ws;
+        self::$wsObject[$wsId] = $ws;
         return $wsId;
     }
 
     public static function delWs(Response $ws)
     {
         $wsId = getObjectId($ws);
-        unset(self::$WsObject[$wsId]);
+        unset(self::$wsObject[$wsId]);
     }
 
     /**
@@ -108,7 +108,6 @@ class ArtWs
         foreach (self::$wsTable  as $key=>$item){
             go(function () use($key,$item,$message,$selfWsId,$recvId){
                 //死循环，注意
-
                 while ($item['status'] === 0){
                     System::sleep(0.05);
                     $item = self::$wsTable->get($key);
@@ -129,6 +128,6 @@ class ArtWs
 
     public static function getWsObjects():array
     {
-        return self::$WsObject;
+        return self::$wsObject;
     }
 }

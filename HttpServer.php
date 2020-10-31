@@ -19,7 +19,7 @@ require 'vendor/autoload.php';
 
 ArtWs::init();
 //多进程管理模块
-$pidPool = new Pool(swoole_cpu_num() * 2);
+$pidPool = new Pool(swoole_cpu_num() * 2 + 2);
 //让每个OnWorkerStart回调都自动创建一个协程
 $pidPool->set(['enable_coroutine' => true]);
 $pidPool->on('workerStart', function ($pidPool,int $id) {
@@ -40,7 +40,7 @@ $pidPool->on('workerStart', function ($pidPool,int $id) {
     });
 
     //websocket部分
-    ArtWs::initPool($id);
+    ArtWs::widthPool($id);
     $server->handle('/so',function (Request $request,Response $ws){
         $bool = $ws->upgrade();
         if ($bool == false){
