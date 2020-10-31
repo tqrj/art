@@ -9,6 +9,12 @@ use Swoole\Table;
 use Swoole\Timer;
 use Swoole\WebSocket\Frame;
 
+
+//把消息放在table
+//key为当前进程ID
+//msg pool status
+//进程定时读当前进程的发完状态改为1，投递消息的时候看状态，如果待处理就等待
+//问题就是这个表要维护，尽量避免遍历
 class ArtWs
 {
     private function __construct()
@@ -58,7 +64,7 @@ class ArtWs
             $row['status'] = 1;
             self::$wsTable->set($poolId,$row);
         }, $poolId);
-        Timer::tick(5000,function (){
+        Timer::tick(20000,function (){
             array_map(function (Response $ws) {
                 $pingFrame = new Frame();
                 $pingFrame->opcode = WEBSOCKET_OPCODE_PING;
