@@ -27,7 +27,7 @@ class ArtWs
 
     private static Table $wsTable;
 
-    private static array $WsObject;
+    private static array $WsObject = [];
 
     public static function init()
     {
@@ -39,7 +39,7 @@ class ArtWs
         self::$wsTable->column('status', Table::TYPE_INT);
         self::$wsTable->create();
 
-        return true;
+        return new static();
     }
 
     public static function initPool($poolId)
