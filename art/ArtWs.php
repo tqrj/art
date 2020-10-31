@@ -33,11 +33,15 @@ class ArtWs
         // TODO: Implement __wakeup() method.
     }
 
+
+    //通过swoole的 table来实现一个进程通信
     //进程为键名
     private static Table $wsMsgTable;
 
-    //连接为键名
-    private static array $wsGroup = [];
+    //进程为键名
+    private static Table $wsGroupTable;
+
+    private static array $wsGroup;
 
     private static array $wsObject = [];
 
@@ -46,6 +50,7 @@ class ArtWs
         if (!empty(self::$wsMsgTable)) {
             return false;
         }
+
         self::$wsMsgTable = new Table(1024);
         self::$wsMsgTable->column('msg', Table::TYPE_STRING, 1024 * 10);
         self::$wsMsgTable->column('sender', Table::TYPE_INT);
@@ -53,12 +58,20 @@ class ArtWs
         self::$wsMsgTable->column('status', Table::TYPE_INT);
         self::$wsMsgTable->create();
 
+        self::$wsGroupTable = new Table(1024);
+        self::$wsGroupTable->column('wsId',Table::TYPE_INT);
+        self::$wsGroupTable->column('group',Table::TYPE_STRING,40);
+        self::$wsGroupTable->column('type',Table::TYPE_INT);
+        self::$wsGroupTable->column('status',Table::TYPE_INT);
+        self::$wsGroupTable->create();
         return new static();
     }
 
     public static function joinPool($poolId)
     {
         self::$wsMsgTable->set($poolId, ['msg' => '','sender'=>0,'recver'=>0,'status' => 1]);
+        self::$wsGroupTable->set($poolId, ['wsId' => -1,'group'=>'','type'=>0,'status' => 1]);
+        //消息处理
         Timer::tick(10, function ($timerId, $poolId) {
             $row = self::$wsMsgTable->get($poolId);
             if ($row['status'] == 1 or empty($row['msg'])) {
@@ -77,10 +90,23 @@ class ArtWs
             $row['status'] = 1;
             self::$wsMsgTable->set($poolId,$row);
         }, $poolId);
-        Timer::tick(50000,function (){
+        //群组处理 加入 退出
+        Timer::tick(10,function ($timeId,$poolId){
+            $row = self::$wsGroupTable->get($poolId);
+            if ($row['status'] == 1 or empty($row['group'])) {
+                return;
+            }
+            if ($row['type'] === 1){
+                self::$wsGroup[$row['group']][] = $row['wsId'];
+            }else{
+                unset(self::$wsGroup[$row['group']][$row['wsId']]);
+            }
+        });
+        //so心跳
+        Timer::tick(30000,function (){
             array_map(function (Response $ws) {
                 $pingFrame = new Frame();
-                $pingFrame->opcode = WEBSOCKET_OPCODE_PING;
+                $pingFrame->opcode = WEBSOCKET_OPCODE_TEXT;
                 $ws->push($pingFrame);
             }, self::$wsObject);
         });
@@ -124,10 +150,10 @@ class ArtWs
     }
 
 
-    public static function createGroup()
-    {
-
-    }
+//    public static function createGroup()
+//    {
+//
+//    }
 
 
     public static function joinGroup()
