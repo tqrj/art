@@ -63,8 +63,6 @@ $pidPool->on('workerStart', function ($pidPool,int $id) {
                 //$ws->push();
             }
         }
-
-
     });
     $server->handle('/favicon.ico', function (Request $request, Response $response) {
         $response->end('');

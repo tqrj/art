@@ -64,7 +64,7 @@ class ArtWs
             $row['status'] = 1;
             self::$wsTable->set($poolId,$row);
         }, $poolId);
-        Timer::tick(20000,function (){
+        Timer::tick(50000,function (){
             array_map(function (Response $ws) {
                 $pingFrame = new Frame();
                 $pingFrame->opcode = WEBSOCKET_OPCODE_PING;
