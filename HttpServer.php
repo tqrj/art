@@ -40,7 +40,7 @@ $pidPool->on('workerStart', function ($pidPool,int $id) {
     });
 
     //websocket部分
-    ArtWs::widthPool($id);
+    ArtWs::joinPool($id);
     $server->handle('/so',function (Request $request,Response $ws){
         $bool = $ws->upgrade();
         if ($bool == false){

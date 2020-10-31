@@ -33,30 +33,34 @@ class ArtWs
         // TODO: Implement __wakeup() method.
     }
 
-    private static Table $wsTable;
+    //进程为键名
+    private static Table $wsMsgTable;
+
+    //连接为键名
+    private static array $wsGroup = [];
 
     private static array $wsObject = [];
 
     public static function init()
     {
-        if (!empty(self::$wsTable)) {
+        if (!empty(self::$wsMsgTable)) {
             return false;
         }
-        self::$wsTable = new Table(1024);
-        self::$wsTable->column('msg', Table::TYPE_STRING, 1024 * 10);
-        self::$wsTable->column('sender', Table::TYPE_INT);
-        self::$wsTable->column('recver', Table::TYPE_INT);
-        self::$wsTable->column('status', Table::TYPE_INT);
-        self::$wsTable->create();
+        self::$wsMsgTable = new Table(1024);
+        self::$wsMsgTable->column('msg', Table::TYPE_STRING, 1024 * 10);
+        self::$wsMsgTable->column('sender', Table::TYPE_INT);
+        self::$wsMsgTable->column('recver', Table::TYPE_INT);
+        self::$wsMsgTable->column('status', Table::TYPE_INT);
+        self::$wsMsgTable->create();
 
         return new static();
     }
 
-    public static function widthPool($poolId)
+    public static function joinPool($poolId)
     {
-        self::$wsTable->set($poolId, ['msg' => '','sender'=>0,'recver'=>0,'status' => 1]);
+        self::$wsMsgTable->set($poolId, ['msg' => '','sender'=>0,'recver'=>0,'status' => 1]);
         Timer::tick(10, function ($timerId, $poolId) {
-            $row = self::$wsTable->get($poolId);
+            $row = self::$wsMsgTable->get($poolId);
             if ($row['status'] == 1 or empty($row['msg'])) {
                 return;
             }
@@ -71,7 +75,7 @@ class ArtWs
                 }
             }
             $row['status'] = 1;
-            self::$wsTable->set($poolId,$row);
+            self::$wsMsgTable->set($poolId,$row);
         }, $poolId);
         Timer::tick(50000,function (){
             array_map(function (Response $ws) {
@@ -97,33 +101,60 @@ class ArtWs
 
     /**
      * 发送消息
-     * 群发不填写收信者ID即可
-     * 指定发送发填写收信ID
-     * @param string $message
-     * @param int $selfWsId
-     * @param int $recvId
+     * @param string $message 消息内容
+     * @param int $selfWsId 群发不填写收信者ID即可
+     * @param int $recvId 指定发送发填写收信ID
      */
     public static function pushMsg(string $message,int $selfWsId = -1,int $recvId = -1)
     {
-        foreach (self::$wsTable  as $key=>$item){
+        foreach (self::$wsMsgTable  as $key=>$item){
             go(function () use($key,$item,$message,$selfWsId,$recvId){
                 //死循环，注意
                 while ($item['status'] === 0){
                     System::sleep(0.05);
-                    $item = self::$wsTable->get($key);
+                    $item = self::$wsMsgTable->get($key);
                 }
                 $item['msg'] = $message;
                 $item['sender'] = $selfWsId;
                 $item['recver'] = $recvId;
                 $item['status'] = 0;
-                self::$wsTable->set($key,$item);
+                self::$wsMsgTable->set($key,$item);
             });
         }
     }
 
+
+    public static function createGroup()
+    {
+
+    }
+
+
+    public static function joinGroup()
+    {
+
+    }
+
+    public static function leaveGroup()
+    {
+
+    }
+
+
+    public static function getGroup():array
+    {
+
+    }
+
+    public static function hasGroup()
+    {
+
+    }
+
+
     public static function getWsTable(): Table
     {
-        return self::$wsTable;
+        return self::$wsMsgTable;
     }
 
     public static function getWsObjects():array
