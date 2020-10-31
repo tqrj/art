@@ -61,13 +61,13 @@ class ArtWs
                 return;
             }
             foreach (self::$WsObject as $key=>$ws){
-                if ($key === $row['sender']){
-                    continue;
-                }elseif(empty($row['recver'])){
-                    $ws->push($row['msg']);
-                }elseif($row['recver'] === $key){
-                    $ws->push($row['msg']);
-                }
+//                if ($key === $row['sender']){
+//                    continue;
+//                }elseif(empty($row['recver'])){
+//                    $ws->push($row['msg']);
+//                }elseif($row['recver'] === $key){
+//                    $ws->push($row['msg']);
+//                }
                 $ws->push($row['msg']);
             }
             $row['status'] = 1;
@@ -113,7 +113,6 @@ class ArtWs
                     System::sleep(0.05);
                     $item = self::$wsTable->get($key);
                 }
-                echo 'qwq';
                 $item['msg'] = $message;
                 $item['sender'] = $selfWsId;
                 $item['recver'] = $recvId;
