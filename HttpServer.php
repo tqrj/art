@@ -62,7 +62,7 @@ $pidPool->on('workerStart', function ($pidPool,int $id) {
                 ArtWs::delWs($ws);
                 echo "error : " . swoole_last_error() . "\n";
                 break;
-            } else {
+            } elseif($frame->opcode == WEBSOCKET_OPCODE_TEXT){
                 ArtWs::pushMsgAll("Server：{$frame->data}");
                 //$ws->push();
             }
