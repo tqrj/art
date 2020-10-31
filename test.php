@@ -16,7 +16,7 @@ Co\run(function(){
             $client->set(array(
                 'open_length_check'     => true,
                 'package_max_length'    => 81920,
-                'package_length_type'   => 'L',
+                'package_length_type'   => 'l',
                 'package_length_offset' => 0,
                 'package_body_offset'   => 0,
             ));
