@@ -69,8 +69,8 @@ class ArtWs
 //                }elseif($row['recver'] === $key){
 //                    $ws->push($row['msg']);
 //                }
+                echo '读到消息了';
                 $ws->push($row['msg']);
-
             }
             $row['status'] = 1;
             self::$wsTable->set($poolId,$row);
