@@ -61,8 +61,6 @@ class ArtWs
                 return;
             }
             foreach (self::$WsObject as $key=>$ws){
-                echo $key;
-                echo $row['sender'].PHP_EOL;
                 if ($key === $row['sender']){
                     continue;
                 }elseif ($row['recver']== -1 ){
