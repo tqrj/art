@@ -46,11 +46,10 @@ $pidPool->on('workerStart', function ($pidPool,int $id) {
         if ($bool == false){
             return;
         }
-        ArtWs::setWs($ws);
+        $wsId = ArtWs::setWs($ws);
         while (true){
             $frame = $ws->recv();
             if ($frame === ''){
-                echo '关闭了'.PHP_EOL;
                 ArtWs::delWs($ws);
                 $ws->close();
                 break;
@@ -59,7 +58,7 @@ $pidPool->on('workerStart', function ($pidPool,int $id) {
                 echo "error : " . swoole_last_error() . "\n";
                 break;
             } elseif($frame->opcode == WEBSOCKET_OPCODE_TEXT){
-                ArtWs::pushMsgAll("Server：{$frame->data}");
+                ArtWs::pushMsg($frame->data,$wsId);
                 //$ws->push();
             }
         }
