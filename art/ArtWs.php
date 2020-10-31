@@ -54,7 +54,7 @@ class ArtWs
 
     public static function initPool($poolId)
     {
-        self::$wsTable->set($poolId, ['msg' => '','sender'=>0,'recver'=>0,'status' => 0]);
+        self::$wsTable->set($poolId, ['msg' => '','sender'=>0,'recver'=>0,'status' => 1]);
         Timer::tick(10, function ($timerId, $poolId) {
             $row = self::$wsTable->get($poolId);
             if ($row['status'] == 1 or empty($row['msg'])) {
@@ -108,9 +108,8 @@ class ArtWs
         foreach (self::$wsTable  as $key=>$item){
             go(function () use($key,$item,$message,$selfWsId,$recvId){
                 //死循环，注意
-                echo $item['status'];
-                echo $item['msg'];
-                while ($item['status'] === 0 && empty($item['msg'])){
+
+                while ($item['status'] === 0){
                     System::sleep(0.05);
                     $item = self::$wsTable->get($key);
                 }
