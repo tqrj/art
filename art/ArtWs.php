@@ -44,7 +44,6 @@ class ArtWs
         }
         self::$wsTable = new Table(1024);
         self::$wsTable->column('msg', Table::TYPE_STRING, 1024 * 10);
-        self::$wsTable->column('status', Table::TYPE_INT);
         self::$wsTable->column('sender', Table::TYPE_INT);
         self::$wsTable->column('recver', Table::TYPE_INT);
         self::$wsTable->column('status', Table::TYPE_INT);
@@ -55,10 +54,10 @@ class ArtWs
 
     public static function initPool($poolId)
     {
-        self::$wsTable->set($poolId, ['msg' => '', 'status' => 1]);
+        self::$wsTable->set($poolId, ['msg' => '','sender'=>0,'recver'=>0,'status' => 0]);
         Timer::tick(10, function ($timerId, $poolId) {
             $row = self::$wsTable->get($poolId);
-            if ($row['status'] == 1) {
+            if ($row['status'] == 1 or empty($row['msg'])) {
                 return;
             }
             foreach (self::$WsObject as $key=>$ws){
