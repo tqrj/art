@@ -9,6 +9,7 @@ Co\run(function(){
 
     $n=0;
     while ($n < 1000){
+        \Co\System::sleep(0.2);
         $n++;
         go(function (){
             $client = new Swoole\Coroutine\Client(SWOOLE_SOCK_TCP);
