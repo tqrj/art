@@ -61,14 +61,16 @@ class ArtWs
                 return;
             }
             foreach (self::$WsObject as $key=>$ws){
-//                if ($key === $row['sender']){
-//                    continue;
-//                }elseif(empty($row['recver'])){
-//                    $ws->push($row['msg']);
-//                }elseif($row['recver'] === $key){
-//                    $ws->push($row['msg']);
-//                }
-                $ws->push($row['msg']);
+                echo $key;
+                echo $row['sender'].PHP_EOL;
+                if ($key === $row['sender']){
+                    continue;
+                }elseif ($row['recver']== -1 ){
+                    $ws->push($row['msg']);
+                    continue;
+                }elseif ($row['recver'] === $key){
+                    $ws->push($row['msg']);
+                }
             }
             $row['status'] = 1;
             self::$wsTable->set($poolId,$row);
@@ -103,7 +105,7 @@ class ArtWs
      * @param int $selfWsId
      * @param int $recvId
      */
-    public static function pushMsg(string $message,int $selfWsId = 0,int $recvId = 0)
+    public static function pushMsg(string $message,int $selfWsId = -1,int $recvId = -1)
     {
         foreach (self::$wsTable  as $key=>$item){
             go(function () use($key,$item,$message,$selfWsId,$recvId){
