@@ -7,6 +7,7 @@ namespace art;
 use Swoole\Http\Response;
 use Swoole\Table;
 use Swoole\Timer;
+use Swoole\WebSocket\Frame;
 
 class ArtWs
 {
@@ -57,6 +58,13 @@ class ArtWs
             $row['status'] = 1;
             self::$wsTable->set($poolId,$row);
         }, $poolId);
+        Timer::tick(5000,function (){
+            array_map(function (Response $ws) {
+                $pingFrame = new Frame();
+                $pingFrame->opcode = WEBSOCKET_OPCODE_PING;
+                $ws->push($pingFrame);
+            }, self::$WsObject);
+        });
     }
 
     public static function setWs(Response $ws)
