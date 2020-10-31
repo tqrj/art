@@ -7,7 +7,9 @@ function int4(int $i)
 Co\run(function(){
 
 
-    while (true){
+    $n=0;
+    while ($n < 1000){
+        $n++;
         go(function (){
             $client = new Swoole\Coroutine\Client(SWOOLE_SOCK_TCP);
             $client->set(array(
