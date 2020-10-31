@@ -63,7 +63,7 @@ class ArtWs
             }
             foreach (self::$WsObject as $key=>$ws){
                 if ($key === $row['sender']){
-                    return;
+                    continue;
                 }elseif(empty($row['recver'])){
                     $ws->push($row['msg']);
                 }elseif($row['recver'] === $key){
