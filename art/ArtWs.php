@@ -62,13 +62,14 @@ class ArtWs
                 return;
             }
             foreach (self::$WsObject as $key=>$ws){
-                if ($key === $row['sender']){
-                    continue;
-                }elseif(empty($row['recver'])){
-                    $ws->push($row['msg']);
-                }elseif($row['recver'] === $key){
-                    $ws->push($row['msg']);
-                }
+//                if ($key === $row['sender']){
+//                    continue;
+//                }elseif(empty($row['recver'])){
+//                    $ws->push($row['msg']);
+//                }elseif($row['recver'] === $key){
+//                    $ws->push($row['msg']);
+//                }
+                $ws->push($row['msg']);
 
             }
             $row['status'] = 1;
