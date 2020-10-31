@@ -110,10 +110,11 @@ class ArtWs
         foreach (self::$wsTable  as $key=>$item){
             go(function () use($key,$item,$message,$selfWsId,$recvId){
                 //死循环，注意
-                while ($item['status'] === 0){
-                    System::sleep(0.05);
-                    $item = self::$wsTable->get($key);
-                }
+//                while ($item['status'] === 0){
+//                    System::sleep(0.05);
+//                    $item = self::$wsTable->get($key);
+//                }
+
                 $item['msg'] = $message;
                 $item['sender'] = $selfWsId;
                 $item['recver'] = $recvId;
