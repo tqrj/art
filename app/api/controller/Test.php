@@ -6,6 +6,7 @@ namespace app\api\controller;
 
 use app\BaseController;
 use art\db\DB;
+use art\helper\Str;
 use Swoole\Coroutine\Client;
 
 class Test extends BaseController
@@ -48,6 +49,7 @@ class Test extends BaseController
             $result = $client->errMsg;
         }
         $client->close();
-        art_assign(200,$result);
+
+        art_assign(200,toStr($result));
     }
 }
