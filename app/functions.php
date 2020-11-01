@@ -166,11 +166,3 @@ function getObjectId(\Swoole\Http\Response $response) {
     }
     return $id;
 }
-
-function toStr($bytes) {
-    $str = '';
-    foreach($bytes as $ch) {
-        $str .= chr($ch);
-    }
-    return $str;
-}
