@@ -15,7 +15,7 @@ Co\run(function(){
             $client = new Swoole\Coroutine\Client(SWOOLE_SOCK_TCP);
             $client->set(array(
                 'open_length_check'     => true,
-                'package_max_length'    => 81920*2,
+                'package_max_length'    => 81920,
                 'package_length_type'   => 'l',
                 'package_length_offset' => 0,
                 'package_body_offset'   => 0,
@@ -45,7 +45,7 @@ include 和require是有区别的 这个区别还没有测试，我不清楚incl
             if ($result == false){
                 echo $client->errMsg;
             }else{
-                echo substr(urldecode($result),-10,10).PHP_EOL;
+                echo substr($result,-10,10).PHP_EOL;
             }
             $client->close();
         });
