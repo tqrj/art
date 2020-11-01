@@ -18,7 +18,7 @@ Co\run(function(){
                 'package_max_length'    => 81920,
                 'package_length_type'   => 'L',
                 'package_length_offset' => 0,
-                'package_body_offset'   => 4,
+                'package_body_offset'   => 0,
             ));
             if (!$client->connect('39.101.214.137', 9501))
             {
@@ -29,7 +29,7 @@ Co\run(function(){
             $str[] = '单10';
             $str[] = '双50';
             $str[] = '万23456千23456除各1';
-            $rand = 2;
+            $rand = mt_rand(0,2);
             $str = $str[$rand];
             $len  = pack('i',strlen($str)+4);
             $client->send($len.$str);
