@@ -6,17 +6,48 @@ namespace app\api\controller;
 
 use app\BaseController;
 use art\db\DB;
+use Swoole\Coroutine\Client;
 
 class Test extends BaseController
 {
+    /**
+     *
+     */
     public function hello()
     {
 //        $params = Request::only(['pp','cc']);
 //        art_validate($params,[
 //            'cc'=>'require|mobile'
 //        ]);
-        $db = new  DB();
-        $result = $db->execute('');
+        $client = new Client(SWOOLE_SOCK_TCP);
+        $client->set([
+            'open_length_check'     => true,
+            'package_max_length'    => 81920,
+            'package_length_type'   => 'L',
+            'package_length_offset' => 0,
+            'package_body_offset'   => 0,
+        ]);
+        if (!$client->connect('39.101.214.137', 9501))
+        {
+            echo "connect failed. Error: {$client->errCode}\n";
+            return;
+        }
+        $str = [];
+        $str[] = '单10';
+        $str[] = '双50';
+        $str[] = '万23456千23456除各1';
+        $rand = 2;
+        $str = $str[$rand];
+        $len  = pack('i',strlen($str)+4);
+        $client->send($len.$str);
+        //sleep(0.5);
+        //}
+        $result = $client->recv();
+        if ($result == false){
+            echo $client->errMsg;
+            $result = $client->errMsg;
+        }
+        $client->close();
         art_assign(200,'',$result);
 
     }
