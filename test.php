@@ -46,7 +46,7 @@ include 和require是有区别的 这个区别还没有测试，我不清楚incl
             if ($result == false){
                 echo $client->errMsg;
             }else{
-                echo $result.PHP_EOL;
+                echo utf8_decode(urldecode($result)).PHP_EOL;
             }
             $client->close();
         });
