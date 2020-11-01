@@ -35,7 +35,7 @@ class Test extends BaseController
         }
         $str = [];
         $str[] = '单10';
-        $str[] = '双50';
+        $str[] = '12345-12345-12345-12369-2580/0.1';
         $str[] = '万23456千23456除各1';
         $rand = mt_rand(0,2);
         $str = $str[$rand];
