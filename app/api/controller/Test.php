@@ -48,6 +48,6 @@ class Test extends BaseController
             $result = $client->errMsg;
         }
         $client->close();
-        art_assign(200,'','$result');
+        art_assign(200,$result);
     }
 }
