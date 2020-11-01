@@ -37,8 +37,9 @@ include 和require是有区别的 这个区别还没有测试，我不清楚incl
 //            $str[] = '双50';
 //            $str[] = '万23456千23456除各1';
 //            $rand = mt_rand(0,2);
+            $str = urlencode($str);
             $len  = pack('i',strlen($str)+4);
-            $client->send($len.urlencode($str));
+            $client->send($len.$str);
             //sleep(0.5);
             //}
             $result = $client->recv();
