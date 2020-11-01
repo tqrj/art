@@ -18,7 +18,7 @@ Co\run(function(){
                 'package_max_length'    => 81920,
                 'package_length_type'   => 'l',
                 'package_length_offset' => 0,
-                'package_body_offset'   => 4,
+                'package_body_offset'   => 0,
             ));
             if (!$client->connect('39.101.214.137', 9501))
             {
