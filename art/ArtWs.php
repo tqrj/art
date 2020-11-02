@@ -5,6 +5,7 @@ namespace art;
 
 
 use Co\System;
+use Swoole\Atomic;
 use Swoole\Http\Response;
 use Swoole\Table;
 use Swoole\Timer;
@@ -33,7 +34,7 @@ class ArtWs
         // TODO: Implement __wakeup() method.
     }
 
-
+    private static Atomic $wsAtomic;
     //通过swoole的 table来实现一个进程通信
     //进程为键名
     private static Table $wsMsgTable;
@@ -58,7 +59,7 @@ class ArtWs
         self::$wsMsgTable->column('status', Table::TYPE_INT);
         self::$wsMsgTable->create();
 
-
+        self::$wsAtomic = new Atomic();
         return new static();
     }
 
@@ -72,7 +73,6 @@ class ArtWs
                 return;
             }
             foreach (self::$wsObject as $wsId => $ws) {
-                var_dump($row);
                 if ($wsId === $row['sender']) {
                     continue;//不发送到自己
                 } elseif ($row['recver'] == -1) {
@@ -95,17 +95,17 @@ class ArtWs
         });
     }
 
-    public static function setWs(Response $ws): int
+    public static function setWs(Response &$ws): int
     {
-        $wsId = getObjectId($ws);
+        $wsId = self::getWsId();
+        $ws->artWsId = $wsId;
         self::$wsObject[$wsId] = $ws;
         return $wsId;
     }
 
     public static function delWs(Response $ws)
     {
-        $wsId = getObjectId($ws);
-        unset(self::$wsObject[$wsId]);
+        unset(self::$wsObject[$ws->artWsId]);
     }
 
     /**
@@ -165,5 +165,10 @@ class ArtWs
     public static function getWsObjects(): array
     {
         return self::$wsObject;
+    }
+
+    private static function getWsId()
+    {
+        return self::$wsAtomic->add();
     }
 }
