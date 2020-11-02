@@ -43,11 +43,15 @@ class Test extends BaseController
         $client->send($len.$str);
         //sleep(0.5);
         //}
-        $result = $client->recv();
-        if ($result == false){
-            echo $client->errMsg;
-            $result = $client->errMsg;
+        while (true){
+            $result = $client->recv();
+            if ($result == false){
+                echo $client->errMsg;
+                $result = $client->errMsg;
+                break;
+            }
         }
+
         $client->close();
         art_assign(200,urldecode($result));
     }
