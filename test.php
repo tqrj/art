@@ -5,7 +5,7 @@ Co\run(function(){
 
     $n=0;
     while ($n < 100000){
-        \Co\System::sleep(0.05);
+        \Co\System::sleep(0.02);
         $n++;
         go(function (){
             $client = new Swoole\Coroutine\Client(SWOOLE_SOCK_TCP);
@@ -26,7 +26,7 @@ Co\run(function(){
             $str[] = '12345-12345-12345-12369-2580/0.1';
             $str[] = '万23456千23456除各1';
             $rand = mt_rand(0,2);
-            $str = $str[$rand];
+            $str = urlencode($str[$rand]);
             $len  = pack('i',strlen($str)+4);
             $client->send($len.$str);
             //sleep(0.5);
@@ -35,7 +35,7 @@ Co\run(function(){
             if ($result == false){
                 echo $client->errMsg;
             }else{
-                echo urldecode($result).PHP_EOL;
+                echo urldecode(substr($result,4)).PHP_EOL;
             }
             $client->close();
         });
