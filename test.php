@@ -1,8 +1,4 @@
 <?php
-function int4(int $i)
-{
-    return pack('I',$i);
-}
 
 Co\run(function(){
 

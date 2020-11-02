@@ -80,7 +80,7 @@ class ArtWs
             foreach (self::$wsObject as $key=>$ws){
                 if ($key === $row['sender']){
                     continue;
-                }elseif ($row['recver']== -1 ){
+                }elseif ($row['recver']== -1){
                     $ws->push($row['msg']);
                     continue;
                 }elseif ($row['recver'] === $key){

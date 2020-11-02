@@ -37,7 +37,7 @@ class Test extends BaseController
         $str[] = '单10';
         $str[] = '12345-12345-12345-12369-2580/0.1';
         $str[] = '万23456千23456除各1';
-        $rand = mt_rand(0,2);
+        $rand = 1;
         $str = $str[$rand];
         $len  = pack('i',strlen($str)+4);
         $client->send($len.$str);
