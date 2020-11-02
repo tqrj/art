@@ -61,7 +61,7 @@ $pidPool->on('workerStart', function ($pidPool,int $id) {
                 echo "error : " . swoole_last_error() . "\n";
                 break;
             } elseif($frame->opcode == WEBSOCKET_OPCODE_TEXT){
-                ArtWs::pushMsg($frame->data,$wsId,-1,$wsGroup);
+                ArtWs::pushMsg($frame->data,$wsId,16);
                 //$ws->push();
             }
         }
