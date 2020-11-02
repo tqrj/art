@@ -49,7 +49,7 @@ class ArtWs
     public static function init()
     {
         if (!empty(self::$wsMsgTable)) {
-            return false;
+            return null;
         }
 
         self::$wsMsgTable = new Table(1024);
