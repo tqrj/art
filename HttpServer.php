@@ -47,6 +47,8 @@ $pidPool->on('workerStart', function ($pidPool,int $id) {
             return;
         }
         $wsId = ArtWs::setWs($ws);
+        $wsGroup = "test".mt_rand(1,2);
+        ArtWs::joinGroup($wsId,$wsGroup);
         while (true){
             $frame = $ws->recv();
             if ($frame === ''){
@@ -58,7 +60,7 @@ $pidPool->on('workerStart', function ($pidPool,int $id) {
                 echo "error : " . swoole_last_error() . "\n";
                 break;
             } elseif($frame->opcode == WEBSOCKET_OPCODE_TEXT){
-                ArtWs::pushMsg($frame->data,$wsId);
+                ArtWs::pushMsg($frame->data,$wsId,'',$wsGroup);
                 //$ws->push();
             }
         }
