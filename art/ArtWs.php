@@ -79,6 +79,7 @@ class ArtWs
                 return;
             }
             foreach (self::$wsObject as $wsId => $ws) {
+                var_dump($row);
                 if ($wsId === $row['sender']) {
                     continue;//不发送到自己
                 } elseif ($row['recver'] == -1 && empty($row['group'])) {
@@ -110,7 +111,7 @@ class ArtWs
         Timer::tick(15000, function () {
             array_map(function (Response $ws) {
                 $pingFrame = new Frame();
-                $pingFrame->opcode = WEBSOCKET_OPCODE_TEXT;
+                $pingFrame->opcode = WEBSOCKET_OPCODE_PING;
                 $ws->push($pingFrame);
             }, self::$wsObject);
         });
