@@ -39,5 +39,5 @@ Co\run(function () {
             $client->close();
         });
     }
-
+    echo 'ojbk处理完毕'.PHP_EOL;
 });
