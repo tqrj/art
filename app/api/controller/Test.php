@@ -19,7 +19,7 @@ class Test extends BaseController
         $client = new Client(SWOOLE_SOCK_TCP);
         $client->set([
             'open_length_check'     => true,
-            'package_max_length'    => 1024*1024*4,
+            'package_max_length'    => 81920,
             'package_length_type'   => 'l',
             'package_length_offset' => 0,
             'package_body_offset'   => 0,
@@ -45,8 +45,6 @@ class Test extends BaseController
             $result = $client->errMsg;
         }
         $client->close();
-        var_dump($result.PHP_EOL);
-        var_dump(urldecode($result));
-        art_assign(200,urldecode(substr($result,4)));
+        art_assign(200,urldecode(mb_substr($result,4)));
     }
 }
