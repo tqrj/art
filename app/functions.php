@@ -158,6 +158,11 @@ function art_assign($code = 200, $msg = "success", $data = [], $url = '', $httpC
     Context::delete();
 }
 
+/**
+ * 跨进程会重复 不安全
+ * @param \Swoole\Http\Response $response
+ * @return int|string
+ */
 function getObjectId(\Swoole\Http\Response $response) {
     if (PHP_VERSION_ID < 70200) {
         $id = spl_object_hash($response);
