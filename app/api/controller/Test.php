@@ -49,6 +49,8 @@ class Test extends BaseController
             $result = $client->errMsg;
         }
         $client->close();
-        art_assign(200,urldecode($result));
+        var_dump($result.PHP_EOL);
+        var_dump(urldecode($result));
+        art_assign(200,$result);
     }
 }
