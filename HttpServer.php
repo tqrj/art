@@ -47,6 +47,7 @@ $pidPool->on('workerStart', function ($pidPool,int $id) {
             return;
         }
         $wsId = ArtWs::setWs($ws);
+        echo $wsId;
         while (true){
             $frame = $ws->recv();
             if ($frame === ''){
