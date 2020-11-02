@@ -16,14 +16,10 @@ class Test extends BaseController
      */
     public function hello()
     {
-//        $params = Request::only(['pp','cc']);
-//        art_validate($params,[
-//            'cc'=>'require|mobile'
-//        ]);
         $client = new Client(SWOOLE_SOCK_TCP);
         $client->set([
             'open_length_check'     => true,
-            'package_max_length'    => 81920,
+            'package_max_length'    => 1024*1024,
             'package_length_type'   => 'l',
             'package_length_offset' => 0,
             'package_body_offset'   => 0,
