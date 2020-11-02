@@ -103,6 +103,8 @@ class ArtWs
             } else {
                 unset(self::$wsGroup[$row['group']][$row['wsId']]);
             }
+            var_dump(self::$wsGroup);
+            echo '加入了一次群组'.PHP_EOL;
             $row['status'] = 1;
             self::$wsGroupTable->set($poolId, $row);
         }, $poolId);
