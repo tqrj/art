@@ -70,7 +70,7 @@ class ArtWs
     public static function joinPool($poolId)
     {
         self::$wsMsgTable->set($poolId, ['msg' => '','sender'=>0,'recver'=>0,'status' => 1]);
-        //self::$wsGroupTable->set($poolId, ['wsId' => -1,'group'=>'','type'=>0,'status' => 1]);
+        self::$wsGroupTable->set($poolId, ['wsId' => -1,'group'=>'','type'=>0,'status' => 1]);
         //消息处理
         Timer::tick(10, function ($timerId, $poolId) {
             $row = self::$wsMsgTable->get($poolId);
@@ -91,7 +91,7 @@ class ArtWs
             self::$wsMsgTable->set($poolId,$row);
         }, $poolId);
         //群组处理 加入 退出
-/*        Timer::tick(10,function ($timeId,$poolId){
+        Timer::tick(10,function ($timeId,$poolId){
             $row = self::$wsGroupTable->get($poolId);
             if ($row['status'] == 1 or empty($row['group'])) {
                 return;
@@ -101,7 +101,7 @@ class ArtWs
             }else{
                 unset(self::$wsGroup[$row['group']][$row['wsId']]);
             }
-        });*/
+        },$poolId);
         //so心跳
         Timer::tick(30000,function (){
             array_map(function (Response $ws) {
@@ -148,13 +148,6 @@ class ArtWs
             });
         }
     }
-
-
-//    public static function createGroup()
-//    {
-//
-//    }
-
 
     public static function joinGroup()
     {
