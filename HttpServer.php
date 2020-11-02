@@ -48,7 +48,7 @@ $pidPool->on('workerStart', function ($pidPool,int $id) {
         }
         $wsId = ArtWs::setWs($ws);
         $wsGroup = "test".mt_rand(1,2);
-        echo $wsGroup;
+        echo $wsGroup.$wsId;
         ArtWs::joinGroup($wsId,$wsGroup);
         while (true){
             $frame = $ws->recv();
