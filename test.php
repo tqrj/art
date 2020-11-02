@@ -35,7 +35,7 @@ Co\run(function(){
             if ($result == false){
                 echo $client->errMsg;
             }else{
-                echo $result.PHP_EOL;
+                echo urldecode($result).PHP_EOL;
             }
             $client->close();
         });
