@@ -59,7 +59,16 @@ $pidPool->on('workerStart', function ($pidPool,int $id) {
                 echo "error : " . swoole_last_error() . "\n";
                 break;
             } elseif($frame->opcode == WEBSOCKET_OPCODE_TEXT){
-                ArtWs::pushMsg($frame->data,$wsId,2);
+                try {
+                    WsApp::init($request,$ws,$frame);
+                    WsApp::run();
+                    WsApp::end();
+                } catch (HttpException $e) {
+                    art_assign($e->getStatusCode(), $e->getMessage());
+                } catch (ClassNotFoundException $e) {
+                    art_assign(404, $e->getMessage());
+                }
+                //ArtWs::pushMsg($frame->data,$wsId,2);
                 //$ws->push();
             }
         }

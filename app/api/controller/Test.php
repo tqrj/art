@@ -5,12 +5,16 @@ namespace app\api\controller;
 
 
 use app\BaseController;
+use art\ArtWs;
 use art\db\DB;
 use art\helper\Str;
 use Swoole\Coroutine\Client;
 
 class Test extends BaseController
 {
+
+    private $isWs = true;
+
     /**
      *
      */

@@ -153,9 +153,13 @@ function art_assign($code = 200, $msg = "success", $data = [], $url = '', $httpC
         }*/
     $res['data'] = $data;
     $response = Context::get('response');
-    $response->status($code);
-    $response->end(json_encode($res));;
-    Context::delete();
+    if (!property_exists ($response,'artWsId')){
+        $response->status($code);
+        $response->end(json_encode($res));;
+        Context::delete();
+    }else{
+        $response->push(json_decode($res));
+    }
 }
 
 /**

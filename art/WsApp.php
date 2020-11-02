@@ -10,11 +10,10 @@ use art\exception\HttpException;
 use art\helper\Str;
 use Swoole\Http\Request;
 use Swoole\Http\Response;
+use Swoole\WebSocket\Frame;
 
-
-class HttpApp extends BaseApp
+class WsApp extends BaseApp
 {
-
     private function __construct()
     {
 
@@ -30,12 +29,14 @@ class HttpApp extends BaseApp
         // TODO: Implement __wakeup() method.
     }
 
-    public static function init(Request $request,Response $response)
+    public static function init(Request $request,Response $response,Frame $frame)
     {
         self::initBase();
         Context::put('request',$request);
         Context::put('response',$response);
-        $pathInfo = $request->server['request_uri'];
+        Context::put('frame',$frame);
+        $frame->data = json_decode($frame->data,true);
+        $pathInfo = $frame->data['path'];
         $pathInfo = explode('/', $pathInfo);
         if (count($pathInfo) < 4) {
             throw new HttpException(404, 'App not find');
@@ -58,8 +59,8 @@ class HttpApp extends BaseApp
         if (class_exists($class)) {
             try {
                 $reflect = new \ReflectionClass($class);
-                if ($reflect->hasProperty('isWs')){
-                    throw new \ReflectionException('no access websocket class');
+                if (!$reflect->hasProperty('isWs')){
+                    throw new \ReflectionException('no access Http class');
                 }
                 $object = $reflect->newInstance();
 //                $object = $reflect->newInstance([$request,$response]);

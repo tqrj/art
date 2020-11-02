@@ -127,7 +127,6 @@ class ArtWs
                 $item['msg'] = $message;
                 $item['sender'] = $selfWsId;
                 $item['recver'] = $recvId;
-                $item['group'] = $group;
                 $item['status'] = 0;
                 self::$wsMsgTable->set($key, $item);
             });
