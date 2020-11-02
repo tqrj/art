@@ -59,12 +59,12 @@ class HttpApp extends BaseApp
             try {
                 $reflect = new \ReflectionClass($class);
                 if ($reflect->hasProperty('isWs')){
-                    throw new \ReflectionException('no access websocket class');
+                    throw new \ReflectionException('no access websocket class: ');
                 }
                 $object = $reflect->newInstance();
 //                $object = $reflect->newInstance([$request,$response]);
             } catch (\ReflectionException $e) {
-                throw new ClassNotFoundException('class not exists: ' . $class, $class, $e);
+                throw new ClassNotFoundException($e->getMessage() . $class, $class, $e);
             }
         } else {
             throw new ClassNotFoundException('class not exists: ' . $class);
