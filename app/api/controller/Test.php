@@ -49,7 +49,6 @@ class Test extends BaseController
             $result = $client->errMsg;
         }
         $client->close();
-        var_dump($result);
-        art_assign(200,$result);
+        art_assign(200,urldecode($result));
     }
 }
