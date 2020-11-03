@@ -75,7 +75,7 @@ class ArtWs
             foreach (self::$wsObject as $wsId => $ws) {
                 if ($wsId === $row['sender']) {
                     continue;//不发送到自己
-                } elseif ($row['recver'] == -1) {
+                } elseif ($row['recver'] == 0) {
                     $ws->push($row['msg']);//全部发送
                     continue;
                 } elseif ($row['recver'] === $wsId) {
@@ -115,20 +115,20 @@ class ArtWs
      * @param int $recvId 指定发送发填写收信ID
      * @param string $group 发送指定群组
      */
-    public static function pushMsg(string $message, int $selfWsId = -1, int $recvId = -1, string $group = '')
+    public static function pushMsg(string $message, int $selfWsId = 0, int $recvId = 0, string $group = '')
     {
-        foreach (self::$wsMsgTable as $key => $item) {
-            go(function () use ($key, $item, $message, $selfWsId, $recvId, $group) {
+        foreach (self::$wsMsgTable as $poolId => $item) {
+            go(function () use ($poolId, $item, $message, $selfWsId, $recvId, $group) {
                 //死循环，注意
                 while ($item['status'] === 0) {
                     System::sleep(0.05);
-                    $item = self::$wsMsgTable->get($key);
+                    $item = self::$wsMsgTable->get($poolId);
                 }
                 $item['msg'] = $message;
                 $item['sender'] = $selfWsId;
                 $item['recver'] = $recvId;
                 $item['status'] = 0;
-                self::$wsMsgTable->set($key, $item);
+                self::$wsMsgTable->set($poolId, $item);
             });
         }
     }
