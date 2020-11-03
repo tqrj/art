@@ -53,7 +53,7 @@ class ArtWs
         }
 
         self::$wsMsgTable = new Table(1024);
-        self::$wsMsgTable->column('msg', Table::TYPE_STRING, 1024 * 10);
+        self::$wsMsgTable->column('msg', Table::TYPE_STRING, 1024 * 1024);
         self::$wsMsgTable->column('sender', Table::TYPE_INT);
         self::$wsMsgTable->column('recver', Table::TYPE_INT);
         self::$wsMsgTable->column('status', Table::TYPE_INT);
