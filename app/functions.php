@@ -158,7 +158,7 @@ function art_assign($code = 200, $msg = "success", $data = [], $url = '', $httpC
         $response->end(json_encode($res));;
         Context::delete();
     }else{
-        $response->push(json_decode($res));
+        $response->push(json_encode($res));
     }
 }
 
