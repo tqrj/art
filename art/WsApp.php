@@ -39,7 +39,7 @@ class WsApp extends BaseApp
         if (!is_array($frame->data)){
             throw new HttpException(404, 'App not find');
         }
-        $pathInfo = $frame->data['path'];
+        $pathInfo = $frame->data['artPath'];
         $pathInfo = explode('/', $pathInfo);
         if (count($pathInfo) < 4) {
             throw new HttpException(404, 'App not find');
