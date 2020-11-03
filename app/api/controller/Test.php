@@ -41,14 +41,13 @@ class Test extends BaseController
         $str = urlencode($str[$rand]);
         $len  = pack('i',strlen($str)+4);
         $client->send($len.$str);
-        //sleep(0.5);
-        //}
         $result = $client->recv();
         if ($result == false){
             echo $client->errMsg;
             $result = $client->errMsg;
         }
         $client->close();
-        art_assign(200,urldecode(mb_substr($result,4)));
+
+        art_assign(200,'success',urldecode(mb_substr($result,4)));
     }
 }
