@@ -15,6 +15,12 @@ class Test extends BaseController
 
     private $isWs = true;
 
+    public function __construct()
+    {
+        parent::__construct();
+        echo 'ojbk';
+    }
+
     /**
      *
      */
@@ -33,6 +39,7 @@ class Test extends BaseController
             echo "connect failed. Error: {$client->errCode}\n";
             return;
         }
+
         $str = [];
         $str[] = '单10';
         $str[] = '12345-12345-12345-12369-2580/0.1';
