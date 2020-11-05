@@ -105,7 +105,7 @@ class ArtWs
             print_r($row);
             if ($row['type'] === 1){
                 self::$wsGroup[$row['group']][] = $row['wsId'];
-                echo '加入了群组'.self::$wsGroup[$row['group']][$row['wsId']];
+                echo '加入了群组'.self::$wsGroup[$row['group']];
             }else{
                 $key = array_search($row['wsId'],self::$wsGroup[$row['group']]);
                 array_splice(self::$wsGroup[$row['group']],$key,1);
@@ -178,6 +178,7 @@ class ArtWs
                 self::$wsGroupTable->set($poolId,$item);
             });
         }
+        echo '尝试加入'.$wsId.$group;
     }
 
     public static function leaveGroup(int $wsId, string $group)
