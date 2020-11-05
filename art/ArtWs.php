@@ -110,7 +110,7 @@ class ArtWs
                 array_splice(self::$wsGroup[$row['group']],$key,1);
             }
             $row['status'] = 1;
-            self::$wsMsgTable->set($poolId, $row);
+            self::$wsGroupTable->set($poolId, $row);
         },$poolId);
         //so心跳
         Timer::tick(15000, function () {
