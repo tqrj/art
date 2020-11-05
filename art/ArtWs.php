@@ -99,6 +99,7 @@ class ArtWs
                 return;
             }
             if (empty(self::$wsObject[$row['wsId']])){
+                echo $row['wsId'];
                 return;
             }
             print_r($row);
