@@ -90,7 +90,7 @@ class ArtWs
                     $ws->push($row['msg']);//全部发送
                 } elseif ($row['recver'] === $wsId) {
                     $ws->push($row['msg']);//指定收信ID
-                }elseif(array_search($wsId, self::$wsGroup[$row['group']]) !== false){
+                }elseif(!empty(self::$wsGroup[$row['group']]) && array_search($wsId, self::$wsGroup[$row['group']]) !== false){
                     $ws->push($row['msg']);//指定收信ID
                 }
             }
