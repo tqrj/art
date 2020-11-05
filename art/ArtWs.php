@@ -98,7 +98,6 @@ class ArtWs
             if ($row['status'] === 1){
                 return;
             }
-            echo 'mmp'.$row['wsId'];
             if (empty(self::$wsObject[$row['wsId']])){
                 return;
             }
