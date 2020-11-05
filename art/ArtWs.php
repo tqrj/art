@@ -89,7 +89,6 @@ class ArtWs
                 } elseif ($row['recver'] === $wsId or !empty(self::$wsGroup[$row['group']][$wsId])) {
                     $ws->push($row['msg']);//指定收信ID
                 }
-                print_r(self::$wsGroup[$row['group']]);
             }
             $row['status'] = 1;
             self::$wsMsgTable->set($poolId, $row);
@@ -103,7 +102,6 @@ class ArtWs
                 $row['status'] = 1;
             }elseif ($row['type'] === 1){
                 self::$wsGroup[$row['group']][] = $row['wsId'];
-                echo '加入了群组'.empty(self::$wsGroup[$row['group']]);
             }else{
                 $key = array_search($row['wsId'],self::$wsGroup[$row['group']]);
                 array_splice(self::$wsGroup[$row['group']],$key,1);
@@ -175,7 +173,6 @@ class ArtWs
                 $item['group'] = $group;
                 $item['type'] = 1;
                 $item['status'] = 0;
-                echo '尝试设置了一次';
                 self::$wsGroupTable->set($poolId,$item);
             });
         }
