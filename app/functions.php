@@ -134,10 +134,11 @@ function art_validate(array $data, $validate, array $message = [], bool $batch =
  * @param string $msg
  * @param array $data
  * @param string $url
+ * @param int $selfWsId
  * @param int $recvId
  * @param string $wsGroup
  */
-function art_assign($code = 200, $msg = "success", $data = [], $url = '',$recvId = 0,$wsGroup = '')
+function art_assign(int $code = 200, string $msg = "success",array $data = [], string $url = '',int $selfWsId = 0, int $recvId = 0, string $wsGroup = '')
 {
     $res['code']= $code;
     $res['msg'] = $msg;
@@ -153,7 +154,7 @@ function art_assign($code = 200, $msg = "success", $data = [], $url = '',$recvId
         $response->end(json_encode($res));;
         Context::delete();
     }else{
-        \art\ArtWs::pushMsg(json_encode($res),$response->artWsId,$recvId,$wsGroup);
+        \art\ArtWs::pushMsg(json_encode($res),$selfWsId,$recvId,$wsGroup);
     }
 }
 
@@ -165,7 +166,7 @@ function art_assign($code = 200, $msg = "success", $data = [], $url = '',$recvId
 function getObjectId(\Swoole\Http\Response $response) {
     if (PHP_VERSION_ID < 70200) {
         $id = spl_object_hash($response);
-    } else {
+    } else {+
         $id = spl_object_id($response);
     }
     return $id;

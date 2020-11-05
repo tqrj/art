@@ -73,8 +73,6 @@ class ArtWs
 
     public static function joinPool($poolId)
     {
-        self::$wsGroup = [];
-        self::$wsObject = [];
         self::$wsMsgTable->set($poolId, ['msg' => '', 'sender' => 0, 'recver' => 0, 'group' => '', 'status' => 1]);
         self::$wsGroupTable->set($poolId, ['wsId' => 0, 'group' => '', 'type' => 1, 'status' => 1]);
         //消息处理
