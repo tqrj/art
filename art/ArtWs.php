@@ -99,10 +99,8 @@ class ArtWs
                 return;
             }
             if (empty(self::$wsObject[$row['wsId']])){
-                echo $row['wsId'];
                 return;
             }
-            print_r($row);
             if ($row['type'] === 1){
                 self::$wsGroup[$row['group']][] = $row['wsId'];
                 echo '加入了群组'.empty(self::$wsGroup[$row['group']]);
