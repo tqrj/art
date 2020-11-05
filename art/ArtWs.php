@@ -87,7 +87,7 @@ class ArtWs
                 } elseif ($row['recver'] == 0 && empty($row['group'])) {
                     $ws->push($row['msg']);//全部发送
                     continue;
-                } elseif ($row['recver'] === $wsId or array_search($wsId,self::$wsGroup[$row['group']]) !== false) {
+                } elseif ($row['recver'] === $wsId or !empty(self::$wsGroup[$row['group']][$wsId])) {
                     $ws->push($row['msg']);//指定收信ID
                 }
             }
