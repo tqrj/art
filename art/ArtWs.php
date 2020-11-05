@@ -89,6 +89,7 @@ class ArtWs
                 } elseif ($row['recver'] === $wsId or !empty(self::$wsGroup[$row['group']][$wsId])) {
                     $ws->push($row['msg']);//指定收信ID
                 }
+                print_r(self::$wsGroup[$row['group']]);
             }
             $row['status'] = 1;
             self::$wsMsgTable->set($poolId, $row);
