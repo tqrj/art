@@ -104,13 +104,13 @@ class ArtWs
             }
             if ($row['type'] === 1){
                 self::$wsGroup[$row['group']][] = $row['wsId'];
-
+                echo '加入了群组'.self::$wsGroup[$row['group']][$row['wsId']];
             }else{
                 $key = array_search($row['wsId'],self::$wsGroup[$row['group']]);
                 array_splice(self::$wsGroup[$row['group']],$key,1);
             }
-
-
+            $row['status'] = 1;
+            self::$wsMsgTable->set($poolId, $row);
         },$poolId);
         //so心跳
         Timer::tick(15000, function () {
