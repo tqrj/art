@@ -86,7 +86,6 @@ class ArtWs
                     continue;//不发送到自己
                 } elseif ($row['recver'] == 0 && empty($row['group'])) {
                     $ws->push($row['msg']);//全部发送
-                    continue;
                 } elseif ($row['recver'] === $wsId or !empty(self::$wsGroup[$row['group']][$wsId])) {
                     $ws->push($row['msg']);//指定收信ID
                 }
@@ -178,7 +177,6 @@ class ArtWs
                 self::$wsGroupTable->set($poolId,$item);
             });
         }
-        echo '尝试加入'.$wsId.$group;
     }
 
     public static function leaveGroup(int $wsId, string $group)
