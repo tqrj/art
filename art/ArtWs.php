@@ -169,10 +169,12 @@ class ArtWs
                     System::sleep(0.05);
                     $item = self::$wsGroupTable->get($poolId);
                 }
+
                 $item['wsId'] = $wsId;
                 $item['group'] = $group;
                 $item['type'] = 1;
                 $item['status'] = 0;
+                echo '尝试设置了一次';
                 self::$wsGroupTable->set($poolId,$item);
             });
         }
