@@ -130,19 +130,14 @@ function art_validate(array $data, $validate, array $message = [], bool $batch =
 }
 
 /**
- * 返回json数据，用于接口
- * @Author   听雨
- * @DateTime 2020-03-31
- * @param integer $code [description]
- * @param string $msg [description]
- * @param array $data [description]
- * @param string $url [description]
- * @param integer $httpCode [description]
- * @param array $header [description]
- * @param array $options [description]
- * @return string
+ * @param int $code
+ * @param string $msg
+ * @param array $data
+ * @param string $url
+ * @param int $recvId
+ * @param string $wsGroup
  */
-function art_assign($code = 200, $msg = "success", $data = [], $url = '', $httpCode = 200, $header = [], $options = [])
+function art_assign($code = 200, $msg = "success", $data = [], $url = '',$recvId = 0,$wsGroup = '')
 {
     $res['code']= $code;
     $res['msg'] = $msg;
@@ -158,7 +153,7 @@ function art_assign($code = 200, $msg = "success", $data = [], $url = '', $httpC
         $response->end(json_encode($res));;
         Context::delete();
     }else{
-        \art\ArtWs::pushMsg(json_encode($res),-1,$response->artWsId);
+        \art\ArtWs::pushMsg(json_encode($res),$response->artWsId,$recvId,$wsGroup);
     }
 }
 

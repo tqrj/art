@@ -54,7 +54,6 @@ class Test extends BaseController
             $result = $client->errMsg;
         }
         $client->close();
-
         art_assign(200,'success',urldecode(mb_substr($result,4)));
     }
 
@@ -62,13 +61,13 @@ class Test extends BaseController
     {
         $msg = $this->frame->data['msg'];
         ArtWs::joinGroup($this->response->artWsId,'test1');
-        ArtWs::pushMsg($msg,$this->response->artWsId,0,'test1');
+        art_assign(200,$msg,[],'','','test1');
     }
 
     public function test2()
     {
         $msg = $this->frame->data['msg'];
         ArtWs::joinGroup($this->response->artWsId,'test2');
-        ArtWs::pushMsg($msg,$this->response->artWsId,0,'test2');
+        art_assign(200,$msg,[],'','','test2');
     }
 }
