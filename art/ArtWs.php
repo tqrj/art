@@ -174,6 +174,7 @@ class ArtWs
                 $item['group'] = $group;
                 $item['type'] = 1;
                 $item['status'] = 0;
+                print_r($item);
                 self::$wsGroupTable->set($poolId,$item);
             });
         }
