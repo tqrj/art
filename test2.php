@@ -1,9 +1,10 @@
 <?php
 
-$test = [1212,13213,21414];
-print_r($test);
-echo  array_search(13213,$test);
-array_splice($test,1,1);
-print_r($test);
+$test['dd'][] = 12;
+$test['dd'][] = 124;
+$test['dd'][] = 125;
+echo empty($test['dd'][125]);
+//echo  array_search(125,$test['dd']);
+
 
 
