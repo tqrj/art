@@ -51,30 +51,10 @@ class HttpApp extends BaseApp
         self::putActionName(Str::camel($action));
     }
 
-    private static function controller():object
-    {
-        //$class = $this->parseClass('controller', );
-        $class= self::parseClass();
-        if (class_exists($class)) {
-            try {
-                $reflect = new \ReflectionClass($class);
-                if ($reflect->hasProperty('isWs')){
-                    throw new \ReflectionException('no access websocket class: ');
-                }
-                $object = $reflect->newInstance();
-//                $object = $reflect->newInstance([$request,$response]);
-            } catch (\ReflectionException $e) {
-                throw new ClassNotFoundException($e->getMessage() . $class, $class, $e);
-            }
-        } else {
-            throw new ClassNotFoundException('class not exists: ' . $class);
-        }
-        return $object;
-    }
 
     public static function run()
     {
-        $instance = self::controller();
+        $instance = self::controller('isHttp');
         if (!is_callable([$instance, self::getActionName()])) {
             throw new HttpException(404, 'method not exists:' . get_class($instance) . '->' . self::getActionName() . '()');
         }

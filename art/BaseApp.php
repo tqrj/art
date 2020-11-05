@@ -5,6 +5,7 @@ namespace art;
 
 
 use art\context\Context;
+use art\exception\ClassNotFoundException;
 
 class BaseApp
 {
@@ -105,6 +106,27 @@ class BaseApp
     {
 
         return 'app' . '\\' . self::getAppName() . '\\' . 'controller' . '\\' . self::getControllerName();
+    }
+
+    protected static function controller($appType = 'isWS'):object
+    {
+        //$class = $this->parseClass('controller', );
+        $class= self::parseClass();
+        if (class_exists($class)) {
+            try {
+                $reflect = new \ReflectionClass($class);
+                if (!$reflect->hasProperty($appType)){
+                    throw new \ReflectionException('no access Http class');
+                }
+                $object = $reflect->newInstance();
+//                $object = $reflect->newInstance([$request,$response]);
+            } catch (\ReflectionException $e) {
+                throw new ClassNotFoundException('class not exists: ' . $class, $class, $e);
+            }
+        } else {
+            throw new ClassNotFoundException('class not exists: ' . $class);
+        }
+        return $object;
     }
 
 }
