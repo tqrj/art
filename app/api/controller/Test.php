@@ -53,20 +53,20 @@ class Test extends BaseController
             $result = $client->errMsg;
         }
         $client->close();
-        art_assign(200,'success',urldecode(mb_substr($result,4)));
+        art_assign(200,urldecode(mb_substr($result,4)));
     }
 
     public function test1()
     {
         $msg = $this->frame->data['msg'];
         ArtWs::joinGroup($this->response->artWsId,'test1');
-        art_assign(200,$msg,[],'',0,'test1');
+        art_assign(200,$msg,[],'',0,0,'test1');
     }
 
     public function test2()
     {
         $msg = $this->frame->data['msg'];
         ArtWs::joinGroup($this->response->artWsId,'test2');
-        art_assign(200,$msg,[],'',0,'test2');
+        art_assign(200,$msg,[],'',0,0,'test2');
     }
 }
