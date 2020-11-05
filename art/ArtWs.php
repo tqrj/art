@@ -42,7 +42,7 @@ class ArtWs
     //进程为键名
     private static Table $wsGroupTable;
 
-    private static array $wsGroup;
+    private static array $wsGroup = [];
 
     private static array $wsObject = [];
 
