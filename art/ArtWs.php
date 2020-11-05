@@ -57,15 +57,15 @@ class ArtWs
         self::$wsMsgTable->column('msg', Table::TYPE_STRING, 1024 * 1024);
         self::$wsMsgTable->column('sender', Table::TYPE_INT);
         self::$wsMsgTable->column('recver', Table::TYPE_INT);
-        self::$wsMsgTable->column('group', Table::TYPE_STRING,40);
+        self::$wsMsgTable->column('group', Table::TYPE_STRING, 40);
         self::$wsMsgTable->column('status', Table::TYPE_INT);
         self::$wsMsgTable->create();
 
         self::$wsGroupTable = new Table(20);
-        self::$wsGroupTable->column('wsId',Table::TYPE_INT);
-        self::$wsGroupTable->column('group',Table::TYPE_STRING,40);
-        self::$wsGroupTable->column('type',Table::TYPE_INT);
-        self::$wsGroupTable->column('status',Table::TYPE_INT);
+        self::$wsGroupTable->column('wsId', Table::TYPE_INT);
+        self::$wsGroupTable->column('group', Table::TYPE_STRING, 40);
+        self::$wsGroupTable->column('type', Table::TYPE_INT);
+        self::$wsGroupTable->column('status', Table::TYPE_INT);
         self::$wsGroupTable->create();
 
         return true;
@@ -73,8 +73,8 @@ class ArtWs
 
     public static function joinPool($poolId)
     {
-        self::$wsMsgTable->set($poolId, ['msg' => '', 'sender' => 0, 'recver' => 0,'group'=>'', 'status' => 1]);
-        self::$wsGroupTable->set($poolId, ['wsId' => 0, 'group' => '','type'=>1, 'status' => 1]);
+        self::$wsMsgTable->set($poolId, ['msg' => '', 'sender' => 0, 'recver' => 0, 'group' => '', 'status' => 1]);
+        self::$wsGroupTable->set($poolId, ['wsId' => 0, 'group' => '', 'type' => 1, 'status' => 1]);
         //消息处理
         Timer::tick(10, function ($timerId, $poolId) {
             $row = self::$wsMsgTable->get($poolId);
@@ -86,30 +86,27 @@ class ArtWs
                     continue;//不发送到自己
                 } elseif ($row['recver'] == 0 && empty($row['group'])) {
                     $ws->push($row['msg']);//全部发送
-                } elseif ($row['recver'] === $wsId or array_search($wsId,self::$wsGroup[$row['group']]) !== false ) {
+                } elseif ($row['recver'] === $wsId or array_search($wsId, self::$wsGroup[$row['group']]) !== false) {
                     $ws->push($row['msg']);//指定收信ID
                 }
             }
             $row['status'] = 1;
             self::$wsMsgTable->set($poolId, $row);
         }, $poolId);
-        Timer::tick(10,function ($timerId,$poolId){
+        Timer::tick(10, function ($timerId, $poolId) {
             $row = self::$wsGroupTable->get($poolId);
-            if ($row['status'] === 1){
+            if ($row['status'] === 1) {
                 return;
-            }
-            if (empty(self::$wsObject[$row['wsId']])){
-                $row['status'] = 1;
-            }elseif ($row['type'] === 1){
+            } elseif ($row['type'] === 1) {
                 self::$wsGroup[$row['group']][] = $row['wsId'];
-            }else{
-                $key = array_search($row['wsId'],self::$wsGroup[$row['group']]);
-                array_splice(self::$wsGroup[$row['group']],$key,1);
+            } else {
+                $key = array_search($row['wsId'], self::$wsGroup[$row['group']]);
+                array_splice(self::$wsGroup[$row['group']], $key, 1);
             }
 
             $row['status'] = 1;
             self::$wsGroupTable->set($poolId, $row);
-        },$poolId);
+        }, $poolId);
         //so心跳
         Timer::tick(15000, function () {
             array_map(function (Response $ws) {
@@ -161,10 +158,9 @@ class ArtWs
 
     public static function joinGroup(int $wsId, string $group)
     {
-        foreach (self::$wsGroupTable as $poolId=>$item)
-        {
-            go(function ()use($poolId,$item,$wsId,$group){
-                while ($item['status'] === 0){
+        foreach (self::$wsGroupTable as $poolId => $item) {
+            go(function () use ($poolId, $item, $wsId, $group) {
+                while ($item['status'] === 0) {
                     System::sleep(0.05);
                     $item = self::$wsGroupTable->get($poolId);
                 }
@@ -173,17 +169,16 @@ class ArtWs
                 $item['group'] = $group;
                 $item['type'] = 1;
                 $item['status'] = 0;
-                self::$wsGroupTable->set($poolId,$item);
+                self::$wsGroupTable->set($poolId, $item);
             });
         }
     }
 
     public static function leaveGroup(int $wsId, string $group)
     {
-        foreach (self::$wsGroupTable as $poolId=>$item)
-        {
-            go(function ()use($poolId,$item,$wsId,$group){
-                while ($item['status'] === 0){
+        foreach (self::$wsGroupTable as $poolId => $item) {
+            go(function () use ($poolId, $item, $wsId, $group) {
+                while ($item['status'] === 0) {
                     System::sleep(0.05);
                     $item = self::$wsGroupTable->get($poolId);
                 }
@@ -191,7 +186,7 @@ class ArtWs
                 $item['group'] = $group;
                 $item['type'] = 0;
                 $item['status'] = 0;
-                self::$wsGroupTable->set($poolId,$item);
+                self::$wsGroupTable->set($poolId, $item);
             });
         }
     }
