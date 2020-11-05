@@ -34,7 +34,7 @@ class Test extends BaseController
             'package_length_offset' => 0,
             'package_body_offset'   => 0,
         ]);
-        if (!$client->connect('39.101.214.137', 9501))
+        if (!$client->connect('172.26.125.81', 9501))
         {
             echo "connect failed. Error: {$client->errCode}\n";
             return;
@@ -56,5 +56,19 @@ class Test extends BaseController
         $client->close();
 
         art_assign(200,'success',urldecode(mb_substr($result,4)));
+    }
+
+    public function test1()
+    {
+        $msg = $this->frame->data['msg'];
+        ArtWs::joinGroup($this->response->artWsId,'test1');
+        ArtWs::pushMsg($msg,$this->response->artWsId,0,'test1');
+    }
+
+    public function test2()
+    {
+        $msg = $this->frame->data['msg'];
+        ArtWs::joinGroup($this->response->artWsId,'test2');
+        ArtWs::pushMsg($msg,$this->response->artWsId,0,'test2');
     }
 }
