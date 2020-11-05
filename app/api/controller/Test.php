@@ -59,7 +59,6 @@ class Test extends BaseController
     public function test1()
     {
         $msg = $this->frame->data['msg'];
-        print_r($this->response->artWsId);
         ArtWs::joinGroup($this->response->artWsId,'test1');
         art_assign(200,$msg,[],'',0,'test1');
     }
