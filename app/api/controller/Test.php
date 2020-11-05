@@ -18,7 +18,6 @@ class Test extends BaseController
     public function __construct()
     {
         parent::__construct();
-        echo 'ojbk';
     }
 
     /**
@@ -61,13 +60,13 @@ class Test extends BaseController
     {
         $msg = $this->frame->data['msg'];
         ArtWs::joinGroup($this->response->artWsId,'test1');
-        art_assign(200,$msg,[],'','','test1');
+        art_assign(200,$msg,[],'',0,'test1');
     }
 
     public function test2()
     {
         $msg = $this->frame->data['msg'];
         ArtWs::joinGroup($this->response->artWsId,'test2');
-        art_assign(200,$msg,[],'','','test2');
+        art_assign(200,$msg,[],'',0,'test2');
     }
 }
