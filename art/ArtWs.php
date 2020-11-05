@@ -102,6 +102,7 @@ class ArtWs
             if (empty(self::$wsObject[$row['wsId']])){
                 return;
             }
+            print_r($row);
             if ($row['type'] === 1){
                 self::$wsGroup[$row['group']][] = $row['wsId'];
                 echo '加入了群组'.self::$wsGroup[$row['group']][$row['wsId']];
@@ -174,7 +175,6 @@ class ArtWs
                 $item['group'] = $group;
                 $item['type'] = 1;
                 $item['status'] = 0;
-                print_r($item);
                 self::$wsGroupTable->set($poolId,$item);
             });
         }
