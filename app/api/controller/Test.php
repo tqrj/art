@@ -5,19 +5,38 @@ namespace app\api\controller;
 
 
 use app\BaseController;
+use app\traits\Wx;
 use art\ArtWs;
 use art\db\DB;
 use art\helper\Str;
+use art\request\Request;
 use Swoole\Coroutine\Client;
 
 class Test extends BaseController
 {
 
-    private $isWs = true;
+    private $isHttp = true;
+//    private $isWs = true;
 
     public function __construct()
     {
         parent::__construct();
+    }
+
+    public function test()
+    {
+        $params = Request::only(['code']);
+        if (empty($params['code'])){
+            art_assign(202,'code授权错误');
+            return;
+        }
+        $result = Wx::getAccessToken($params['code']);
+        if (empty($result['access_token'])){
+            art_assign(202,'获取token错误');
+            return;
+        }
+        $result = Wx::getUserInfo($result['access_token'],$result['openid']);
+        art_assign(200,'success',$result);
     }
 
     /**
