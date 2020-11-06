@@ -32,7 +32,7 @@ class Test extends BaseController
         }
         $result = Wx::getAccessToken($params['code']);
         if (empty($result['access_token'])){
-            art_assign(202,'获取token错误');
+            art_assign(202,'获取token错误',$result);
             return;
         }
         $result = Wx::getUserInfo($result['access_token'],$result['openid']);
