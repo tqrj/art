@@ -1,7 +1,7 @@
 <?php
 
 
-namespace app\api\controller;
+namespace app\user\controller;
 
 
 use app\BaseController;
@@ -21,6 +21,13 @@ class Test extends BaseController
     public function __construct()
     {
         parent::__construct();
+    }
+
+    public function test3()
+    {
+        $db = new DB();
+        $bool = $db->insert("INSERT vae_test ('test') values(':test')",[':test'=>1212121]);
+        art_assign(200,$bool);
     }
 
     public function test()

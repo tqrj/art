@@ -13,16 +13,16 @@ class Database
     public static $port = 3306;
 
     /** @var string */
-    public static $dbname = 'porty';
+    public static $dbname = 'hn';
 
     /** @var string */
     public static $charset = 'utf8mb4';
 
     /** @var string */
-    public static $username = 'porty';
+    public static $username = 'hn';
 
     /** @var string */
-    public static $password = 'JRbs3aErPn5JwLNB';
+    public static $password = 'Yp2yZPawZLiZ54kc';
 
     public static $size = 64;
 }

@@ -35,7 +35,6 @@ $pidPool->on('workerStart', function ($Pool, int $id) {
             art_assign(404, $e->getMessage());
         }
     });
-
     //websocket部分
     ArtWs::joinPool($id);
     $server->handle('/so', function (Request $request, Response $ws) {
