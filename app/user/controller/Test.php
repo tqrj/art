@@ -26,8 +26,8 @@ class Test extends BaseController
     public function test3()
     {
         $db = new DB();
-        $bool = $db->insert("INSERT vae_test ('test') values(:test)",[':test'=>1212121]);
-        art_assign(200,$bool);
+        $bool = $db->query("SELECT * FROM vae_test WHERE id = :id",[':id'=>1]);
+        art_assign(200,'success',$bool);
     }
 
     public function test()

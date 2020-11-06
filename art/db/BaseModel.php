@@ -53,13 +53,9 @@ class BaseModel
 
     private $in_transaction = false;
 
-    public function __construct($config = null)
+    public function __construct()
     {
-        if (! empty($config)) {
-            $this->pool = \Simps\DB\PDO::getInstance($config);
-        } else {
-            $this->pool = \Simps\DB\PDO::getInstance();
-        }
+        $this->pool = \art\DB\PDO::getInstance();
     }
 
     public function beginTransaction()
