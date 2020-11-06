@@ -30,7 +30,7 @@ class Test extends BaseController
 //        $bool = $db->query("SELECT * FROM vae_test WHERE id = :id",[':id'=>1]);
 //        $bool = $db->insert("INSERT INTO vae_test (test) values (:test)",[':test'=>1]);
         $model = new BaseModel();
-        $bool = $model->select('vae_test',['id','test'],['id'=>1]);
+        $bool = $model->select('vae_test',['id','test'],['id[>]'=>20]);
 
         art_assign(200,'success',$bool);
     }
