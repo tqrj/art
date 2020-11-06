@@ -7,6 +7,7 @@ namespace app\user\controller;
 use app\BaseController;
 use app\traits\Wx;
 use art\ArtWs;
+use art\db\BaseModel;
 use art\db\DB;
 use art\helper\Str;
 use art\request\Request;
@@ -25,9 +26,12 @@ class Test extends BaseController
 
     public function test3()
     {
-        $db = new DB();
+//        $db = new DB();
 //        $bool = $db->query("SELECT * FROM vae_test WHERE id = :id",[':id'=>1]);
-        $bool = $db->insert("INSERT INTO vae_test (test) values (:test)",[':test'=>1]);
+//        $bool = $db->insert("INSERT INTO vae_test (test) values (:test)",[':test'=>1]);
+        $model = new BaseModel();
+        $bool = $model->select('vae_test',['id'=>1]);
+
         art_assign(200,'success',$bool);
     }
 
