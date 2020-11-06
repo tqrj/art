@@ -18,7 +18,7 @@ trait Wx
      */
     public static function getAccessToken(string $code)
     {
-        $client = new Client('api.weixin.qq.com',80,true);
+        $client = new Client('api.weixin.qq.com',443,true);
         $client->get("/sns/oauth2/access_token?appid=".self::$appID."&secret=".self::$appSecret."&code=".$code."&grant_type=authorization_code");
         $client->close();
         if ($client->statusCode != 200){
@@ -34,7 +34,7 @@ trait Wx
      */
     public static function refreshToken(string $refresh_token)
     {
-        $client = new Client('api.weixin.qq.com',80,true);
+        $client = new Client('api.weixin.qq.com',443,true);
         $url = "/sns/oauth2/refresh_token?appid=".self::$appID."&grant_type=refresh_token&refresh_token=".$refresh_token;
         $client->get($url);
         $client->close();
@@ -53,7 +53,7 @@ trait Wx
      */
     public static function getUserInfo(string $accessToken,string $OPENID)
     {
-        $client = new Client('api.weixin.qq.com',80,true);
+        $client = new Client('api.weixin.qq.com',443,true);
         $url = "/sns/userinfo?access_token=".$accessToken."&openid=".$OPENID."&lang=zh_CN";
         $client->get($url);
         $client->close();
