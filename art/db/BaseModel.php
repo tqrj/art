@@ -12,7 +12,6 @@ namespace art\db;
 
 use Exception;
 use InvalidArgumentException;
-use PDO;
 use RuntimeException;
 use Swoole\Coroutine;
 
@@ -36,7 +35,7 @@ class BaseModel
 {
     protected $pool;
 
-    /** @var PDO */
+    /** @var \PDO */
     protected $pdo;
 
     protected $statement;
@@ -55,7 +54,7 @@ class BaseModel
 
     public function __construct()
     {
-        $this->pool = \art\DB\PDO::getInstance();
+        $this->pool = PDO::getInstance();
     }
 
     public function beginTransaction()
