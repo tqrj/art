@@ -110,7 +110,7 @@ class ArtWs
             self::$wsGroupTable->set($poolId, $row);
         }, $poolId);
         //so心跳
-        Timer::tick(15000, function () {
+        Timer::tick(15000, function (){
             array_map(function (Response $ws) {
                 $pingFrame = new Frame();
                 $pingFrame->opcode = WEBSOCKET_OPCODE_PING;
@@ -118,6 +118,8 @@ class ArtWs
             }, self::$wsObject);
         });
     }
+
+
 
     public static function setWs(Response &$ws): int
     {
