@@ -14,6 +14,7 @@ use Exception;
 use InvalidArgumentException;
 use RuntimeException;
 use Swoole\Coroutine;
+use PDO;
 
 /*!
  * Medoo database framework
@@ -35,7 +36,7 @@ class BaseModel
 {
     protected $pool;
 
-    /** @var \PDO */
+    /** @var PDO */
     protected $pdo;
 
     protected $statement;
@@ -54,7 +55,7 @@ class BaseModel
 
     public function __construct()
     {
-        $this->pool = PDO::getInstance();
+        $this->pool = \art\db\PDO::getInstance();
     }
 
     public function beginTransaction()
