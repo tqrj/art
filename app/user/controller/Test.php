@@ -44,10 +44,10 @@ class Test extends BaseController
             ['[><]vae_user'=>['id']],
             ['vae_test.nickname']
         );*/
-        $bool = $model->debug()->select('vae_test(t)',
+/*        $bool = $model->debug()->select('vae_test(t)',
             ['[><]vae_user(u)'=>['id']],
             ['t.nickname']
-        );//别名 用括号括起来声明
+        );//别名 用括号括起来声明*/
         //SELECT `vae_test`.`nickname` FROM `vae_test` INNER JOIN `vae_user` USING (`id`)
 
         art_assign(200,'success',$bool);
