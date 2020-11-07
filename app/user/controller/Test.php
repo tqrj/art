@@ -27,13 +27,16 @@ class Test extends BaseController
     public function test3()
     {
         //https://loiy.net/post/566.html
+        //https://medoo.in/api/where
 //        $db = new DB();
 //        $bool = $db->query("SELECT * FROM vae_test WHERE id = :id",[':id'=>1]);
 //        $bool = $db->insert("INSERT INTO vae_test (test) values (:test)",[':test'=>1]);
         $model = new BaseModel();
 //        $bool = $model->select('vae_test',['id','test'],['id'=>[20,21,30]]);
-        $bool = $model->select('vae_test',['id','test'],['like'=>['nickname'=>'我%']]);
-
+        $bool = $model->debug()->select('vae_test',
+            ['id','nickname'],
+            ['nickname[~]'=>['我%']
+            ]);
         art_assign(200,'success',$bool);
     }
 
