@@ -31,7 +31,7 @@ class Test extends BaseController
 //        $bool = $db->insert("INSERT INTO vae_test (test) values (:test)",[':test'=>1]);
         $model = new BaseModel();
 //        $bool = $model->select('vae_test',['id','test'],['id'=>[20,21,30]]);
-        $bool = $model->select('vae_test',['id','test'],['nickname'=>['like','我%']]);
+        $bool = $model->select('vae_test',['id','test'],['nickname[like]'=>['我%']]);
 
         art_assign(200,'success',$bool);
     }
