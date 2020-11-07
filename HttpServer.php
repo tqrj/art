@@ -9,6 +9,7 @@ use Swoole\Coroutine\Http\Server;
 use Swoole\Http\Request;
 use Swoole\Http\Response;
 use Swoole\Process\Pool;
+use Swoole\WebSocket\Frame;
 
 require 'vendor/autoload.php';
 
@@ -54,6 +55,10 @@ $pidPool->on('workerStart', function ($Pool, int $id) {
                 ArtWs::delWs($ws);
                 echo "error : " . swoole_last_error() . "\n";
                 break;
+            } elseif ($frame->opcode == WEBSOCKET_OPCODE_PING){
+                $pingFrame = new Frame();
+                $pingFrame->opcode = WEBSOCKET_OPCODE_PONG;
+                $ws->push($pingFrame);
             } elseif ($frame->opcode == WEBSOCKET_OPCODE_TEXT) {
                 try {
                     WsApp::init($request, $ws, $frame);
