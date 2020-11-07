@@ -39,9 +39,9 @@ class Test extends BaseController
 //            ['nickname[~]'=>['我%']
 //            ]);
         //SELECT `id`,`nickname` FROM `vae_test` WHERE (`nickname` LIKE '我%')
-        $bool = $model->select('vae_test',
-            ['[<>]vae_user'=>['vae_user.id'=>'vae_test.id']],
-            ['vae_test.nickname']
+        $bool = $model->debug()->select('vae_test',
+            ['[><]vae_user'=>['id']],
+            ['nickname']
         );
 
         art_assign(200,'success',$bool);
