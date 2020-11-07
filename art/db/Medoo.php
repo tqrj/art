@@ -48,7 +48,7 @@ class Medoo
 
     private $in_transaction = false;
 
-	public function __construct(array $options)
+	public function __construct()
 	{
         $this->pool = \art\db\PDO::getInstance();
 	}
