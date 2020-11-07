@@ -33,10 +33,17 @@ class Test extends BaseController
 //        $bool = $db->insert("INSERT INTO vae_test (test) values (:test)",[':test'=>1]);
         $model = new BaseModel();
 //        $bool = $model->select('vae_test',['id','test'],['id'=>[20,21,30]]);
-        $bool = $model->debug()->select('vae_test',
-            ['id','nickname'],
-            ['nickname[~]'=>['我%']
-            ]);
+
+//        $bool = $model->debug()->select('vae_test',
+//            ['id','nickname'],
+//            ['nickname[~]'=>['我%']
+//            ]);
+        //SELECT `id`,`nickname` FROM `vae_test` WHERE (`nickname` LIKE '我%')
+        $bool = $model->select('vae_test',
+            ['[<>]vae_user'=>['vae_user.id'=>'vae_test.id']],
+            ['vae_test.nickname']
+        );
+
         art_assign(200,'success',$bool);
     }
 
