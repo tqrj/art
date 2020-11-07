@@ -117,14 +117,9 @@ class Medoo
 
 	protected function generate($query, $map)
 	{
-		$identifier = [
-			'mysql' => '`$1`',
-			'mssql' => '[$1]'
-		];
-
 		$query = preg_replace(
 			'/"([a-zA-Z0-9_]+)"/i',
-			isset($identifier[ $this->type ]) ?  $identifier[ $this->type ] : '"$1"',
+            '`$1`',
 			$query
 		);
 
