@@ -99,7 +99,9 @@ class Test extends BaseController
             $result = $client->errMsg;
         }
         $client->close();
-        art_assign(200,'success',json_decode(urldecode(mb_substr($result,4)),true));
+        $result = urldecode(mb_substr($result,4));
+        echo $result;
+        art_assign(200,'success',json_decode($result,true));
     }
 
     /**
