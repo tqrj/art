@@ -71,7 +71,7 @@ class Lottery
         if ($type  == self::LOTTERY_TYPE_OLD){
             $str = urlencode(self::LOTTERY_TYPE_OLD);
         }elseif ($type == self::LOTTERY_TYPE_now){
-            $str = urlencode(self::LOTTERY_TYPE_check);
+            $str = urlencode(self::LOTTERY_TYPE_now);
         }elseif ($type == self::LOTTERY_TYPE_check){
             $str = urlencode(self::LOTTERY_TYPE_check.'|'.$code);
         }

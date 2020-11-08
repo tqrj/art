@@ -75,6 +75,7 @@ class Test extends BaseController
         $result = Lottery::getCode(Lottery::LOTTERY_TYPE_OLD);
         art_assign(200,$result);
     }
+
     public function hello2()
     {
         $result = Lottery::getCode(Lottery::LOTTERY_TYPE_now);
