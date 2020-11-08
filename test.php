@@ -1,5 +1,5 @@
 <?php
-
+require 'vendor/autoload.php';
 use app\traits\Lottery;
 
 Co\run(function () {
