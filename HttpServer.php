@@ -5,6 +5,7 @@ namespace art;
 
 use art\exception\ClassNotFoundException;
 use art\exception\HttpException;
+use art\ws\ArtWs;
 use Swoole\Coroutine\Http\Server;
 use Swoole\Http\Request;
 use Swoole\Http\Response;

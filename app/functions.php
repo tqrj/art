@@ -155,7 +155,7 @@ function art_assign(int $code = 200, $msg = "success",$data = [], string $url = 
         $response->end(json_encode($res));;
         Context::delete();
     }else{
-        \art\ArtWs::pushMsg(json_encode($res),$selfWsId,$recvId,$wsGroup);
+        \art\ws\ArtWs::pushMsg(json_encode($res),$selfWsId,$recvId,$wsGroup);
     }
 }
 

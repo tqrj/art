@@ -6,11 +6,8 @@ namespace app\user\controller;
 
 use app\BaseController;
 use app\traits\Wx;
-use art\ArtWs;
-use art\db\BaseModel;
-use art\db\DB;
+use art\ws\ArtWs;
 use art\db\Medoo;
-use art\helper\Str;
 use art\request\Request;
 use Swoole\Coroutine\Client;
 
