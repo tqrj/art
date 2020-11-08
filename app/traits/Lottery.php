@@ -41,7 +41,6 @@ class Lottery
             return '';
         }
         $result = urldecode(mb_substr($result,4));
-        echo $result.PHP_EOL;
         if ($result === '识别失败'){
             return '';
         }

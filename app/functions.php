@@ -138,7 +138,7 @@ function art_validate(array $data, $validate, array $message = [], bool $batch =
  * @param int $recvId
  * @param string $wsGroup
  */
-function art_assign(int $code = 200, $msg = "success",$data = [], string $url = '',int $selfWsId = 0, int $recvId = 0, string $wsGroup = '')
+function art_assign(int $code = 200, string $msg = "success",array $data = [], string $url = '',int $selfWsId = 0, int $recvId = 0, string $wsGroup = '')
 {
     $res['code']= $code;
     $res['msg'] = $msg;
