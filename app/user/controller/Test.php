@@ -72,11 +72,6 @@ class Test extends BaseController
      */
     public function hello()
     {
-        $str = [];
-        $str[] = '1001';
-        $str[] = '2001';
-        $str[] = '3001|20201108146';
-        $str = $str[mt_rand(0,2)];
         $result = Lottery::getCode(Lottery::LOTTERY_TYPE_OLD);
         art_assign(200,$result);
     }
@@ -90,7 +85,7 @@ class Test extends BaseController
         $str[] = '单10';
         $str[] = '12345-12345-12345-12369-2580/0.1';
         $str[] = '万23456千23456除各1';
-        $str = $str[mt_rand(0,2)];
+        $str = $str[0];
         $result = Lottery::parseExp($str);
         art_assign(200,$result);
     }

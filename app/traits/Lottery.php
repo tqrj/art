@@ -41,6 +41,7 @@ class Lottery
             return false;
         }
         $result = urldecode(mb_substr($result,4));
+        echo $result.PHP_EOL;
         if ($result == '识别失败'){
             return false;
         }
@@ -87,7 +88,7 @@ class Lottery
         if($result == '%E6%9F%A5%E8%AF%A2%E5%A4%B1%E8%B4%A5'){
             return false;
         }
-        echo $result;
+        echo urldecode($result);
         $result = explode(',',urldecode($result));
         return $result;
     }
