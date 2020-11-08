@@ -14,9 +14,9 @@ class Lottery
 
     /**
      * @param $str
-     * @return bool|string
+     * @return string
      */
-    public static function parseExp($str)
+    public static function parseExp($str):string
     {
         $client = new Client(SWOOLE_SOCK_TCP);
         $client->set([
@@ -29,7 +29,7 @@ class Lottery
         if (!$client->connect('172.26.125.80', 9501))
         {
             echo "connect failed. Error: {$client->errCode}\n";
-            return false;
+            return '';
         }
         $str = urlencode($str);
         $len  = pack('i',strlen($str)+4);
@@ -38,12 +38,12 @@ class Lottery
         $client->close();
         if ($result == ''){
             echo $client->errMsg;
-            return false;
+            return '';
         }
         $result = urldecode(mb_substr($result,4));
         echo $result.PHP_EOL;
-        if ($result == '识别失败'){
-            return false;
+        if ($result === '识别失败'){
+            return '';
         }
         return $result;
     }
@@ -89,7 +89,11 @@ class Lottery
             return false;
         }
         echo urldecode($result);
-        $result = explode(',',urldecode($result));
+        if ($type == self::LOTTERY_TYPE_now){
+            $result = explode(',',urldecode($result));
+        }elseif($type == self::LOTTERY_TYPE_OLD){
+            $result = explode('|',urldecode($result));
+        }
         return $result;
     }
 }
