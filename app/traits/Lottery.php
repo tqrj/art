@@ -87,7 +87,6 @@ class Lottery
         if($result == '%E6%9F%A5%E8%AF%A2%E5%A4%B1%E8%B4%A5'){
             return false;
         }
-        echo urldecode($result);
         if ($type == self::LOTTERY_TYPE_now){
             $result = explode(',',urldecode($result));
         }elseif($type == self::LOTTERY_TYPE_OLD){
