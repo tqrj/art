@@ -4,7 +4,7 @@
 namespace config;
 
 
-class ArtConf
+class ArtConfig
 {
 
 }

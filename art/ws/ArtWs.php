@@ -1,7 +1,7 @@
 <?php
 
 
-namespace art;
+namespace art\ws;
 
 
 use Co\System;

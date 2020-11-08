@@ -10,6 +10,7 @@ declare(strict_types=1);
  */
 namespace art\db;
 
+use config\RedisConf;
 use RuntimeException;
 use Swoole\Database\RedisConfig;
 use Swoole\Database\RedisPool;
@@ -29,32 +30,26 @@ class Redis
 
     private static $instance;
 
-    private function __construct(array $config)
+    private function __construct()
     {
         if (empty($this->pools)) {
-            $this->config = array_replace_recursive($this->config, $config);
+            //$this->config = array_replace_recursive($this->config, $config);
             $this->pools = new RedisPool(
                 (new RedisConfig())
-                    ->withHost($this->config['host'])
-                    ->withPort($this->config['port'])
-                    ->withAuth($this->config['auth'])
-                    ->withDbIndex($this->config['db_index'])
-                    ->withTimeout($this->config['time_out']),
-                $this->config['size']
+                    ->withHost(RedisConf::$host)
+                    ->withPort(RedisConf::$port)
+                    ->withAuth(RedisConf::$auth)
+                    ->withDbIndex(RedisConf::$dbIndex)
+                    ->withTimeout(RedisConf::$timeOut),
+                RedisConf::$size
             );
         }
     }
 
-    public static function getInstance($config = null)
+    public static function getInstance()
     {
         if (empty(self::$instance)) {
-            if (empty($config)) {
-                throw new RuntimeException('redis config empty');
-            }
-            if (empty($config['size'])) {
-                throw new RuntimeException('the size of redis connection pools cannot be empty');
-            }
-            self::$instance = new static($config);
+            self::$instance = new static();
         }
 
         return self::$instance;

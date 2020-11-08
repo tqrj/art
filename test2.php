@@ -1,5 +1,5 @@
 <?php
-$test = json_decode('qweqwe',true);
+$test = microtime(true);
 var_dump($test);
 
 
