@@ -79,7 +79,7 @@ class Test extends BaseController
             'package_length_offset' => 0,
             'package_body_offset'   => 0,
         ]);
-        if (!$client->connect('172.26.125.80', 9501))
+        if (!$client->connect('172.26.125.80', 9502))
         {
             echo "connect failed. Error: {$client->errCode}\n";
             return;
@@ -115,7 +115,7 @@ class Test extends BaseController
             'package_length_offset' => 0,
             'package_body_offset'   => 0,
         ]);
-        if (!$client->connect('172.26.125.80', 9502))
+        if (!$client->connect('172.26.125.80', 9501))
         {
             echo "connect failed. Error: {$client->errCode}\n";
             return;
