@@ -85,9 +85,8 @@ class Test extends BaseController
         $str[] = '单10';
         $str[] = '12345-12345-12345-12369-2580/0.1';
         $str[] = '万23456千23456除各1';
-        $str = $str[0];
+        $str = $str[mt_rand(0,2)];
         $result = Lottery::parseExp($str);
-        echo $result.PHP_EOL;
         art_assign(200,$result);
     }
 

@@ -16,7 +16,7 @@ class Lottery
      * @param $str
      * @return string
      */
-    public static function parseExp($str):string
+    public static function parseExp($str)
     {
         $client = new Client(SWOOLE_SOCK_TCP);
         $client->set([
@@ -29,7 +29,7 @@ class Lottery
         if (!$client->connect('172.26.125.80', 9501))
         {
             echo "connect failed. Error: {$client->errCode}\n";
-            return '';
+            return false;
         }
         $str = urlencode($str);
         $len  = pack('i',strlen($str)+4);
@@ -38,11 +38,11 @@ class Lottery
         $client->close();
         if ($result == ''){
             echo $client->errMsg;
-            return '';
+            return false;
         }
         $result = urldecode(mb_substr($result,4));
         if ($result === '识别失败'){
-            return '';
+            return false;
         }
         return (string)$result;
     }
