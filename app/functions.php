@@ -147,7 +147,6 @@ function art_assign(int $code = 200, $msg = "success",$data = [], string $url = 
     /*    if (is_object($data)) {
             $data = $data->toArray();
         }*/
-    $res['data'] = $data;
     $response = Context::get('response');
     if (!property_exists ($response,'artWsId')){
         $response->status($code);
