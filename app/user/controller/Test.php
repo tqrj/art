@@ -99,7 +99,7 @@ class Test extends BaseController
             $result = $client->errMsg;
         }
         $client->close();
-        $result = urldecode(mb_substr($result,4));
+        $result = gzuncompress(mb_substr($result,4));
         echo $result;
         art_assign(200,'success',json_decode($result,true));
     }
