@@ -10,7 +10,6 @@ Co\run(function () {
         \Co\System::sleep(0.02);
         $n++;
         $result = Lottery::getCode(Lottery::LOTTERY_TYPE_OLD);
-        echo $result.PHP_EOL;
     }
     echo 'ojbk处理完毕'.PHP_EOL;
 });
