@@ -35,7 +35,7 @@ class WsApp extends BaseApp
         Context::put('request',$request);
         Context::put('response',$response);
         Context::put('frame',$frame);
-        $frame->data = @json_decode($frame->data,true);
+        $frame->data = json_decode($frame->data,true);
         if (!is_array($frame->data)){
             throw new HttpException(404, 'App not find');
         }
