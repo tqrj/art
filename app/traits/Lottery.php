@@ -45,7 +45,7 @@ class Lottery
         if ($result === '识别失败'){
             return '';
         }
-        return $result;
+        return (string)$result;
     }
 
     /**
