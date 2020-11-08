@@ -88,7 +88,7 @@ class Test extends BaseController
         $str = [];
         $str[] = '1001';
         $str[] = '2001';
-        $str[] = '3001';
+        $str[] = '3001|20201108146';
         $rand = mt_rand(0,2);
         $str = urlencode($str[$rand]);
         $len  = pack('i',strlen($str)+4);
