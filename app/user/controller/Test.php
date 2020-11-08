@@ -89,7 +89,7 @@ class Test extends BaseController
         $str[] = '1001';
         $str[] = '2001';
         $str[] = '3001|20201108146';
-        $rand = mt_rand(0,2);
+        $rand = 1;
         $str = urlencode($str[$rand]);
         $len  = pack('i',strlen($str)+4);
         $client->send($len.$str);
@@ -99,7 +99,7 @@ class Test extends BaseController
             $result = $client->errMsg;
         }
         $client->close();
-        art_assign(200,urldecode(mb_substr($result,4)));
+        art_assign(200,'success',json_decode(urldecode(mb_substr($result,4)),true));
     }
 
     /**
