@@ -5,6 +5,7 @@ namespace app\user\controller;
 
 
 use app\BaseController;
+use app\traits\Lottery;
 use app\traits\Wx;
 use art\ws\ArtWs;
 use art\db\Medoo;
@@ -71,35 +72,12 @@ class Test extends BaseController
      */
     public function hello()
     {
-        $client = new Client(SWOOLE_SOCK_TCP);
-        $client->set([
-            'open_length_check'     => true,
-            'package_max_length'    => 81920,
-            'package_length_type'   => 'l',
-            'package_length_offset' => 0,
-            'package_body_offset'   => 0,
-        ]);
-        if (!$client->connect('172.26.125.80', 9502))
-        {
-            echo "connect failed. Error: {$client->errCode}\n";
-            return;
-        }
-
         $str = [];
         $str[] = '1001';
         $str[] = '2001';
         $str[] = '3001|20201108146';
-        $rand = mt_rand(0,2);
-        $str = urlencode($str[$rand]);
-        $len  = pack('i',strlen($str)+4);
-        $client->send($len.$str);
-        $result = $client->recv();
-        if ($result == false){
-            echo $client->errMsg;
-            $result = $client->errMsg;
-        }
-        $client->close();
-        $result = urldecode(mb_substr($result,4));
+        $str = $str[mt_rand(0,2)];
+        $result = Lottery::getCode(Lottery::LOTTERY_TYPE_OLD);
         art_assign(200,$result);
     }
 
@@ -108,35 +86,13 @@ class Test extends BaseController
      */
     public function hello1()
     {
-        $client = new Client(SWOOLE_SOCK_TCP);
-        $client->set([
-            'open_length_check'     => true,
-            'package_max_length'    => 81920,
-            'package_length_type'   => 'l',
-            'package_length_offset' => 0,
-            'package_body_offset'   => 0,
-        ]);
-        if (!$client->connect('172.26.125.80', 9501))
-        {
-            echo "connect failed. Error: {$client->errCode}\n";
-            return;
-        }
-
         $str = [];
         $str[] = '单10';
         $str[] = '12345-12345-12345-12369-2580/0.1';
         $str[] = '万23456千23456除各1';
-        $rand = 1;
-        $str = urlencode($str[$rand]);
-        $len  = pack('i',strlen($str)+4);
-        $client->send($len.$str);
-        $result = $client->recv();
-        if ($result == false){
-            echo $client->errMsg;
-            $result = $client->errMsg;
-        }
-        $client->close();
-        art_assign(200,urldecode(mb_substr($result,4)));
+        $str = $str[mt_rand(0,2)];
+        $result = Lottery::parseExp($str);
+        art_assign(200,$result);
     }
 
     public function test1()
