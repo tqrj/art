@@ -100,9 +100,7 @@ class Test extends BaseController
         }
         $client->close();
         $result = urldecode(mb_substr($result,4));
-        echo $result;
-        var_dump(json_decode($result,true));
-        art_assign(200,'success',json_decode($result,true));
+        art_assign(200,$result);
     }
 
     /**
