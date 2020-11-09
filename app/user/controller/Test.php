@@ -7,9 +7,11 @@ namespace app\user\controller;
 use app\BaseController;
 use app\traits\Lottery;
 use app\traits\Wx;
+use art\lock\ArtLock;
 use art\ws\ArtWs;
 use art\db\Medoo;
 use art\request\Request;
+use Co\System;
 use Swoole\Coroutine\Client;
 
 class Test extends BaseController
@@ -21,6 +23,21 @@ class Test extends BaseController
     public function __construct()
     {
         parent::__construct();
+    }
+
+    public function lock()
+    {
+        $lock = new ArtLock();
+        $bool= $lock->lock('dd',10);
+        if ($bool == false){
+            echo '我没进去'.PHP_EOL;
+            art_assign(202,'进来失败了');
+        }
+        echo '我进来了';
+        System::sleep(5);
+        $bool = $lock->unLock();
+        echo '我出来了'.$bool.PHP_EOL;
+        art_assign(200,'ojbk');
     }
 
     public function test3()
