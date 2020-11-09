@@ -87,11 +87,12 @@ class Test extends BaseController
      */
     public function hello1()
     {
-        $str = [];
+/*        $str = [];
         $str[] = '单10';
         $str[] = '12345-12345-12345-12369-2580/0.1';
         $str[] = '万23456千23456除各1';
-        $str = $str[mt_rand(0,2)];
+        $str = $str[mt_rand(0,2)];*/
+        $str = Request::only(['code'])['code'];
         $result = Lottery::parseExp($str);
         art_assign(200,$result);
     }
