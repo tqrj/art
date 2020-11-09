@@ -28,7 +28,7 @@ class ArtLock
         if (is_null($redis)){
             return false;
         }
-        $this->$lockKey = $lockKey;
+        $this->lockKey = $lockKey;
         do{
             $this->lockStatus = $redis->set('ArtLock' . $this->lockKey, 'lock', ['nx', 'ex' => $outTime]);
             if (false == $this->lockStatus){

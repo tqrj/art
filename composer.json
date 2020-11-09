@@ -2,7 +2,7 @@
     "name": "porty/art",
     "type": "project",
     "require": {
-        "php": ">=7.2",
+        "php": ">=7.4",
         "swoole/ide-helper": "@dev"
     },
     "authors": [
