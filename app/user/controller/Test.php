@@ -32,11 +32,16 @@ class Test extends BaseController
         if ($bool == false){
             echo '我没进去'.PHP_EOL;
             art_assign(202,'进来失败了');
+            return;
         }
         echo '我进来了';
-        System::sleep(5);
+        System::sleep(15);
         $bool = $lock->unLock();
-        echo '我出来了'.$bool.PHP_EOL;
+        if ($bool){
+            echo '我出来了'.$bool.PHP_EOL;
+        }else{
+            echo '我出来失败了'.$bool.PHP_EOL;
+        }
         art_assign(200,'ojbk');
     }
 
@@ -65,7 +70,7 @@ class Test extends BaseController
         );//别名 用括号括起来声明*/
         //SELECT `vae_test`.`nickname` FROM `vae_test` INNER JOIN `vae_user` USING (`id`)
 
-        art_assign(200,'success',$bool);
+        //art_assign(200,'success',$bool);
     }
 
     public function test()
