@@ -34,7 +34,7 @@ class Request
          $params = array_merge($get,$post);
          $result = [];
 
-         array_walk($keys,function ($item,$value) use($params,&$result)
+         array_walk($keys,function ($value,$item) use($params,&$result)
          {
              if (array_key_exists($item,$params)){
                  $result[$item] = $params[$item];
