@@ -14,8 +14,8 @@ class Auth
 
     public static function hand():bool
     {
-        $token = Request::only(['token'=>'q'])['token'];
-        if (empty($token)){
+        $data = Request::only(['token']);
+        if (empty($data['token'])){
             throw new HttpException(202,'无权限访问');
         }
         $redis  = Redis::getInstance()->getConnection();

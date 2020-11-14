@@ -24,7 +24,7 @@ class Request
         // TODO: Implement __wakeup() method.
     }
 
-    public static function only($keys):array
+    public static function only(array $keys):array
     {
          $request = Context::get('request');
          $post = $request->post;
@@ -33,17 +33,15 @@ class Request
          is_null($get)?$get=[]:true;
          $params = array_merge($get,$post);
          $result = [];
-         var_dump($keys);
-         array_walk($keys,function ($value,$item) use($params,&$result)
+         if (count($params) == 0){
+             return $result;
+         }
+         array_walk($keys,function ($item) use($params,&$result)
          {
-             echo $value.$item.PHP_EOL;
              if (array_key_exists($item,$params)){
                  $result[$item] = $params[$item];
-             }elseif(!empty($value)){
-                 $result[$item] = $value;
              }
          });
-         var_dump($result);
          return $result;
     }
 
