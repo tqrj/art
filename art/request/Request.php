@@ -36,6 +36,7 @@ class Request
 
          array_walk($keys,function ($value,$item) use($params,&$result)
          {
+             echo $value.$item.PHP_EOL;
              if (array_key_exists($item,$params)){
                  $result[$item] = $params[$item];
              }elseif(!empty($value)){
