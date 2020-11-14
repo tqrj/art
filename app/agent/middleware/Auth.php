@@ -14,7 +14,7 @@ class Auth
 
     public static function hand():bool
     {
-        $token = Request::only(['token'=>''])['token'];
+        $token = Request::only(['token'=>'q'])['token'];
         if (empty($token)){
             throw new HttpException(202,'无权限访问');
         }
