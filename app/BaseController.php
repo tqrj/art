@@ -29,7 +29,7 @@ class BaseController
 
     public function __construct()
     {
-        $this->request = Context::get('request');;
+        $this->request = Context::get('request');
         $this->response = Context::get('response');
         $this->frame = Context::get('frame');
     }

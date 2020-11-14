@@ -4,26 +4,40 @@
 namespace app\agent\model\service;
 
 
-use app\traits\TRedis;
 use art\db\Medoo;
 use art\db\Redis;
 
-class AgentService extends Medoo
+class AgentService
 {
+
+
     public static function login($params)
     {
-        $userInfo = self::get('agent',[
+        $medoo = new Medoo();
+        $userInfo = $medoo->get('agent',[
             'id',
             'nickname',
             'pass',
             'salt',
             'token',
-            'expire_time'
+            'expire_time',
+            'status',
+            'quantity'
         ],['nickname'=>$params['nickname']]);
         if (empty($userInfo)){
             art_assign(202,'用户信息错误');
         }
-
+        if (art_set_password($params['pass'],$userInfo['salt']) != $userInfo['pass']){
+            art_assign(202,'账号或密码错误');
+        }
+        if (strtotime($userInfo['expire_time']) < time()){
+            art_assign(202,'账号已过期');
+        }
+        if ($userInfo['status'] ==0){
+            art_assign(202,'账号已禁用');
+        }
+        unset($userInfo['salt']);
+        return $userInfo;
     }
 
     public static function sign($params)
@@ -66,12 +80,15 @@ class AgentService extends Medoo
         return $data;
     }
 
-    public static function userInfo()
+    public static function userInfo($params)
     {
-
+        $medoo = new Medoo();
+        $userInfo = $medoo->get('agent',['*'],['token'=>$params['token']]);
+        unset($userInfo['salt']);
+        art_assign(200,'success',$userInfo);
     }
 
-    public static function change()
+    public static function change($params)
     {
 
     }

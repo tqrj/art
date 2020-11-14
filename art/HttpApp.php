@@ -8,6 +8,7 @@ use art\context\Context;
 use art\exception\ClassNotFoundException;
 use art\exception\HttpException;
 use art\helper\Str;
+use art\middleware\Middleware;
 use Swoole\Http\Request;
 use Swoole\Http\Response;
 
@@ -65,6 +66,7 @@ class HttpApp extends BaseApp
         } catch (\ReflectionException $e) {
             throw new HttpException(404, 'method not exists:' . get_class($instance) . '->' . self::getActionName() . '()');
         }
+        Middleware::Auth(self::getAppName());
         $reflect->invokeArgs($instance,[]);
         //$this->response->end('qwq');
     }

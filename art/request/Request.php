@@ -45,4 +45,12 @@ class Request
          return $result;
     }
 
+    /**
+     * @return \Swoole\Http\Request
+     */
+    public static function getRequest()
+    {
+        return Context::get('request');
+    }
+
 }
