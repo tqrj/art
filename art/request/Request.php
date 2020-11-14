@@ -24,7 +24,7 @@ class Request
         // TODO: Implement __wakeup() method.
     }
 
-    public static function only(array $keys):array
+    public static function only($keys):array
     {
          $request = Context::get('request');
          $post = $request->post;
@@ -33,7 +33,7 @@ class Request
          is_null($get)?$get=[]:true;
          $params = array_merge($get,$post);
          $result = [];
-
+         var_dump($keys);
          array_walk($keys,function ($value,$item) use($params,&$result)
          {
              echo $value.$item.PHP_EOL;
