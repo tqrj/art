@@ -32,9 +32,9 @@ $pidPool->on('workerStart', function ($Pool, int $id) {
             HttpApp::run();
             HttpApp::end();
         } catch (HttpException $e) {
-            art_assign($e->getStatusCode(), $e->getMessage());
+            _art_assign($e->getStatusCode(), $e->getMessage(),$e->getData(),$e->getLocation());
         } catch (ClassNotFoundException $e) {
-            art_assign(404, $e->getMessage());
+            _art_assign(404, $e->getMessage());
         }
     });
     //websocket部分
@@ -65,9 +65,9 @@ $pidPool->on('workerStart', function ($Pool, int $id) {
                     WsApp::run();
                     WsApp::end();
                 } catch (HttpException $e) {
-                    art_assign($e->getStatusCode(), $e->getMessage());
+                    _art_assign($e->getStatusCode(), $e->getMessage(),$e->getData(),$e->getLocation(),$e->getSelfWsId(),$e->getRecvId(),$e->getWsGroup());
                 } catch (ClassNotFoundException $e) {
-                    art_assign(404, $e->getMessage());
+                    _art_assign(404, $e->getMessage());
                 }
                 //ArtWs::pushMsg($frame->data,$wsId,2);
                 //$ws->push();

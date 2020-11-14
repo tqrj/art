@@ -21,14 +21,22 @@ use Exception;
 class HttpException extends \RuntimeException
 {
     private $statusCode;
-    private $headers;
+    private $data;
+    private $location;
+    private $selfWsId;
+    private $recvId;
+    private $wsGroup;
 
-    public function __construct(int $statusCode, string $message = '', Exception $previous = null, array $headers = [], $code = 0)
+    public function __construct(int $statusCode, string $message = '',$data = [],string $location = '',int $selfWsId = 0, int $recvId = 0, string $wsGroup = '', Exception $previous = null)
     {
         $this->statusCode = $statusCode;
-        $this->headers    = $headers;
+        $this->data = $data;
+        $this->location = $location;
+        $this->selfWsId = $selfWsId;
+        $this->recvId = $recvId;
+        $this->wsGroup = $wsGroup;
 
-        parent::__construct($message, $code, $previous);
+        parent::__construct($message, $statusCode, $previous);
     }
 
     public function getStatusCode()
@@ -36,8 +44,29 @@ class HttpException extends \RuntimeException
         return $this->statusCode;
     }
 
-    public function getHeaders()
+    public function getData()
     {
-        return $this->headers;
+        return $this->data;
     }
+
+    public function getLocation()
+    {
+        return $this->location;
+    }
+
+    public function getSelfWsId()
+    {
+        return $this->selfWsId;
+    }
+
+    public function getRecvId()
+    {
+        return $this->recvId;
+    }
+
+    public function getWsGroup()
+    {
+        return $this->wsGroup;
+    }
+
 }

@@ -7,6 +7,7 @@ namespace app\user\controller;
 use app\BaseController;
 use app\traits\Lottery;
 use app\traits\Wx;
+use art\db\DB;
 use art\lock\ArtLock;
 use art\ws\ArtWs;
 use art\db\Medoo;
@@ -49,28 +50,29 @@ class Test extends BaseController
     {
         //https://loiy.net/post/566.html
         //https://medoo.in/api/where
-//        $db = new DB();
-//        $bool = $db->query("SELECT * FROM vae_test WHERE id = :id",[':id'=>1]);
-//        $bool = $db->insert("INSERT INTO vae_test (test) values (:test)",[':test'=>1]);
+        $db = new DB();
+        $bool = $db->query("SELECT * FROM vae_test WHERE id = :id",[':id'=>1]);
+        $bool = $db->insert("INSERT INTO vae_test (test) values (:test)",[':test'=>1]);
+        $model = new Medoo();
+        $bool = $model->select('vae_test',['id','test'],['id'=>[20,21,30]]);
 
-//        $bool = $model->select('vae_test',['id','test'],['id'=>[20,21,30]]);
-
-/*        $bool = $model->debug()->select('vae_test',
+        $bool = $model->debug()->select('vae_test',
             ['id','nickname'],
             ['nickname[~]'=>['我%']
             ]);
-        //SELECT `id`,`nickname` FROM `vae_test` WHERE (`nickname` LIKE '我%')*/
-/*        $bool = $model->debug()->select('vae_test',
+        //SELECT `id`,`nickname` FROM `vae_test` WHERE (`nickname` LIKE '我%')
+        $bool = $model->debug()->select('vae_test',
             ['[><]vae_user'=>['id']],
             ['vae_test.nickname']
-        );*/
-/*        $bool = $model->debug()->select('vae_test(t)',
+        );
+        $bool = $model->debug()->select('vae_test(t)',
+
             ['[><]vae_user(u)'=>['id']],
             ['t.nickname']
-        );//别名 用括号括起来声明*/
+        );//别名 用括号括起来声明
         //SELECT `vae_test`.`nickname` FROM `vae_test` INNER JOIN `vae_user` USING (`id`)
 
-        //art_assign(200,'success',$bool);
+        art_assign(200,'success',$bool);
     }
 
     public function test()

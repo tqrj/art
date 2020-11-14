@@ -139,7 +139,7 @@ function art_validate(array $data, $validate, array $message = [], bool $batch =
  * @param int $recvId
  * @param string $wsGroup
  */
-function art_assign(int $code = 200, $msg = "success",$data = [], string $location = '',int $selfWsId = 0, int $recvId = 0, string $wsGroup = '')
+function _art_assign(int $code = 200, $msg = "success",$data = [], string $location = '',int $selfWsId = 0, int $recvId = 0, string $wsGroup = '')
 {
     $res['code']= $code;
     $res['msg'] = $msg;
@@ -159,4 +159,16 @@ function art_assign(int $code = 200, $msg = "success",$data = [], string $locati
         \art\ws\ArtWs::pushMsg(json_encode($res),$selfWsId,$recvId,$wsGroup);
     }
 }
-
+/**
+ * @param int $code
+ * @param string $msg
+ * @param array $data
+ * @param string $location
+ * @param int $selfWsId
+ * @param int $recvId
+ * @param string $wsGroup
+ */
+function art_assign(int $code = 200, $msg = "success",$data = [], string $location = '',int $selfWsId = 0, int $recvId = 0, string $wsGroup = '')
+{
+    throw new \art\exception\HttpException($code,$msg,$data,$location,$selfWsId,$recvId,$wsGroup);
+}

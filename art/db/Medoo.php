@@ -10,6 +10,7 @@
 
 namespace art\db;
 
+use config\Database;
 use PDO;
 use Exception;
 use PDOException;
@@ -1081,6 +1082,9 @@ class Medoo
 
 	public function select($table, $join, $columns = null, $where = null)
 	{
+	    if (!empty(Database::$prefix)){
+            $table = Database::$prefix.$table;
+        }
 		$map = [];
 		$result = [];
 		$column_map = [];

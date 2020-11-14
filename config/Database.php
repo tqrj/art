@@ -25,4 +25,9 @@ class Database
     public static $password = 'Yp2yZPawZLiZ54kc';
 
     public static $size = 64;
+
+    /**
+     * @var string
+     */
+    public static $prefix = 'vae_';
 }

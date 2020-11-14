@@ -19,15 +19,6 @@ class Redis
 {
     protected $pools;
 
-    protected $config = [
-        'host' => 'localhost',
-        'port' => 6379,
-        'auth' => '',
-        'db_index' => 0,
-        'time_out' => 1,
-        'size' => 64,
-    ];
-
     private static $instance;
 
     private function __construct()
@@ -65,8 +56,4 @@ class Redis
         $this->pools->put($connection);
     }
 
-    public function getConfig(): array
-    {
-        return $this->config;
-    }
 }
