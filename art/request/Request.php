@@ -36,10 +36,12 @@ class Request
          if (count($params) == 0){
              return $result;
          }
-         array_walk($keys,function ($item) use($params,&$result)
+         array_walk($keys,function ($value,$item) use($params,&$result)
          {
              if (array_key_exists($item,$params)){
                  $result[$item] = $params[$item];
+             }elseif(!empty($value)){
+                 $result[$item] = $value;
              }
          });
          return $result;

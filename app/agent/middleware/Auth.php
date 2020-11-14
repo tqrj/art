@@ -14,11 +14,10 @@ class Auth
 
     public static function hand():bool
     {
-        $token = Request::only(['token']);
-        if (empty($token['token'])){
+        $token = Request::only(['token'=>''])['token'];
+        if (empty($token)){
             throw new HttpException(202,'无权限访问');
         }
-        $token = $token['token'];
         $redis  = Redis::getInstance()->getConnection();
         $bool = $redis->get('token_'.$token);
         Redis::getInstance()->close($redis);
