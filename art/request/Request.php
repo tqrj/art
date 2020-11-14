@@ -42,6 +42,7 @@ class Request
                  $result[$item] = $value;
              }
          });
+         var_dump($result);
          return $result;
     }
 
