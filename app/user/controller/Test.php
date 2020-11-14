@@ -80,12 +80,10 @@ class Test extends BaseController
         $params = Request::only(['code']);
         if (empty($params['code'])){
             art_assign(202,'code授权错误');
-            return;
         }
         $result = Wx::getAccessToken($params['code']);
         if (empty($result['access_token'])){
             art_assign(202,'获取token错误',$result);
-            return;
         }
         $result = Wx::getUserInfo($result['access_token'],$result['openid']);
         art_assign(200,'success',$result);
@@ -97,13 +95,13 @@ class Test extends BaseController
     public function hello()
     {
         $result = Lottery::getCode(Lottery::LOTTERY_TYPE_OLD);
-        art_assign(200,$result);
+        art_assign(200,'success',$result);
     }
 
     public function hello2()
     {
         $result = Lottery::getCode(Lottery::LOTTERY_TYPE_now);
-        art_assign(200,$result);
+        art_assign(200,'success',$result);
     }
 
     /**
@@ -118,7 +116,7 @@ class Test extends BaseController
         $str = $str[mt_rand(0,2)];*/
         $str = Request::only(['code'])['code'];
         $result = Lottery::parseExp($str);
-        art_assign(200,$result);
+        art_assign(200,,$result);
     }
 
     public function test1()
