@@ -35,7 +35,7 @@ class Test extends BaseController
             return;
         }
         echo '我进来了';
-        System::sleep(15);
+        System::sleep(9);
         $bool = $lock->unLock();
         if ($bool){
             echo '我出来了'.$bool.PHP_EOL;
@@ -52,7 +52,7 @@ class Test extends BaseController
 //        $db = new DB();
 //        $bool = $db->query("SELECT * FROM vae_test WHERE id = :id",[':id'=>1]);
 //        $bool = $db->insert("INSERT INTO vae_test (test) values (:test)",[':test'=>1]);
-        $model = new Medoo();
+
 //        $bool = $model->select('vae_test',['id','test'],['id'=>[20,21,30]]);
 
 /*        $bool = $model->debug()->select('vae_test',

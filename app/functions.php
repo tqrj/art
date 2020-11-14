@@ -134,17 +134,16 @@ function art_validate(array $data, $validate, array $message = [], bool $batch =
  * @param int $code
  * @param string $msg
  * @param array $data
- * @param string $url
+ * @param string $location
  * @param int $selfWsId
  * @param int $recvId
  * @param string $wsGroup
  */
-function art_assign(int $code = 200, $msg = "success",$data = [], string $url = '',int $selfWsId = 0, int $recvId = 0, string $wsGroup = '')
+function art_assign(int $code = 200, $msg = "success",$data = [], string $location = '',int $selfWsId = 0, int $recvId = 0, string $wsGroup = '')
 {
     $res['code']= $code;
     $res['msg'] = $msg;
     $res['data'] = $data;
-    $res['url'] = $url;
     /*    if (is_object($data)) {
             $data = $data->toArray();
         }*/
@@ -152,23 +151,12 @@ function art_assign(int $code = 200, $msg = "success",$data = [], string $url = 
     if (!property_exists ($response,'artWsId')){
         $response->status($code);
         $response->header('Content-type','text/json');
+        if (!empty($location))
+            $response->header('Content-Location',$location);
         $response->end(json_encode($res));;
         Context::delete();
-    }else{
+    }else {
         \art\ws\ArtWs::pushMsg(json_encode($res),$selfWsId,$recvId,$wsGroup);
     }
 }
 
-/**
- * 跨进程会重复 不安全
- * @param \Swoole\Http\Response $response
- * @return int|string
- */
-function getObjectId(\Swoole\Http\Response $response) {
-    if (PHP_VERSION_ID < 70200) {
-        $id = spl_object_hash($response);
-    } else {+
-        $id = spl_object_id($response);
-    }
-    return $id;
-}
