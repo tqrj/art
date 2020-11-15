@@ -85,11 +85,23 @@ class AgentService
         $medoo = new Medoo();
         $userInfo = $medoo->get('agent',['*'],['token'=>$params['token']]);
         unset($userInfo['salt']);
-        art_assign(200,'success',$userInfo);
+        return $userInfo;
     }
 
     public static function change($params)
     {
-
+        $medoo = new Medoo();
+        $userInfo = $medoo->get('agent',['pass_sec','salt'],['token'=>$params['token']]);
+        if (!$userInfo or art_set_password($params['pass_sec'],$userInfo['salt']) != $userInfo['pass_sec']){
+            art_assign(202,'二级密码错误');
+        }
+        unset($params['pass_sec']);
+        if (!empty($params['pass'])){
+            $params['pass'] = art_set_password($params['pass'],$userInfo['salt']);
+        }
+        if($medoo->update('agent',$params,['token'=>$params['token']])){
+            return '更新完毕';
+        }
+        art_assign(202,'更新失败');
     }
 }

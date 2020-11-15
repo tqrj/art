@@ -4,6 +4,7 @@
 namespace app\agent\middleware;
 
 
+use art\context\Context;
 use art\db\Medoo;
 use art\db\Redis;
 use art\exception\HttpException;
@@ -13,41 +14,40 @@ use art\request\Request;
 class Auth
 {
 
-    public static function hand():bool
+    public static function hand(): bool
     {
         $passAction = [
-            'login',
+            'sendCode',
             'sign',
-            'hello2',
+            'login',
             'hello'
         ];
         $action = HttpApp::getActionName();
-        if (false !== array_search($action,$passAction)){
+        if (false !== array_search($action, $passAction)) {
             return true;
         }
-
         $data = Request::only(['token']);
-        if (empty($data['token'])){
-            throw new HttpException(202,'无权限访问');
+        if (empty($data['token'])) {
+            throw new HttpException(202, '无权限访问');
         }
-        $redis  = Redis::getInstance()->getConnection();
-        $bool = $redis->get('token_'.$token);
+        $token = $data['token'];
+        $redis = Redis::getInstance()->getConnection();
+        $authInfo = $redis->get('token_' . $token);
         Redis::getInstance()->close($redis);
-        if (!is_null($bool)){
+        if (!is_null($authInfo)) {
+            Context::put('authInfo', unserialize($authInfo));
             return true;
         }
         $medoo = new Medoo();
-        $result = $medoo->has('agent',['id','token','status','expire_time'],
-            [
-                'token'=>$token,
-                'expire_time[<]'=>art_d()
-            ]);
-        if (!$result){
-            throw new HttpException(202,'无权限访问');
+
+        $result = $medoo->get('agent', ['id', 'pass', 'pass_sec', 'salt', 'nickname', 'quantity', 'status', 'expire_time',],['token' => $token, 'expire_time[>]' => art_d()]);
+        if (!$result) {
+            throw new HttpException(202, '账户过期或Token错误');
         }
-        $redis  = Redis::getInstance()->getConnection();
-        $redis->setex('token_'.$token,3600,'true');
+        $redis = Redis::getInstance()->getConnection();
+        $redis->setex('token_' . $token, 3600, serialize($result));
         Redis::getInstance()->close($redis);
+        Context::put('authInfo', $result);
         return true;
     }
 

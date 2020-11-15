@@ -4,6 +4,20 @@
 use art\context\Context;
 use art\WsApp;
 
+/**
+ * 针对无键名数组unset 避免jsonEncode变成对象
+ * @param $value
+ * @param $array
+ * @return array|bool
+ */
+function art_unset($value,&$array)
+{
+    $sort = array_search($value,$array);
+    if (false === $sort){
+        return false;
+    }
+    return array_splice($array,$sort,1);
+}
 
 function art_rand_mobile()
 {
