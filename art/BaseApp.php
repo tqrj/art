@@ -34,17 +34,17 @@ class BaseApp
         Context::put('appPath', $appPath);
     }
 
-    protected static function getArtPath():string
+    public static function getArtPath():string
     {
         return Context::get('artPath');
     }
 
-    protected static function getRootPath():string
+    public static function getRootPath():string
     {
         return Context::get('rootPath');
     }
 
-    protected static function getAppPath():string
+    public static function getAppPath():string
     {
         return Context::get('appPath');
     }
@@ -54,7 +54,7 @@ class BaseApp
         Context::put('namespace',$namespace);
     }
 
-    protected static function getNamespace()
+    public static function getNamespace()
     {
        return Context::get('namespace');
     }
@@ -64,7 +64,7 @@ class BaseApp
         Context::put('appName',$appName);
     }
 
-    protected static function getAppName()
+    public static function getAppName()
     {
        return Context::get('appName');
     }
@@ -74,7 +74,7 @@ class BaseApp
         Context::put('controllerName',$controllerName);
     }
 
-    protected static function getControllerName()
+    public static function getControllerName()
     {
         return Context::get('controllerName');
     }
@@ -84,7 +84,7 @@ class BaseApp
         Context::put('actionName',$actionName);
     }
 
-    protected static function getActionName()
+    public static function getActionName()
     {
        return Context::get('actionName');
     }
@@ -94,7 +94,7 @@ class BaseApp
      * @access protected
      * @return string
      */
-    protected static function getDefaultRootPath(): string
+    public static function getDefaultRootPath(): string
     {
         return dirname(self::getArtPath(), 4) . DIRECTORY_SEPARATOR;
     }

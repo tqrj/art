@@ -7,6 +7,7 @@ namespace app\agent\middleware;
 use art\db\Medoo;
 use art\db\Redis;
 use art\exception\HttpException;
+use art\HttpApp;
 use art\request\Request;
 
 class Auth
@@ -14,6 +15,17 @@ class Auth
 
     public static function hand():bool
     {
+        $passAction = [
+            'login',
+            'sign',
+            'hello2',
+            'hello'
+        ];
+        $action = HttpApp::getActionName();
+        if (false !== array_search($action,$passAction)){
+            return true;
+        }
+
         $data = Request::only(['token']);
         if (empty($data['token'])){
             throw new HttpException(202,'无权限访问');

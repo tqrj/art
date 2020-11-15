@@ -7,4 +7,5 @@ namespace config;
 class ArtConfig
 {
 
+
 }
