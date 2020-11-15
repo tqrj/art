@@ -86,12 +86,12 @@ class Test extends BaseController
             art_assign(202,'获取token错误',$result);
         }
         $result = Wx::getUserInfo($result['access_token'],$result['openid']);
-        art_assign(200,'success',$result,'wailitoo.com');
+        art_assign(200,'success',$result,'http://wailitoo.com/');
     }
 
     public function test4()
     {
-        art_assign(200,'success',[],'wailitoo.com');
+        art_assign(200,'success',[],'http://wailitoo.com/');
     }
 
     /**
