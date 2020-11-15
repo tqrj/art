@@ -212,6 +212,9 @@ class Medoo
 
 	protected function tableQuote($table)
 	{
+        if (!empty(Database::$prefix)){
+            $table = Database::$prefix.$table;
+        }
 		if (!preg_match('/^[a-zA-Z0-9_]+$/i', $table))
 		{
 			throw new InvalidArgumentException("Incorrect table name \"$table\"");
@@ -1082,9 +1085,6 @@ class Medoo
 
 	public function select($table, $join, $columns = null, $where = null)
 	{
-	    if (!empty(Database::$prefix)){
-            $table = Database::$prefix.$table;
-        }
 		$map = [];
 		$result = [];
 		$column_map = [];
