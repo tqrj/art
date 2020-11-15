@@ -153,7 +153,7 @@ function _art_assign(int $code = 200, $msg = "success",$data = [], string $locat
         $response->status($code);
         $response->header('Content-type','text/json');
         if (!empty($location))
-            $response->header('Content-Location',$location);
+            $response->header('Location',$location);
         $response->end(json_encode($res));;
         Context::delete();
     }else {
