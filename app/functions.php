@@ -2,6 +2,7 @@
 
 
 use art\context\Context;
+use art\WsApp;
 
 
 function art_rand_mobile()
@@ -158,6 +159,7 @@ function _art_assign(int $code = 200, $msg = "success",$data = [], string $locat
     }else {
         \art\ws\ArtWs::pushMsg(json_encode($res),$selfWsId,$recvId,$wsGroup);
     }
+
 }
 /**
  * @param int $code

@@ -22,7 +22,8 @@ class Auth
             'login',
             'sign',
             'hello2',
-            'hello'
+            'hello',
+            'test'
         ];
         $action = HttpApp::getActionName();
         if (false !== array_search($action,$passAction)){
