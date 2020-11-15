@@ -41,7 +41,7 @@ class Auth
             return true;
         }
         $medoo = new Medoo();
-        $result = $medoo->has('vae_agent',['id','token','status','expire_time'],
+        $result = $medoo->has('vae_agent',
             [
                 'token'=>$token,
                 'expire_time[<]'=>art_d()
