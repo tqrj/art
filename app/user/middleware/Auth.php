@@ -41,10 +41,10 @@ class Auth
             return true;
         }
         $medoo = new Medoo();
-        $result = $medoo->has('vae_agent',
+        $result = $medoo->has('agent',
             [
                 'token'=>$token,
-                'expire_time[<]'=>art_d()
+                'expire_time[>]'=>art_d()
             ]);
         if (!$result){
             throw new HttpException(202,'无权限访问');

@@ -51,6 +51,9 @@ class Medoo
 
 	public function __construct()
 	{
+	    if (!empty(Database::$prefix)){
+	        $this->prefix = Database::$prefix;
+        }
         $this->pool = \art\db\PDO::getInstance();
 	}
 
