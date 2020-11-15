@@ -24,25 +24,23 @@ class Request
         // TODO: Implement __wakeup() method.
     }
 
-    public static function only(array $keys):array
+    public static function only(array $keys): array
     {
-         $request = Context::get('request');
-         $post = $request->post;
-         $get = $request->get;
-         is_null($post)?$post=[]:true;
-         is_null($get)?$get=[]:true;
-         $params = array_merge($get,$post);
-         $result = [];
-         if (count($params) == 0){
-             return $result;
-         }
-         array_walk($keys,function ($item) use($params,&$result)
-         {
-             if (array_key_exists($item,$params)){
-                 $result[$item] = $params[$item];
-             }
-         });
-         return $result;
+        $request = Context::get('request');
+        $post = $request->post;
+        $get = $request->get;
+        is_null($post) ? $post = [] : true;
+        is_null($get) ? $get = [] : true;
+        $params = array_merge($get, $post);
+        $result = [];
+        array_walk($keys, function ($item, $key) use ($params, &$result) {
+            if (is_int($key) && array_key_exists($item, $params)) {
+                $result[$item] = $params[$item];
+            } elseif (!is_int($key)) {
+                array_key_exists($key, $params)?$result[$key] = $params[$key]:$result[$key] = $item;
+            }
+        });
+        return $result;
     }
 
     /**
