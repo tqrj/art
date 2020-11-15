@@ -35,7 +35,8 @@ class Auth
         $redis  = Redis::getInstance()->getConnection();
         $bool = $redis->get('token_'.$token);
         Redis::getInstance()->close($redis);
-        if (!is_null($bool)){
+        var_dump($bool);
+        if (!$bool){
             return true;
         }
         $medoo = new Medoo();
