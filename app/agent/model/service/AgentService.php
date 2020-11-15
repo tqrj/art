@@ -60,7 +60,7 @@ class AgentService
             art_assign(202, '该用户名已注册');
         }
         $result = $medoo->insert('agent', $params);
-        if (!$result) {
+        if (!$result->rowCount()) {
             art_assign(202, '注册失败');
         }
         return [];
@@ -100,7 +100,7 @@ class AgentService
             $params['pass'] = art_set_password($params['pass'],$userInfo['salt']);
         }
         if($medoo->update('agent',$params,['token'=>$params['token']])){
-            return '更新完毕';
+            return [];
         }
         art_assign(202,'更新失败');
     }
