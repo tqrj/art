@@ -212,9 +212,9 @@ class Medoo
 
 	protected function tableQuote($table)
 	{
-        if (!empty(Database::$prefix)){
-            $table = Database::$prefix.$table;
-        }
+//        if (!empty(Database::$prefix)){
+//            $table = Database::$prefix.$table;
+//        }
 		if (!preg_match('/^[a-zA-Z0-9_]+$/i', $table))
 		{
 			throw new InvalidArgumentException("Incorrect table name \"$table\"");
