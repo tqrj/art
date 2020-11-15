@@ -89,6 +89,11 @@ class Test extends BaseController
         art_assign(200,'success',$result,'wailitoo.com');
     }
 
+    public function test1()
+    {
+        art_assign(200,'success',[],'wailitoo.com');
+    }
+
     /**
      *
      */
