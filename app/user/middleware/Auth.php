@@ -13,6 +13,9 @@ use art\request\Request;
 class Auth
 {
 
+    /**
+     * @return bool
+     */
     public static function hand():bool
     {
         $passAction = [
@@ -27,7 +30,6 @@ class Auth
         }
 
         $data = Request::only(['token'=>'qwqwq']);
-        var_dump($data);
         if (empty($data['token'])){
             throw new HttpException(202,'无权限访问');
         }
@@ -35,8 +37,7 @@ class Auth
         $redis  = Redis::getInstance()->getConnection();
         $bool = $redis->get('token_'.$token);
         Redis::getInstance()->close($redis);
-        var_dump($bool);
-        if (!$bool){
+        if ($bool){
             return true;
         }
         $medoo = new Medoo();
