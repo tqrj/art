@@ -35,7 +35,7 @@ class Auth
         $redis = Redis::getInstance()->getConnection();
         $authInfo = $redis->get('token_' . $token);
         Redis::getInstance()->close($redis);
-        if (!is_null($authInfo)) {
+        if (false === $authInfo) {
             Context::put('authInfo', unserialize($authInfo));
             return true;
         }
