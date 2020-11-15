@@ -26,6 +26,7 @@ class Auth
         if (false !== array_search($action, $passAction)) {
             return true;
         }
+        echo '1'.PHP_EOL;
         $data = Request::only(['token']);
         if (empty($data['token'])) {
             throw new HttpException(202, '无权限访问');
@@ -38,8 +39,8 @@ class Auth
             Context::put('authInfo', unserialize($authInfo));
             return true;
         }
+        echo '1'.PHP_EOL;
         $medoo = new Medoo();
-
         $result = $medoo->get('agent', ['id', 'pass', 'pass_sec', 'salt', 'nickname', 'quantity', 'status', 'expire_time',],['token' => $token, 'expire_time[>]' => art_d()]);
         var_dump($result);
         if (!$result) {
