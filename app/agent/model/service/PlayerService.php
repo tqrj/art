@@ -17,13 +17,17 @@ class PlayerService
     {
         $map = [];
         if (!empty($params['keyWord'])) {
-            $map['nickname[~]'] = $params['keyWord'] . '%';
+            $map['u.nickname[~]'] = $params['keyWord'] . '%';
         }
         $map['LIMIT'] = [$params['page'], $params['limit']];
-        $map['ORDER'] = ['id' => 'DESC'];
-        $map['status'] = [1, 0];
+        $map['ORDER'] = ['q.id' => 'DESC'];
+        $map['u.status'] = [1, 0];
+        $map['q.status'] = [1, 0];
         $medoo = new Medoo();
-        return $medoo->select('user', ['id', 'nickname', 'quantity', 'group_id', 'status'], $map);
+        return $medoo->select('user(u)',
+            ['[><]user_quantity(q)'=>['u.id'=>'q.user_id']],
+            ['u.id', 'u.nickname', 'q.quantity', 'u.group_id', 'u.status','q.create_time'],
+            $map);
     }
 
     public static function info($params)
