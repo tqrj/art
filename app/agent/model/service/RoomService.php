@@ -3,6 +3,10 @@
 
 namespace app\agent\model\service;
 
+use art\context\Context;
+use art\db\Medoo;
+use Swoole\Timer;
+
 /**
  * Class Room 房间设置
  * @package app\agent\controller
@@ -10,4 +14,112 @@ namespace app\agent\model\service;
 class RoomService
 {
 
+    /**
+     * @return array
+     * @todo 房间定时开奖算账害没有写
+     */
+    public static function switchOpen()
+    {
+        $agentInfo = Context::get('authInfo');
+        $medoo = new Medoo();
+        $roomInfo = $medoo->get('room', ['id', 'status', 'TimeID'], ['agent_id' => $agentInfo['id']]);
+        if (!$roomInfo) {
+            art_assign(202, '房间数据异常');
+        }
+        if ($roomInfo['timerID'] && $roomInfo['status']) {
+            art_assign(202, '房间已经开启');
+        }
+        if ($roomInfo['status']) {
+            $bool = $medoo->update('room', ['status' => 1], ['agent_id' => $agentInfo['id']])->rowCount();
+            if (!$bool) {
+                art_assign(202, '更新数据出错');
+            }
+        }
+        if (!$roomInfo['timerID']) {
+            return [];
+        }
+        //开启房间定时器
+        Timer::tick(2000, function (int $timer_id, $room_info, $agent_info, $medoo) {
+            $roomInfo = $medoo->get('room', ['id', 'status', 'TimeID'], ['agent_id' => $agent_info['id']]);
+            if (!$roomInfo) {
+                echo '房间定时器被清除了1';
+                Timer::clear($timer_id);
+                return;
+            } else if ($roomInfo['status'] == 0) {
+                echo '房间定时器被清除了2';
+                Timer::clear($timer_id);
+                return;
+            }
+
+
+        }, $roomInfo, $agentInfo, $medoo);
+
+
+        return [];
+    }
+
+    public static function switchClose()
+    {
+        $agentInfo = Context::get('authInfo');
+        $medoo = new Medoo();
+        $roomInfo = $medoo->get('room', ['id', 'status', 'TimeID'], ['agent_id' => $agentInfo['id']]);
+        if (!$roomInfo) {
+            art_assign(202, '房间数据异常');
+        }
+        if (!$roomInfo['status']) {
+            art_assign(202, '房间已经被关闭');
+        }
+        if ($roomInfo['status']) {
+            $bool = $medoo->update('room', ['status' => 0], ['agent_id' => $agentInfo['id']])->rowCount();
+            if (!$bool) {
+                art_assign(202, '更新数据出错');
+            }
+        }
+        return [];
+    }
+
+    public static function setRule($params)
+    {
+        $agentInfo = Context::get('authInfo');
+        $medoo = new Medoo();
+        $roomInfo = $medoo->get('room', ['id', 'status'], ['agent_id' => $agentInfo['id']]);
+        if (!$roomInfo) {
+            art_assign(202, '房间数据异常');
+        }
+        $pdoDoc = $medoo->update('room_rule',$params,['agent_id'=>$agentInfo['id'],'class'=>$params['class']]);
+        if (!$pdoDoc->rowCount()){
+            art_assign(202,'更新失败');
+        }
+        return [];
+    }
+
+    public static function change($params)
+    {
+        $agentInfo = Context::get('authInfo');
+        $medoo = new Medoo();
+        $roomInfo = $medoo->get('room', ['id', 'status'], ['agent_id' => $agentInfo['id']]);
+        if (!$roomInfo) {
+            art_assign(202, '房间数据异常');
+        }
+        $pdoDoc = $medoo->update('room',$params,['id'=>$roomInfo['id']]);
+        if (!$pdoDoc->rowCount()){
+            art_assign(202,'更新失败');
+        }
+        return [];
+    }
+
+    public static function info()
+    {
+        $agentInfo = Context::get('authInfo');
+        $medoo = new Medoo();
+        $roomInfo = $medoo->get('room', '*', ['agent_id' => $agentInfo['id']]);
+        if (!$roomInfo) {
+            art_assign(202, '房间数据异常');
+        }
+        $roomInfo['rule'] = $medoo->select('room_rule','*',['agent_id'=>$agentInfo['id']]);
+        if (false === $roomInfo['rule']){
+            $roomInfo['rule'] = [];
+        }
+        return $roomInfo;
+    }
 }

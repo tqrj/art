@@ -29,7 +29,13 @@ class PlayerLogic
 
     public static function info()
     {
-
+        $params = Request::only([
+            'playerId',
+        ]);
+        art_validate($params,[
+            'playerId'=>'require|number'
+        ]);
+        return $params;
     }
 
     /**
@@ -37,7 +43,16 @@ class PlayerLogic
      */
     public static function infoPosts()
     {
-
+        $params = Request::only([
+            'playerId',
+            'page'=>1,
+            'limit'=>20
+        ]);
+        art_validate($params,[
+            'playerId'=>'require|number',
+            'limit'=>'require|between:10,50',
+            'page'=>'require|between:1,999',
+        ]);
     }
 
     /**
@@ -45,16 +60,46 @@ class PlayerLogic
      */
     public static function infoScore()
     {
-
+        $params = Request::only([
+            'playerId',
+            'page'=>1,
+            'limit'=>20
+        ]);
+        art_validate($params,[
+            'playerId'=>'require|number',
+            'limit'=>'require|between:10,50',
+            'page'=>'require|between:1,999',
+        ]);
     }
 
     public static function change()
     {
-
+        $params = Request::only([
+            'playerId',
+            'nickname',
+            'pass',
+            'pass_sec',
+            'quantity',
+            'status'
+        ]);
+        art_validate($params,[
+            'playerId'=>'require|number',
+            'nickname|用户名称'=>'length:6,20',
+            'pass|密码'=>'length:6,20',
+            'pass_sec|二级密码'=>'length:6',
+            'status'=>'between:0,1'
+        ]);
+        return $params;
     }
 
     public static function del()
     {
-
+        $params = Request::only([
+            'playerId',
+        ]);
+        art_validate($params,[
+            'playerId'=>'require|gt:0'
+        ]);
+        return $params;
     }
 }

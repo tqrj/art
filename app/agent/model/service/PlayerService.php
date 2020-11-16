@@ -3,6 +3,9 @@
 
 namespace app\agent\model\service;
 
+use art\context\Context;
+use art\db\Medoo;
+
 /**
  * Class Player 玩家管理
  * @package app\agent\controller
@@ -10,40 +13,70 @@ namespace app\agent\model\service;
 class PlayerService
 {
 
-    public static function list()
+    public static function list($params)
     {
-
+        $map = [];
+        if (!empty($params['keyWord'])) {
+            $map['nickname[~]'] = $params['keyWord'] . '%';
+        }
+        $map['LIMIT'] = [$params['page'], $params['limit']];
+        $map['ORDER'] = ['id' => 'DESC'];
+        $map['status'] = [1, 0];
+        $medoo = new Medoo();
+        return $medoo->select('user', ['id', 'nickname', 'quantity', 'group_id', 'status'], $map);
     }
 
-    public static function info()
+    public static function info($params)
     {
-
+        $map = [];
+        $map['id'] = $params['playerId'];
+        $medoo = new Medoo();
+        $userInfo = $medoo->get('user', ['id', 'nickname', 'quantity', 'group_id', 'status'], $map);
+        if (!$userInfo) {
+            art_assign(202, '用户ID错误');
+        }
+        $agentInfo = Context::get('authInfo');
+        $map = [
+            'agent_id' => $agentInfo['id'],
+            'user_id' => $userInfo['id']
+        ];
+        $userInfo['order'] = $medoo->select('order', '*', $map);
+        $userInfo['quantityLog'] = $medoo->select('user_quantity', '*', $map);
+        return $userInfo;
     }
 
-    /**
-     * 投注列表
-     */
-    public static function infoPosts()
+    public static function change($params)
     {
-
+        $medoo = new Medoo();
+        $userInfo = $medoo->get('user', 'id,salt', ['id' => $params['playerId']]);
+        if (!$userInfo) {
+            art_assign(202, '用户信息错误');
+        }
+        if (!empty($params['pass'])) {
+            $params['pass'] = art_set_password($params['pass'], $userInfo['salt']);
+        } elseif (!empty($params['pass_sec'])) {
+            $params['pass_sec'] = art_set_password($params['pass_sec'], $userInfo['salt']);
+        }
+        unset($params['playerId']);
+        $result = $medoo->update('user', $params, ['id' => $userInfo['id']]);
+        if (!$result->rowCount()) {
+            art_assign(202, '更新失败');
+        }
+        return [];
     }
 
-    /**
-     * 上下分列表
-     */
-    public static function infoScore()
+    public static function del($params)
     {
-
-    }
-
-    public static function change()
-    {
-
-    }
-
-    public static function del()
-    {
-
+        $medoo = new Medoo();
+        $userInfo = $medoo->get('user', 'id,salt', ['id' => $params['playerId']]);
+        if (!$userInfo) {
+            art_assign(202, '用户信息错误');
+        }
+        $result = $medoo->update('user', ['status'=>-1], ['id' => $userInfo['id']]);
+        if (!$result->rowCount()) {
+            art_assign(202, '删除失败');
+        }
+        return [];
     }
 
 }
