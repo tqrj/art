@@ -22,37 +22,38 @@ class RoomService
     {
         $agentInfo = Context::get('authInfo');
         $medoo = new Medoo();
-        $roomInfo = $medoo->get('room', ['id', 'status', 'TimeID'], ['agent_id' => $agentInfo['id']]);
+        $roomInfo = $medoo->get('room', ['id', 'status', 'timerID'], ['agent_id' => $agentInfo['id']]);
         if (!$roomInfo) {
             art_assign(202, '房间数据异常');
         }
         if ($roomInfo['timerID'] && $roomInfo['status']) {
             art_assign(202, '房间已经开启');
         }
-        if ($roomInfo['status']) {
+        if (!$roomInfo['status']) {
             $bool = $medoo->update('room', ['status' => 1], ['agent_id' => $agentInfo['id']])->rowCount();
             if (!$bool) {
                 art_assign(202, '更新数据出错');
             }
         }
-        if (!$roomInfo['timerID']) {
+        if ($roomInfo['timerID']) {
             return [];
         }
         //开启房间定时器
-        Timer::tick(2000, function (int $timer_id, $room_info, $agent_info, $medoo) {
-            $roomInfo = $medoo->get('room', ['id', 'status', 'TimeID'], ['agent_id' => $agent_info['id']]);
+        Timer::tick(2000, function (int $timer_id, $agent_info,Medoo $medoo) {
+            $roomInfo = $medoo->get('room', ['id', 'status', 'timerID'], ['agent_id' => $agent_info['id']]);
             if (!$roomInfo) {
                 echo '房间定时器被清除了1';
                 Timer::clear($timer_id);
                 return;
             } else if ($roomInfo['status'] == 0) {
                 echo '房间定时器被清除了2';
+                $medoo->update('room',['timerID'=>0],['id'=>$roomInfo['id']]);
                 Timer::clear($timer_id);
                 return;
             }
 
 
-        }, $roomInfo, $agentInfo, $medoo);
+        },$agentInfo, $medoo);
 
 
         return [];
@@ -62,7 +63,7 @@ class RoomService
     {
         $agentInfo = Context::get('authInfo');
         $medoo = new Medoo();
-        $roomInfo = $medoo->get('room', ['id', 'status', 'TimeID'], ['agent_id' => $agentInfo['id']]);
+        $roomInfo = $medoo->get('room', ['id', 'status', 'timerID'], ['agent_id' => $agentInfo['id']]);
         if (!$roomInfo) {
             art_assign(202, '房间数据异常');
         }

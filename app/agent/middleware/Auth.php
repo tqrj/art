@@ -14,9 +14,12 @@ use art\request\Request;
 class Auth
 {
 
+    /**
+     * @return bool
+     */
     public static function hand(): bool
     {
-        $passAction = ['sendCode', 'sign', 'login', 'hello'];
+        $passAction = ['sendCode', 'sign', 'login'];
         $action = HttpApp::getActionName();
         if (false !== array_search($action, $passAction)) {
             return true;

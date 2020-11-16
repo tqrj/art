@@ -1,7 +1,7 @@
 <?php
 
 
-namespace app\user\controller;
+namespace app\agent\controller;
 
 
 use app\BaseController;
@@ -13,7 +13,6 @@ use art\ws\ArtWs;
 use art\db\Medoo;
 use art\request\Request;
 use Co\System;
-use Swoole\Coroutine\Client;
 
 class Test extends BaseController
 {
@@ -50,11 +49,12 @@ class Test extends BaseController
     {
         //https://loiy.net/post/566.html
         //https://medoo.in/api/where
-        $db = new DB();
-        $bool = $db->query("SELECT * FROM vae_test WHERE id = :id",[':id'=>1]);
-        $bool = $db->insert("INSERT INTO vae_test (test) values (:test)",[':test'=>1]);
+//        $db = new DB();
+//        $bool = $db->query("SELECT * FROM vae_test WHERE id = :id",[':id'=>1]);
+//        $bool = $db->insert("INSERT INTO vae_test (test) values (:test)",[':test'=>1]);
         $model = new Medoo();
-        $bool = $model->select('vae_test',['id','test'],['id'=>[20,21,30]]);
+        $bool = $model->select('agent','*',['id'=>[2,3]]);
+/*        $bool = $model->select('vae_test',['id','test'],['id'=>[20,21,30]]);
 
         $bool = $model->debug()->select('vae_test',
             ['id','nickname'],
@@ -70,7 +70,7 @@ class Test extends BaseController
             ['[><]vae_user(u)'=>['id']],
             ['t.nickname']
         );//别名 用括号括起来声明
-        //SELECT `vae_test`.`nickname` FROM `vae_test` INNER JOIN `vae_user` USING (`id`)
+        //SELECT `vae_test`.`nickname` FROM `vae_test` INNER JOIN `vae_user` USING (`id`)*/
 
         art_assign(200,'success',$bool);
     }
