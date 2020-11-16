@@ -15,7 +15,7 @@ class PlayerLogic
     public static function list()
     {
         $params = Request::only([
-           'page'=>1,
+           'page'=>0,
            'limit'=>10,
             'keyWord'
         ]);
