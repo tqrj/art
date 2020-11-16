@@ -49,6 +49,7 @@ class AgentLogic
         $params['pass_sec'] = art_set_password($params['pass_sec'],$params['salt']);
         $params['token'] = art_set_salt(20);
         $params['status'] = 1;
+        $params['code'] = art_set_salt(5);
         return $params;
     }
 

@@ -118,9 +118,45 @@ class RoomService
             art_assign(202, '房间数据异常');
         }
         $roomInfo['rule'] = $medoo->select('room_rule','*',['agent_id'=>$agentInfo['id']]);
-        if (false === $roomInfo['rule']){
-            $roomInfo['rule'] = [];
-        }
         return $roomInfo;
+    }
+
+    /**
+     * 创建代理的时候附带初始化所属房间
+     * @param $agentId
+     */
+    public static function create($agentId)
+    {
+        $medoo = new Medoo();
+        $bool = $medoo->has('room',['agent_id'=>$agentId]);
+        if ($bool){
+            art_assign(202,'创建房间失败');
+        }
+        $roomData['agent_id'] = $agentId;
+        $roomData['status'] = 0;
+        $roomData['timerID'] = 0;
+        $roomData['create_time'] = art_d();
+        $roomData['update_time'] = art_d();
+        $pdoDoc = $medoo->insert('room',$roomData);
+        if (!$pdoDoc->rowCount()){
+            art_assign(202,'创建房间信息失败');
+        }
+        $roomRule['agent_id'] = $agentId;
+        $roomRule['line'] = 97;
+        $roomRule['max'] =1000;
+        $roomRule['eat'] = 0;
+        $roomRule['eatNum'] = 20;
+        $roomRule['decimal'] = 0;
+        $roomRule['status'] = 1;
+        $roomRuleAll = [];
+        for ($i = 1; $i <= 5; $i++){
+            $roomRule['class'] = $i;
+            $roomRuleAll[] =  $roomRule;
+        }
+        $pdoDoc = $medoo->insert('room_rule',$roomRuleAll);
+        if (!$pdoDoc->rowCount()){
+            art_assign(202,'创建房间规则信息失败');
+        }
+        return [];
     }
 }

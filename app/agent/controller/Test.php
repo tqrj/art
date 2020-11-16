@@ -53,7 +53,7 @@ class Test extends BaseController
 //        $bool = $db->query("SELECT * FROM vae_test WHERE id = :id",[':id'=>1]);
 //        $bool = $db->insert("INSERT INTO vae_test (test) values (:test)",[':test'=>1]);
         $model = new Medoo();
-        $bool = $model->select('agent','*',['id'=>[2,3]]);
+        $bool = $model->get('agent','*',['id'=>[2,3]]);
 /*        $bool = $model->select('vae_test',['id','test'],['id'=>[20,21,30]]);
 
         $bool = $model->debug()->select('vae_test',

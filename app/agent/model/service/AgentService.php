@@ -6,6 +6,7 @@ namespace app\agent\model\service;
 
 use art\db\Medoo;
 use art\db\Redis;
+use mysql_xdevapi\Exception;
 
 class AgentService
 {
@@ -59,10 +60,20 @@ class AgentService
         if ($has) {
             art_assign(202, '该用户名已注册');
         }
-        $result = $medoo->insert('agent', $params);
-        if (!$result->rowCount()) {
-            art_assign(202, '注册失败');
+        $medoo->beginTransaction();
+        try {
+            $result = $medoo->insert('agent', $params);
+            if (!$result->rowCount()) {
+                throw new Exception('加入Agent数据失败');
+            }
+            RoomService::create($medoo->id());
+            $medoo->commit();
+        }catch (\Exception $e){
+            art_assign(202, $e->getMessage());
+            $medoo->rollBack();
         }
+
+
         return [];
     }
 
