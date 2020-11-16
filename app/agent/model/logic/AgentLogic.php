@@ -66,7 +66,7 @@ class AgentLogic
         $params = Request::only(['pass_sec','token','pass','pay_card','nickname']);
         art_validate($params,[
             'nickname|用户名称'=>'require|length:6,20',
-            'pass|密码'=>'require|length:6,20',
+            'pass|密码'=>'length:6,20',
             'pass_sec|二级密码'=>'require|length:6',
             'mobile|手机号'=>'length:6,11',
             'pay_card|支付信息'=>'length:10,255',
