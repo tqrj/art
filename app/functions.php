@@ -12,11 +12,11 @@ use art\WsApp;
  */
 function art_unset($value,&$array)
 {
-    $sort = array_search($value,$array);
-    if (false === $sort){
-        return false;
+    $sort = array_flip($array);
+    if (isset($sort[$value])){
+        return array_splice($array,$sort[$value],1);
     }
-    return array_splice($array,$sort,1);
+    return false;
 }
 
 function art_rand_mobile()

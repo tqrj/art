@@ -94,7 +94,7 @@ class AgentService
     public static function userInfo($params)
     {
         $medoo = new Medoo();
-        $userInfo = $medoo->get('agent',['*'],['token'=>$params['token']]);
+        $userInfo = $medoo->get('agent','*',['token'=>$params['token']]);
         unset($userInfo['salt']);
         return $userInfo;
     }
