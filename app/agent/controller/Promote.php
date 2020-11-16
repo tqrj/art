@@ -10,5 +10,6 @@ namespace app\agent\controller;
  */
 class Promote
 {
+    private $isHttp = true;
 
 }

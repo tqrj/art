@@ -12,6 +12,8 @@ use app\agent\model\service\RoomService;
  */
 class Room
 {
+    private $isHttp = true;
+
     public function switchOpen()
     {
         $result = RoomService::switchOpen();

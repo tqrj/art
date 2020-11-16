@@ -12,6 +12,8 @@ use app\agent\model\service\PlayerService;
  */
 class Player
 {
+    private $isHttp = true;
+
     public function list()
     {
         $params = PlayerLogic::list();

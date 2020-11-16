@@ -9,6 +9,8 @@ use app\agent\model\service\AgentService;
 
 class Agent
 {
+    private $isHttp = true;
+
     public function login()
     {
         $params = AgentLogic::login();

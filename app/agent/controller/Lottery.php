@@ -13,6 +13,7 @@ use app\agent\model\service\LotteryService;
  */
 class Lottery
 {
+    private $isHttp = true;
 
     public function old()
     {

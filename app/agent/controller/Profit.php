@@ -9,5 +9,6 @@ namespace app\agent\controller;
  */
 class Profit
 {
+    private $isHttp = true;
 
 }
