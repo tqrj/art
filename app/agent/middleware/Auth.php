@@ -37,7 +37,7 @@ class Auth
             return true;
         }
         $medoo = new Medoo();
-        $result = $medoo->get('agent', ['id', 'pass', 'pass_sec', 'salt', 'nickname', 'quantity', 'status', 'expire_time',],['token' => $token, 'expire_time[>]' => art_d()]);
+        $result = $medoo->get('agent', ['id', 'pass', 'pass_sec','code', 'salt', 'nickname', 'quantity', 'status', 'expire_time',],['token' => $token, 'expire_time[>]' => art_d()]);
         if (!$result) {
             throw new HttpException(202, '账户过期或Token错误');
         }

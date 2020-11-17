@@ -1,6 +1,7 @@
 <?php
 
-echo 30%2;
+$aaa = 'qqq';
+echo $aaa.='123';
 
 //echo  PACK('H*','696D616765732F646564652E6A7067');
 //$data = ['qq','ww','ee','cc'];
