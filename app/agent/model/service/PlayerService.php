@@ -69,7 +69,7 @@ class PlayerService
         $map['q.agent_id'] = $agentInfo['id'];
         $userInfo = $medoo->get('user(u)',
             ['[><]user_quantity(q)'=>['u.id'=>'user_id']],
-            ['u.id','u.salt'],
+            ['u.id','salt'],
             $map);
         if (!$userInfo) {
             art_assign(202, '用户信息错误');
