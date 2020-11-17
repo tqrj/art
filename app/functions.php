@@ -179,6 +179,8 @@ function _art_assign_ws(int $code = 200, $msg = "success",$data = [],int $selfWs
     $res['code']= $code;
     $res['msg'] = $msg;
     $res['data'] = $data;
+    var_dump($selfWsId).PHP_EOL;
+    var_dump($recvId).PHP_EOL;
     \art\ws\ArtWs::pushMsg(json_encode($res),$selfWsId,$recvId,$wsGroup);
 }
 
