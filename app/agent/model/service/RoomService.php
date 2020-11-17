@@ -39,7 +39,7 @@ class RoomService
             return [];
         }
         //开启房间定时器
-        Timer::tick(2000, function (int $timer_id, $agent_info,Medoo $medoo) {
+        Timer::tick(4000, function (int $timer_id, $agent_info,Medoo $medoo) {
             $roomInfo = $medoo->get('room', ['id', 'status', 'timerID'], ['agent_id' => $agent_info['id']]);
             if (!$roomInfo) {
                 echo '房间定时器被清除了1';
@@ -51,7 +51,10 @@ class RoomService
                 Timer::clear($timer_id);
                 return;
             }
-
+            //如果是的话就是第一次被开启
+            if (!$roomInfo['timerID']){
+                $medoo->update('room',['timerID'=>$timer_id],['id'=>$roomInfo['id']]);
+            }
 
         },$agentInfo, $medoo);
 

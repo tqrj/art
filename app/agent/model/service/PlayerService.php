@@ -54,7 +54,7 @@ class PlayerService
             'user_id' => $userInfo['id']
         ];
         $userInfo['order'] = $medoo->select('order', '*', $map);
-        $userInfo['quantityLog'] = $medoo->select('user_quantity', '*', $map);
+        $userInfo['quantityLog'] = $medoo->select('quantity_log', '*', $map);
         return $userInfo;
     }
 

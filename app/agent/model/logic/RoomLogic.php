@@ -40,7 +40,8 @@ class RoomLogic
         $params = Request::only(['closeTime','notice']);
         art_validate($params,[
             'closeTime'=>'require',
-            'notice'=>'require'
+            'notice'=>'require',
+            'notice_close'=>'require',
         ]);
         return $params;
     }
