@@ -16,6 +16,7 @@ class PlayerService
     public static function list($params)
     {
         $map = [];
+        $agentInfo = Context::get('authInfo');
         if (!empty($params['keyWord'])) {
             $map['u.nickname[~]'] = $params['keyWord'] . '%';
         }
@@ -23,6 +24,7 @@ class PlayerService
         $map['ORDER'] = ['q.id' => 'DESC'];
         $map['u.status'] = [1, 0];
         $map['q.status'] = [1, 0];
+        $map['q.agent_id'] = $agentInfo['id'];
         $medoo = new Medoo();
         return $medoo->select('user(u)',
             ['[><]user_quantity(q)'=>['u.id'=>'user_id']],
@@ -33,9 +35,16 @@ class PlayerService
     public static function info($params)
     {
         $map = [];
-        $map['id'] = $params['playerId'];
+        $agentInfo = Context::get('authInfo');
+        $map['u.id'] = $params['playerId'];
+        $map['u.status'] = [1, 0];
+        $map['q.status'] = [1, 0];
+        $map['q.agent_id'] = $agentInfo['id'];
         $medoo = new Medoo();
-        $userInfo = $medoo->get('user', ['id', 'nickname', 'quantity', 'group_id', 'status'], $map);
+        $userInfo = $medoo->get('user(u)',
+            ['[><]user_quantity(q)'=>['u.id'=>'user_id']],
+            ['u.id', 'u.nickname', 'q.quantity', 'u.group_id', 'q.status'],
+            $map);
         if (!$userInfo) {
             art_assign(202, '用户ID错误');
         }
@@ -51,8 +60,17 @@ class PlayerService
 
     public static function change($params)
     {
+        $agentInfo = Context::get('authInfo');
         $medoo = new Medoo();
-        $userInfo = $medoo->get('user', 'id,salt', ['id' => $params['playerId']]);
+        $map = [];
+        $map['u.status'] = [1, 0];
+        $map['q.status'] = [1, 0];
+        $map['u.id'] = $params['playerId'];
+        $map['q.agent_id'] = $agentInfo['id'];
+        $userInfo = $medoo->get('user(u)',
+            ['[><]user_quantity(q)'=>['u.id'=>'user_id']],
+            'u.id,u.salt',
+            $map);
         if (!$userInfo) {
             art_assign(202, '用户信息错误');
         }
@@ -71,14 +89,11 @@ class PlayerService
 
     public static function del($params)
     {
+        $agentInfo = Context::get('authInfo');
         $medoo = new Medoo();
-        $userInfo = $medoo->get('user', 'id,salt', ['id' => $params['playerId']]);
-        if (!$userInfo) {
-            art_assign(202, '用户信息错误');
-        }
-        $result = $medoo->update('user', ['status'=>-1], ['id' => $userInfo['id']]);
-        if (!$result->rowCount()) {
-            art_assign(202, '删除失败');
+        $pdoDoc = $medoo->update('user_quantity',['status'=>-1],['user_id'=>$params['playerId'],'agent_id'=>$agentInfo['id']]);
+        if (!$pdoDoc->rowCount()){
+            art_assign(202,'删除失败');
         }
         return [];
     }

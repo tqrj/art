@@ -79,15 +79,12 @@ class PlayerLogic
             'nickname',
             'pass',
             'pass_sec',
-            'quantity',
-            'status'
         ]);
         art_validate($params,[
             'playerId'=>'require|number',
             'nickname|用户名称'=>'length:6,20',
             'pass|密码'=>'length:6,20',
             'pass_sec|二级密码'=>'length:6',
-            'status'=>'between:0,1'
         ]);
         return $params;
     }
