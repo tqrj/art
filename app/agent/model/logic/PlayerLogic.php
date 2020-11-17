@@ -21,7 +21,7 @@ class PlayerLogic
         ]);
         art_validate($params,[
             'limit'=>'require|between:10,50',
-            'page'=>'require|between:1,999',
+            'page'=>'require|between:0,999',
             'keyword'=>'length:1,12'
         ]);
         return $params;
