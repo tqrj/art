@@ -60,6 +60,9 @@ class PlayerService
 
     public static function change($params)
     {
+        if (count($params)<2){
+            art_assign(202,'输入错误');
+        }
         $agentInfo = Context::get('authInfo');
         $medoo = new Medoo();
         $map = [];
