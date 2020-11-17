@@ -28,26 +28,18 @@ class Player
         art_assign(200,'success',$result);
     }
 
-    /**
-     * 投注列表
-     */
-    public function infoPosts()
-    {
-
-    }
-
-    /**
-     * 上下分列表
-     */
-    public function infoScore()
-    {
-
-    }
 
     public function change()
     {
         $params = PlayerLogic::change();
         $result = PlayerService::change($params);
+        art_assign(200,'success',$result);
+    }
+
+    public function score()
+    {
+        $params = PlayerLogic::score();
+        $result = PlayerService::score($params);
         art_assign(200,'success',$result);
     }
 

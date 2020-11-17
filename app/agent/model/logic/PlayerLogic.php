@@ -99,4 +99,17 @@ class PlayerLogic
         ]);
         return $params;
     }
+
+    public static function score()
+    {
+        $params = Request::only([
+            'playerId',
+            'score'
+        ]);
+        art_validate($params,[
+            'playerId'=>'require|gt:0',
+            'score'=>'require'
+        ]);
+        return $params;
+    }
 }

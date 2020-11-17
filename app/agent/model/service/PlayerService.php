@@ -87,6 +87,19 @@ class PlayerService
         return [];
     }
 
+    public static function score($params)
+    {
+        $agentInfo = Context::get('authInfo');
+        $medoo = new Medoo();
+        $map['agent_id'] = $agentInfo['id'];
+        $map['user_id'] = $params['playerId'];
+        $pdoDoc = $medoo->update('user_quantity',['quantity'=>$params['score']],$map);
+        if (!$pdoDoc->rowCount()){
+            art_assign(202,'更新数据失败');
+        }
+        return $medoo->get('user_quantity',['quantity'],$map);
+    }
+
     public static function del($params)
     {
         $agentInfo = Context::get('authInfo');
