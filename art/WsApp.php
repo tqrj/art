@@ -58,18 +58,18 @@ class WsApp extends BaseApp
 
 
 
-    public static function run()
+    public static function run(Request $request,Response $response,Frame $frame)
     {
         $instance = self::controller('isWs');
         if (!is_callable([$instance, self::getActionName()])) {
-            throw new HttpException(404, 'method not exists:' . get_class($instance) . '->' . self::getActionName() . '()');
+            throw new HttpException(404, 'method not exists:' . get_class($instance) . '->' . self::getActionName() . '()',[],'',0,$request->artWsId);
         }
         try {
             $reflect = new \ReflectionMethod($instance, self::getActionName());
             // 严格获取当前操作方法名
             self::putActionName($reflect->getName());
         } catch (\ReflectionException $e) {
-            throw new HttpException(404, 'method not exists:' . get_class($instance) . '->' . self::getActionName() . '()');
+            throw new HttpException(404, 'method not exists:' . get_class($instance) . '->' . self::getActionName() . '()',[],'',0,$request->artWsId);
         }
         Middleware::Auth(self::getAppName());
         $reflect->invokeArgs($instance,[]);

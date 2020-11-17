@@ -64,7 +64,7 @@ $pidPool->on('workerStart', function ($Pool, int $id) {
             } elseif ($frame->opcode == WEBSOCKET_OPCODE_TEXT) {
                 try {
                     WsApp::init($request, $ws, $frame);
-                    WsApp::run();
+                    WsApp::run($request, $ws, $frame);
                     WsApp::end();
                 } catch (HttpException $e) {
                     _art_assign($e->getStatusCode(), $e->getMessage(),$e->getData(),$e->getLocation(),$e->getSelfWsId(),$e->getRecvId(),$e->getWsGroup());
