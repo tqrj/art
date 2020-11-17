@@ -171,11 +171,17 @@ function _art_assign(int $code = 200, $msg = "success",$data = [], string $locat
             $response->header('Location',$location);
         $response->end(json_encode($res));;
         Context::delete();
-    }else {
-        \art\ws\ArtWs::pushMsg(json_encode($res),$selfWsId,$recvId,$wsGroup);
     }
-
 }
+
+function _art_assign_ws(int $code = 200, $msg = "success",$data = [],int $selfWsId = 0, int $recvId = 0, string $wsGroup = '')
+{
+    $res['code']= $code;
+    $res['msg'] = $msg;
+    $res['data'] = $data;
+    \art\ws\ArtWs::pushMsg(json_encode($res),$selfWsId,$recvId,$wsGroup);
+}
+
 /**
  * @param int $code
  * @param string $msg

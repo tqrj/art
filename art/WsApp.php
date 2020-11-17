@@ -5,7 +5,6 @@ namespace art;
 
 
 use art\context\Context;
-use art\exception\ClassNotFoundException;
 use art\exception\HttpException;
 use art\helper\Str;
 use art\middleware\Middleware;
