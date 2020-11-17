@@ -72,8 +72,6 @@ $pidPool->on('workerStart', function ($Pool, int $id) {
                 } catch (ClassNotFoundException $e) {
                     _art_assign_ws(404, $e->getMessage(),[],0,$wsId);
                     WsApp::end();
-                    $ws->close();
-                    break;
                 }
                 //ArtWs::pushMsg($frame->data,$wsId,2);
                 //$ws->push();
