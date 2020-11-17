@@ -37,12 +37,12 @@ class WsApp extends BaseApp
         Context::put('frame',$frame);
         $frame->data = json_decode($frame->data,true);
         if (!is_array($frame->data)){
-            throw new HttpException(404, 'App not find');
+            throw new HttpException(404, 'App not find',[],'',0,$request->artWsId);
         }
         $pathInfo = $frame->data['artPath'];
         $pathInfo = explode('/', $pathInfo);
         if (count($pathInfo) < 4) {
-            throw new HttpException(404, 'App not find');
+            throw new HttpException(404, 'App not find',[],'',0,$request->artWsId);
         }
         // 获取应用名
         $app = strip_tags($pathInfo[1]);
