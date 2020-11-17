@@ -29,20 +29,20 @@ class WsApp extends BaseApp
         // TODO: Implement __wakeup() method.
     }
 
-    public static function init(Request $request,Response $response,Frame $frame)
+    public static function init(Request $request,Response $ws,Frame $frame)
     {
         self::initBase();
         Context::put('request',$request);
-        Context::put('response',$response);
+        Context::put('response',$ws);
         Context::put('frame',$frame);
         $frame->data = json_decode($frame->data,true);
         if (!is_array($frame->data)){
-            throw new HttpException(404, 'App not find',[],'',0,$request->artWsId);
+            throw new HttpException(404, 'App not find',[],'',0,$ws->artWsId);
         }
         $pathInfo = $frame->data['artPath'];
         $pathInfo = explode('/', $pathInfo);
         if (count($pathInfo) < 4) {
-            throw new HttpException(404, 'App not find',[],'',0,$request->artWsId);
+            throw new HttpException(404, 'App not find',[],'',0,$ws->artWsId);
         }
         // 获取应用名
         $app = strip_tags($pathInfo[1]);
@@ -57,18 +57,18 @@ class WsApp extends BaseApp
 
 
 
-    public static function run(Request $request,Response $response,Frame $frame)
+    public static function run(Request $request,Response $ws,Frame $frame)
     {
         $instance = self::controller('isWs');
         if (!is_callable([$instance, self::getActionName()])) {
-            throw new HttpException(404, 'method not exists:' . get_class($instance) . '->' . self::getActionName() . '()',[],'',0,$request->artWsId);
+            throw new HttpException(404, 'method not exists:' . get_class($instance) . '->' . self::getActionName() . '()',[],'',0,$ws->artWsId);
         }
         try {
             $reflect = new \ReflectionMethod($instance, self::getActionName());
             // 严格获取当前操作方法名
             self::putActionName($reflect->getName());
         } catch (\ReflectionException $e) {
-            throw new HttpException(404, 'method not exists:' . get_class($instance) . '->' . self::getActionName() . '()',[],'',0,$request->artWsId);
+            throw new HttpException(404, 'method not exists:' . get_class($instance) . '->' . self::getActionName() . '()',[],'',0,$ws->artWsId);
         }
         Middleware::Auth(self::getAppName());
         $reflect->invokeArgs($instance,[]);
