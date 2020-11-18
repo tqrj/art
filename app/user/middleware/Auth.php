@@ -14,6 +14,10 @@ use art\request\Request;
 class Auth
 {
 
+    /**
+     * @return bool
+     * @todo user的权限验证
+     */
     public static function hand(): bool
     {
         $passAction = ['sendCode', 'sign', 'login', 'hello'];
@@ -34,7 +38,21 @@ class Auth
             return true;
         }
         $medoo = new Medoo();
-        $result = $medoo->get('agent', ['id', 'pass', 'pass_sec', 'salt', 'nickname', 'quantity', 'status', 'expire_time',],['token' => $token, 'expire_time[>]' => art_d()]);
+        $map['token'] = $token;
+        $result = $medoo->get('user',
+            [
+                'id',
+                'pass',
+                'pass_sec',
+                'salt',
+                'nickname',
+                'quantity',
+                'status',
+                'expire_time',
+            ],
+            [
+                'token' => $token,
+            ]);
         if (!$result) {
             throw new HttpException(202, '账户过期或Token错误');
         }

@@ -5,6 +5,7 @@ namespace app\agent\model\service;
 
 use art\context\Context;
 use art\db\Medoo;
+use art\ws\ArtWs;
 use Swoole\Timer;
 
 /**
@@ -39,7 +40,7 @@ class RoomService
             return [];
         }
         //开启房间定时器
-        Timer::tick(4000, function (int $timer_id, $agent_info,Medoo $medoo) {
+        Timer::tick(5000, function (int $timer_id, $agent_info,Medoo $medoo) {
             $roomInfo = $medoo->get('room', ['id', 'status', 'timerID'], ['agent_id' => $agent_info['id']]);
             if (!$roomInfo) {
                 echo '房间定时器被清除了1';
@@ -52,13 +53,13 @@ class RoomService
                 return;
             }
             //如果是的话就是第一次被开启
+            //第一次被开启，需要先结清之前的账单，然后 获取即将开奖的号码，以及马上需要开奖的时间 放入table
+            //然后定时检查该害差多久开始封盘，以及是不是已经开奖，已经开奖了就马上算账！
             if (!$roomInfo['timerID']){
                 $medoo->update('room',['timerID'=>$timer_id],['id'=>$roomInfo['id']]);
             }
 
         },$agentInfo, $medoo);
-
-
         return [];
     }
 

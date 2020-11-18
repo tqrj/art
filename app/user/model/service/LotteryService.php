@@ -1,14 +1,14 @@
 <?php
 
 
-namespace app\agent\model\service;
+namespace app\user\model\service;
 
 
 use app\traits\Lottery;
 
 /**
  * Class Lottery 开奖信息
- * @package app\user\controller
+ * @package app\agent\controller
  */
 class LotteryService
 {
