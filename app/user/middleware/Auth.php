@@ -16,11 +16,10 @@ class Auth
 
     /**
      * @return bool
-     * @todo user的权限验证
      */
     public static function hand(): bool
     {
-        $passAction = ['sendCode', 'sign', 'login', 'hello'];
+        $passAction = ['auth'];
         $action = HttpApp::getActionName();
         if (false !== array_search($action, $passAction)) {
             return true;
@@ -50,7 +49,8 @@ class Auth
                 'nickname',
                 'headimgurl',
                 'refresh_token',
-                'openid'
+                'openid',
+                'agent_id'
             ],
             $map
             );
@@ -58,7 +58,7 @@ class Auth
             throw new HttpException(202, '账户过期或Token错误');
         }
         $redis = Redis::getInstance()->getConnection();
-        $redis->setex('user_' . $token.'_'.$agent_id, 60, serialize($result));
+        $redis->setex('user_' . $token.'_'.$agent_id, 120, serialize($result));
         Redis::getInstance()->close($redis);
         Context::put('authInfo', $result);
         return true;

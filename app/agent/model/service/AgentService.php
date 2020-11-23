@@ -72,8 +72,6 @@ class AgentService
             art_assign(202, $e->getMessage());
             $medoo->rollBack();
         }
-
-
         return [];
     }
 

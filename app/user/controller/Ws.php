@@ -10,4 +10,9 @@ namespace app\user\controller;
 class Ws
 {
     private $isWs = true;
+
+    public function push()
+    {
+
+    }
 }

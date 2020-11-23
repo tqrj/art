@@ -4,7 +4,269 @@
 namespace app\user\model\service;
 
 
+use app\traits\Wx;
+use art\context\Context;
+use art\db\DB;
+use art\db\Medoo;
+use art\exception\HttpException;
+use art\request\Request;
+
 class UserService
 {
+    /**
+     * @param $params
+     * @return array|bool|mixed
+     */
+    public static function auth($params)
+    {
 
+        $arr_state = explode('/', base64_decode($params['state']));
+        if (count($arr_state) != 2) {
+            art_assign(202, 'state参数错误');
+        }
+        if (empty($params['code'])) {
+            art_assign(202, 'code授权错误');
+        }
+        $result = Wx::getAccessToken($params['code']);
+        if (empty($result['access_token'])) {
+            art_assign(202, '获取token错误', $result);
+        }
+        $result = Wx::getUserInfo($result['access_token'], $result['openid']);
+        if (empty($result['openid']) or count($result['openid']) < 8) {
+            art_assign(202, '获取用户资料异常');
+        }
+
+        $medoo = new Medoo();
+        $agentInfo = $medoo->get('agent', ['id', 'code', 'status', 'expire_time'], [
+            'code' => $arr_state[1],
+            'status' => 1,
+            'expire_time[>]' => art_d()
+        ]);
+        if (empty($agentInfo)) {
+            art_assign(202, '未知异常');
+        }
+        $userInfo = $medoo->get('user', [
+            'id',
+            'nickname',
+            'status',
+            'refresh_token',
+            'openid',
+            'headimgurl'
+        ], [
+            'openid' => $result['openid'],
+        ]);
+        if (!empty($userInfo) && $userInfo['status'] != 1) {
+            art_assign(202, '用户被封停');
+        }
+        $time = art_d();
+        $userInfoQuantity = [];
+        $medoo->beginTransaction();
+        try {
+            if (empty($userInfo)) {
+                $userInfo = [];
+                $userInfo['token'] = art_set_salt(20);
+                $userInfo['openid'] = $result['openid'];
+                $userInfo['refresh_token'] = '';
+                $userInfo['headimgurl'] = $result['headimgurl'];
+                $userInfo['create_time'] = $time;
+                $userInfo['update_time'] = $time;
+                $userInfo['nickname'] = $result['nickname'];
+                $pdoDoc = $medoo->insert('user', $userInfo);
+                if (!$pdoDoc->rowCount()) {
+                    throw new \Exception('添加用户出错');
+                }
+                $userInfo['id'] = $medoo->id();
+                $userInfoQuantity = self::makeUserQuantity($userInfo, $agentInfo);
+                $pdoDoc = $medoo->insert('user_quantity', $userInfoQuantity);
+                if (!$pdoDoc->rowCount()) {
+                    throw new \Exception('添加用户信息出错');
+                }
+                $userInfoQuantity['id'] = $medoo->id();
+            } else {
+                $userInfoQuantity = $medoo->get('user_quantity', [
+                    'id',
+                    'user_id',
+                    'agent_id',
+                    'quantity',
+                    'type',
+                    'status'
+                ], [
+                    'user_id' => $userInfo['id'],
+                    'agent_id' => $agentInfo['id'],
+                    'status' => 1
+                ]);
+                if (empty($userInfoQuantity)) {
+                    $userInfoQuantity = self::makeUserQuantity($userInfo, $agentInfo);
+                    $pdoDoc = $medoo->insert('user_quantity', $userInfoQuantity);
+                    if (!$pdoDoc->rowCount()) {
+                        throw new \Exception('添加用户信息出错');
+                    }
+                    $userInfoQuantity['id'] = $medoo->id();
+                }
+            }
+            if ($userInfo['headimgurl'] !== $result['headimgurl']) {
+                $medoo->update('user', ['headimgurl' => $result['headimgurl']], ['user_id' => $userInfo['id']]);
+            }
+            $medoo->commit();
+        } catch (\Exception $e) {
+            $medoo->rollBack();
+            art_assign(202, $e->getMessage());
+        }
+        $userInfo['quantity'] = $userInfoQuantity;
+        return $userInfo;
+    }
+
+    private static function makeUserQuantity($userInfo, $agentInfo)
+    {
+        $time = art_d();
+        $userInfoQuantity['user_id'] = $userInfo['id'];
+        $userInfoQuantity['agent_id'] = $agentInfo['id'];
+        $userInfoQuantity['type'] = 1;
+        $userInfoQuantity['status'] = 1;
+        $userInfoQuantity['create_time'] = $time;
+        $userInfoQuantity['update_time'] = $time;
+        return $userInfoQuantity;
+    }
+
+    public static function info($params)
+    {
+        $medoo = new Medoo();
+        $map['token'] = $params['token'];
+        $map['agent_id'] = $params['agent_id'];
+        $map['u.status'] = [1];
+        $map['q.status'] = [1];
+        $result = $medoo->get('user(u)',
+            ['[><]user_quantity(q)'=>['u.id'=>'user_id']],
+            [
+                'u.id',
+                'nickname',
+                'headimgurl',
+                'refresh_token',
+                'openid',
+                'quantity',
+                'q.status',
+                'type'
+            ],
+            $map
+        );
+        if (!$result) {
+            throw new HttpException(202, '账户过期或Token错误');
+        }
+        return $result;
+    }
+
+    public static function pay($params)
+    {
+        $userInfo = Context::get('authInfo');
+        $medoo = new Medoo();
+        $has = $medoo->has('points',[
+            'user_id'=>$userInfo['id'],
+            'agent_id'=>$userInfo['agent_id'],
+            'status'=>0
+        ]);
+        if ($has){
+            art_assign(202,'您有请求还没有处理请耐心等待!');
+        }
+        $data['user_id'] = $userInfo['id'];
+        $data['agent_id'] = $userInfo['agent_id'];
+        $data['status']=0;
+        $data['create_time'] = art_d();
+        $data['type'] = 1;
+        $data['quantity'] = $params['quantity'];
+        $pdoDoc = $medoo->insert('points',$data);
+        if(!$pdoDoc->rowCount()){
+            art_assign(202,'上分异常');
+        }
+        return [];
+    }
+
+    public static function reBack($params)
+    {
+        $userInfo = Context::get('authInfo');
+        $medoo = new Medoo();
+        $has = $medoo->has('points',[
+            'user_id'=>$userInfo['id'],
+            'agent_id'=>$userInfo['agent_id'],
+            'status'=>0
+        ]);
+        if ($has){
+            art_assign(202,'您有请求还没有处理请耐心等待!');
+        }
+        $medoo->beginTransaction();
+        try {
+            $userQuantityInfo = $medoo->get('user_quantity',[
+                'id',
+                'quantity'
+            ],[
+                'user_id'=>$userInfo['id'],
+                'agent_id'=>$userInfo['agent_id'],
+            ]);
+            if (empty($userQuantityInfo)){
+                throw new \Exception('积分数据异常');
+            }
+            if ((float)$userQuantityInfo['quantity'] < (float)$params['quantity']){
+                throw new \Exception('下分异常');
+            }
+            $pdoDoc = $medoo->update('user_quantity',['quantity[-]'=>(float)$params['quantity']],[
+                'user_id'=>$userInfo['id'],
+                'agent_id'=>$userInfo['agent_id'],
+                'quantity'=>$userQuantityInfo['quantity']
+            ]);
+            if (!$pdoDoc->rowCount()){
+                throw new \Exception('下分异常');
+            }
+            $data['user_id'] = $userInfo['id'];
+            $data['agent_id'] = $userInfo['agent_id'];
+            $data['status']=0;
+            $data['create_time'] = art_d();
+            $data['type'] = -1;
+            $data['quantity'] = $params['quantity'];
+            $pdoDoc = $medoo->insert('points',$data);
+            if(!$pdoDoc->rowCount()){
+                throw new \Exception('退分异常');
+            }
+            $medoo->commit();
+        }catch (\Exception $e){
+            $medoo->rollBack();
+            art_assign(202,$e->getMessage());
+        }
+        return [];
+    }
+
+    public static function payList($params)
+    {
+        $userInfo = Context::get('authInfo');
+        $medoo = new Medoo();
+        $result = $medoo->select('user_quantity','*',[
+            'agent_id'=>$userInfo['agent_id'],
+            'user_id'=>$userInfo['id'],
+            'type'=>1,
+            'LIMIT'=>[$params['page'],$params['limit']],
+            'ORDER'=>['id'=>'DESC']
+            ]);
+        return $result;
+    }
+
+    public static function reBackList($params)
+    {
+        $userInfo = Context::get('authInfo');
+        $medoo = new Medoo();
+        $result = $medoo->select('user_quantity','*',[
+            'agent_id'=>$userInfo['agent_id'],
+            'user_id'=>$userInfo['id'],
+            'type'=>-1,
+            'LIMIT'=>[$params['page'],$params['limit']],
+            'ORDER'=>['id'=>'DESC']
+        ]);
+        return $result;
+    }
+
+
+    public static function baseConfig()
+    {
+        $userInfo = Context::get('authInfo');
+        $medoo = new Medoo();
+        $result['notice_top'] = $medoo->get('room','notice_top',['agent_id'=>$userInfo['agent_id']]);
+        return $result;
+    }
 }

@@ -14,7 +14,7 @@ class Lottery
 
     /**
      * @param $str
-     * @return string
+     * @return array|false
      */
     public static function parseExp($str)
     {
@@ -44,7 +44,8 @@ class Lottery
         if ($result === '识别失败'){
             return false;
         }
-        return (string)$result;
+
+        return explode('<-8888->',(string)$result);
     }
 
     /**

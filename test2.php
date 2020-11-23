@@ -1,10 +1,11 @@
 <?php
-
-$aaa = 'qqq';
-echo $aaa.='123';
+$filename = '121.jpo.php';
+if(preg_match("#php#", $filename) == false)
+{
+    echo 11;
+}
 
 //echo  PACK('H*','696D616765732F646564652E6A7067');
-//$data = ['qq','ww','ee','cc'];
 ////unset($data[0]);
 //art_unset('qq',$data);
 //var_dump(json_encode($data));

@@ -121,7 +121,7 @@ class Test extends BaseController
         $str = $str[mt_rand(0,2)];*/
         $str = Request::only(['code'])['code'];
         $result = Lottery::parseExp($str);
-        art_assign(200,$result);
+        art_assign(200,'success',$result);
     }
 
     public function test1()
