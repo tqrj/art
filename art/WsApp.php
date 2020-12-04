@@ -34,13 +34,15 @@ class WsApp extends BaseApp
         self::initBase();
         $frame->data = json_decode($frame->data,true);
         if (!is_array($frame->data)){
-            throw new HttpException(404, 'App not find',[],'',0,$ws->artWsId);
+            throw new HttpException(404, 'data error',[],'',0,$ws->artWsId);
         }
         Context::put('request',$request);
         Context::put('response',$ws);
         Context::put('frame',$frame);
         $pathInfo = $frame->data['artPath'];
         $pathInfo = explode('/', $pathInfo);
+        var_dump($pathInfo);
+        var_dump($frame->data);
         if (count($pathInfo) < 4) {
             throw new HttpException(404, 'App not find',[],'',0,$ws->artWsId);
         }
