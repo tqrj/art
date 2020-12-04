@@ -51,7 +51,6 @@ class Auth
                 'refresh_token',
                 'openid',
                 'agent_id',
-                'code'
             ],
             $map
             );

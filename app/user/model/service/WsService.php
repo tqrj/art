@@ -18,7 +18,7 @@ class WsService
     {
         $agentInfo = Context::get('authInfo');
         $ws = Context::get('response');
-        ArtWs::joinGroup($ws->artWsId,$agentInfo['code']);
+        ArtWs::joinGroup($ws->artWsId,$agentInfo['agent_id']);
     }
 
     /**
