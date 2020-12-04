@@ -41,8 +41,6 @@ class WsApp extends BaseApp
         Context::put('frame',$frame);
         $pathInfo = $frame->data['artPath'];
         $pathInfo = explode('/', $pathInfo);
-        var_dump($pathInfo);
-        var_dump($frame->data);
         if (count($pathInfo) < 4) {
             throw new HttpException(404, 'App not find',[],'',0,$ws->artWsId);
         }
