@@ -29,7 +29,7 @@ class WsService
     {
         $agentInfo = Context::get('authInfo');
         $ws = Context::get('response');
-        ArtWs::pushMsg($params['message'],0,0,$agentInfo['code']);
+        ArtWs::pushMsg($params['message'],0,0,$agentInfo['agent_id']);
         //if ($params)
     }
 
