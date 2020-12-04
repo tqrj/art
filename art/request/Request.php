@@ -27,11 +27,13 @@ class Request
     public static function only(array $keys): array
     {
         $request = Context::get('request');
+        $frame = Context::get('frame');
         $post = $request->post;
         $get = $request->get;
         is_null($post) ? $post = [] : true;
         is_null($get) ? $get = [] : true;
-        $params = array_merge($get, $post);
+        !is_array($frame->data) ? $frame->data = [] : true;
+        $params = array_merge($get, $post,$frame->data);
         $result = [];
         array_walk($keys, function ($item, $key) use ($params, &$result) {
             if (is_int($key) && array_key_exists($item, $params)) {

@@ -50,7 +50,8 @@ class Auth
                 'headimgurl',
                 'refresh_token',
                 'openid',
-                'agent_id'
+                'agent_id',
+                'code'
             ],
             $map
             );

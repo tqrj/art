@@ -1,9 +1,27 @@
 <?php
-$filename = '121.jpo.php';
-if(preg_match("#php#", $filename) == false)
-{
-    echo 11;
-}
+
+require 'vendor/autoload.php';
+
+$carbon = \Carbon\Carbon::now('Asia/Shanghai');
+$carStart = \Carbon\Carbon::now()->addDays(10);
+$carEnd = \Carbon\Carbon::now()->subDays(10);
+echo $carbon->isSameMonth($carStart);
+//echo $carbon->tz;
+
+//$test ='ddd';
+//$data[0][0] = 111;
+//$data[0][1] = 112;
+//array_walk($data,function ($item,$key) use (&$test){
+//    print_r($item);
+//    $test =1121;
+//},$test);
+//echo $test;
+//echo date('j',strtotime('2020-1-18 19:46:27'));
+
+//if(preg_match("#php#", $filename) == false)
+//{
+//    echo 11;
+//}
 
 //echo  PACK('H*','696D616765732F646564652E6A7067');
 ////unset($data[0]);

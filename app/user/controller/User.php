@@ -14,6 +14,9 @@ class User
 {
     private $isHttp = true;
 
+    /**
+     * auth之后应该直接带着参数跳转到前端的
+     */
     public function auth()
     {
         $params = UserLogic::auth();

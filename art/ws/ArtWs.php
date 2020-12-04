@@ -53,7 +53,7 @@ class ArtWs
         }
         self::$wsAtomic = new Atomic();
 
-        self::$wsMsgTable = new Table(20);
+        self::$wsMsgTable = new Table(4096);
         self::$wsMsgTable->column('msg', Table::TYPE_STRING, 1024 * 1024);
         self::$wsMsgTable->column('sender', Table::TYPE_INT);
         self::$wsMsgTable->column('recver', Table::TYPE_INT);
@@ -61,7 +61,7 @@ class ArtWs
         self::$wsMsgTable->column('status', Table::TYPE_INT);
         self::$wsMsgTable->create();
 
-        self::$wsGroupTable = new Table(20);
+        self::$wsGroupTable = new Table(4096);
         self::$wsGroupTable->column('wsId', Table::TYPE_INT);
         self::$wsGroupTable->column('group', Table::TYPE_STRING, 40);
         self::$wsGroupTable->column('type', Table::TYPE_INT);
@@ -89,7 +89,7 @@ class ArtWs
                 } elseif ($row['recver'] === $wsId) {
                     $ws->push($row['msg']);//指定收信ID
                 }elseif(!empty(self::$wsGroup[$row['group']]) && array_search($wsId, self::$wsGroup[$row['group']]) !== false){
-                    $ws->push($row['msg']);//指定收信ID
+                    $ws->push($row['msg'])?true:self::leaveGroup($wsId,$row['group']);//指定收信群组发送失败了就退出群组
                 }
             }
             $row['status'] = 1;
