@@ -20,7 +20,7 @@ class PlayerService
         if (!empty($params['keyWord'])) {
             $map['u.nickname[~]'] = $params['keyWord'] . '%';
         }
-        $map['LIMIT'] = [0, $params['limit']];
+        $map['LIMIT'] = [$params['page'], $params['limit']];
         $map['ORDER'] = ['q.id' => 'DESC'];
         $map['u.status'] = [1, 0];
         $map['q.status'] = [1, 0];

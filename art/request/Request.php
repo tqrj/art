@@ -30,10 +30,11 @@ class Request
         $frame = Context::get('frame');
         $post = $request->post;
         $get = $request->get;
+        $wsData = !is_null($frame)?$wsData = $frame->data:true;
+        !is_array($wsData) ? $wsData = [] : true;
         is_null($post) ? $post = [] : true;
         is_null($get) ? $get = [] : true;
-        !is_array($frame->data) ? $frame->data = [] : true;
-        $params = array_merge($get, $post,$frame->data);
+        $params = array_merge($get, $post,$wsData);
         $result = [];
         array_walk($keys, function ($item, $key) use ($params, &$result) {
             if (is_int($key) && array_key_exists($item, $params)) {
