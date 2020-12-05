@@ -6,30 +6,38 @@ namespace app\user\model\service;
 
 use app\traits\Lottery;
 use art\context\Context;
+use art\db\Medoo;
 use art\ws\ArtWs;
+use Swoole\WebSocket\Frame;
 
 class WsService
 {
+    protected Frame $ws;
+    protected $agentInfo = null;
+    protected Medoo $medoo;
+
+    public function __construct()
+    {
+        $this->agentInfo = Context::get('authInfo');
+        $this->ws = Context::get('response');
+        $this->medoo = new Medoo();
+    }
 
     /**
      * 连接上之后加入到该房间分组
      */
-    public static function joinGroup()
+    public function joinGroup()
     {
-        $agentInfo = Context::get('authInfo');
-        $ws = Context::get('response');
-        ArtWs::joinGroup($ws->artWsId,$agentInfo['agent_id']);
+        ArtWs::joinGroup($this->ws->artWsId,$this->agentInfo['agent_id']);
     }
 
     /**
      * 对用户消息进行处理
      * @param $params
      */
-    public static function push($params)
+    public function push($params)
     {
-        $agentInfo = Context::get('authInfo');
-        $ws = Context::get('response');
-        ArtWs::pushMsg($params['message'],0,0,$agentInfo['agent_id']);
+
         //if ($params)
     }
 
@@ -38,20 +46,32 @@ class WsService
      * @param $message
      *
      */
-    private static function checkScore($message)
+    private function checkScore($message)
     {
+
         $exp = '历史走势图|历史图|走势图|开奖图|开奖|长条|历史';
-        if (strpos($exp,$message) !== false){
-            art_assign(200,'success',Lottery::getCode(Lottery::LOTTERY_TYPE_OLD));
+        if ($this->_codeExp($exp,$message) != false){
+            art_assign_ws(200,'success',Lottery::getCode(Lottery::LOTTERY_TYPE_OLD),$this->agentInfo['agent_id']);
         }
         $exp = '查流水';
-        if (strpos($exp,$message) !== false) {
+        if ($this->_codeExp($exp,$message) != false) {
 
         }
         $exp = '查，查分，查钱，查信用';
-        if (strpos($exp,$message) !== false) {
+        if ($this->_codeExp($exp,$message) != false) {
 
         }
 
+    }
+
+    private function _codeExp($code,$message):bool
+    {
+        $codeArr = explode("|",$code);
+        foreach ($codeArr as $exp){
+            if($exp == $message){
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -1,11 +1,14 @@
 <?php
 
-require 'vendor/autoload.php';
+echo preg_match("#ph|aa#","aa");
 
-$carbon = \Carbon\Carbon::now('Asia/Shanghai');
-$carStart = \Carbon\Carbon::now()->addDays(10);
-$carEnd = \Carbon\Carbon::now()->subDays(10);
-echo $carbon->isSameMonth($carStart);
+
+//require 'vendor/autoload.php';
+//
+//$carbon = \Carbon\Carbon::now('Asia/Shanghai');
+//$carStart = \Carbon\Carbon::now()->addDays(10);
+//$carEnd = \Carbon\Carbon::now()->subDays(10);
+//echo $carbon->isSameMonth($carStart);
 //echo $carbon->tz;
 
 //$test ='ddd';

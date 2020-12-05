@@ -6,6 +6,7 @@ namespace art\middleware;
 
 use art\exception\ClassNotFoundException;
 use art\exception\HttpException;
+use Swoole\Http\Response;
 
 class Middleware
 {
@@ -35,7 +36,7 @@ class Middleware
         return $object;
     }
 
-    public static function Auth($appName)
+    public static function Auth($appName,$artWsId)
     {
         $instance = self::controller($appName);
         if (is_null($instance)){
@@ -50,7 +51,7 @@ class Middleware
             throw new HttpException(404, 'auth method not exists:' . get_class($instance) . '->hand()');
         }
 
-        $reflect->invokeArgs($instance,[]);
+        $reflect->invokeArgs($instance,[$artWsId]);
         //$this->response->end('qwq');
     }
 

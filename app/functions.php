@@ -191,7 +191,20 @@ function _art_assign_ws(int $code = 200, $msg = "success",$data = [],int $selfWs
  * @param int $recvId
  * @param string $wsGroup
  */
-function art_assign(int $code = 200, $msg = "success",$data = [], string $location = '',int $selfWsId = 0, int $recvId = 0, string $wsGroup = '')
+function art_assign(int $code = 200, $msg = "success",$data = [], string $location = '')
 {
-    throw new \art\exception\HttpException($code,$msg,$data,$location,$selfWsId,$recvId,$wsGroup);
+    throw new \art\exception\HttpException($code,$msg,$data,$location);
+}
+
+/**
+ * @param int $code
+ * @param string $msg
+ * @param array $data
+ * @param string $wsGroup
+ * @param int $recvId
+ * @param int $selfWsId
+ */
+function art_assign_ws(int $code = 200, $msg = "success",$data = [], string $wsGroup = '',int $recvId = 0,int $selfWsId = 0)
+{
+    throw new \art\exception\HttpException($code,$msg,$data,'',$selfWsId,$recvId,$wsGroup);
 }

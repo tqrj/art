@@ -16,12 +16,12 @@ class Ws
 
     public function joinGroup()
     {
-        WsService::joinGroup();
+        (new WsService())->joinGroup();
     }
 
     public function push()
     {
         $params = WsLogic::push();
-        WsService::push($params);
+        (new WsService())->push($params);
     }
 }
