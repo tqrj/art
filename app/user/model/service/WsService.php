@@ -8,11 +8,12 @@ use app\traits\Lottery;
 use art\context\Context;
 use art\db\Medoo;
 use art\ws\ArtWs;
+use Swoole\Http\Response;
 use Swoole\WebSocket\Frame;
 
 class WsService
 {
-    protected Frame $ws;
+    protected Response $ws;//$artWsId
     protected $agentInfo = null;
     protected Medoo $medoo;
 
