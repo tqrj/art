@@ -47,7 +47,7 @@ class Auth
         $result = $medoo->get('user(u)',
             [
                 '[><]user_quantity(q)'=>['u.id'=>'user_id'],
-                '[><]agent(a)'=>['agent_id'=>'a.id'],
+                '[><]agent(a)'=>['q.agent_id'=>'a.id'],
             ],
             [
                 'u.id',
@@ -55,7 +55,7 @@ class Auth
                 'headimgurl',
                 'refresh_token',
                 'openid',
-                'agent_id',
+                'q.agent_id',
             ],
             $map
             );
