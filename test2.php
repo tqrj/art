@@ -1,7 +1,9 @@
 <?php
 
-$res = 'qqq';
-echo "$res";
+$res = null;
+$res = serialize($res);
+var_dump(unserialize($res));
+//echo "$res";
 //echo preg_match("#上(\d+)#","上1上2",$res);
 //var_dump($res);
 

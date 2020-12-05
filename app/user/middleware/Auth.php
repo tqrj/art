@@ -51,7 +51,7 @@ class Auth
             ],
             [
                 'u.id',
-                'nickname',
+                'u.nickname',
                 'headimgurl',
                 'refresh_token',
                 'openid',
