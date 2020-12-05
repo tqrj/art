@@ -39,7 +39,7 @@ class Auth
             return true;
         }
         $medoo = new Medoo();
-        $map['token'] = $token;
+        $map['u.token'] = $token;
         $map['agent_id'] = $agent_id;
         $map['u.status'] = [1];
         $map['q.status'] = [1];
