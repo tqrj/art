@@ -8,9 +8,9 @@ use Swoole\Coroutine\Client;
 
 class Lottery
 {
-    const LOTTERY_TYPE_OLD = '1001';
-    const LOTTERY_TYPE_now = '2001';
-    const LOTTERY_TYPE_check = '3001';
+    const LOTTERY_TYPE_OLD = 1001;
+    const LOTTERY_TYPE_now = 2001;
+    const LOTTERY_TYPE_check = 3001;
 
     /**
      * @param $str

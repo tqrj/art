@@ -1,7 +1,9 @@
 <?php
 
-echo preg_match("#ph|aa#","aa");
-
+$res = 'qqq';
+echo "$res";
+//echo preg_match("#上(\d+)#","上1上2",$res);
+//var_dump($res);
 
 //require 'vendor/autoload.php';
 //

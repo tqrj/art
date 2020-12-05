@@ -210,7 +210,7 @@ class UserService
             $pdoDoc = $medoo->update('user_quantity',['quantity[-]'=>(float)$params['quantity']],[
                 'user_id'=>$userInfo['id'],
                 'agent_id'=>$userInfo['agent_id'],
-                'quantity'=>$userQuantityInfo['quantity']
+                'quantity'=>(float)$userQuantityInfo['quantity']
             ]);
             if (!$pdoDoc->rowCount()){
                 throw new \Exception('下分异常');

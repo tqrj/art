@@ -16,10 +16,9 @@ class Auth
 {
 
     /**
-     * @param $artWsId
      * @return bool
      */
-    public static function hand($artWsId): bool
+    public static function hand(): bool
     {
         $passAction = ['auth'];
         $action = HttpApp::getActionName();
@@ -28,7 +27,7 @@ class Auth
         }
         $data = Request::only(['token','agent_id']);
         if (empty($data['token']) or empty($data['agent_id'])) {
-            throw new HttpException(202, '无权限访问',[],'',0,$artWsId);
+            throw new HttpException(202, '无权限访问',[]);
         }
         $token = $data['token'];
         $agent_id = $data['agent_id'];
@@ -44,8 +43,12 @@ class Auth
         $map['agent_id'] = $agent_id;
         $map['u.status'] = [1];
         $map['q.status'] = [1];
+        $map['expire_time[>]']= art_d();
         $result = $medoo->get('user(u)',
-            ['[><]user_quantity(q)'=>['u.id'=>'user_id']],
+            [
+                '[><]user_quantity(q)'=>['u.id'=>'user_id'],
+                '[><]agent(a)'=>['agent_id'=>'a.id'],
+            ],
             [
                 'u.id',
                 'nickname',
@@ -57,7 +60,7 @@ class Auth
             $map
             );
         if (!$result) {
-            throw new HttpException(202, '账户过期或Token错误',[],'',0,$artWsId);
+            throw new HttpException(202, '账户过期或Token错误');
         }
         $redis = Redis::getInstance()->getConnection();
         $redis->setex('user_' . $token.'_'.$agent_id, 120, serialize($result));

@@ -36,7 +36,7 @@ class Middleware
         return $object;
     }
 
-    public static function Auth($appName,$artWsId)
+    public static function Auth($appName)
     {
         $instance = self::controller($appName);
         if (is_null($instance)){
@@ -51,7 +51,7 @@ class Middleware
             throw new HttpException(404, 'auth method not exists:' . get_class($instance) . '->hand()');
         }
 
-        $reflect->invokeArgs($instance,[$artWsId]);
+        $reflect->invokeArgs($instance,[]);
         //$this->response->end('qwq');
     }
 

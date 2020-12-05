@@ -70,7 +70,7 @@ class WsApp extends BaseApp
         } catch (\ReflectionException $e) {
             throw new HttpException(404, 'method not exists:' . get_class($instance) . '->' . self::getActionName() . '()',[],'',0,$ws->artWsId);
         }
-        Middleware::Auth(self::getAppName(),$ws->artWsId);
+        Middleware::Auth(self::getAppName());
         $reflect->invokeArgs($instance,[]);
         //$this->response->end('qwq');
     }
