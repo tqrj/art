@@ -32,7 +32,7 @@ class UserService
             art_assign(202, '获取token错误', $result);
         }
         $result = Wx::getUserInfo($result['access_token'], $result['openid']);
-        if (empty($result['openid']) or is_array($result) or count($result) < 8) {
+        if (empty($result['openid']) or !is_array($result) or count($result) < 8) {
             art_assign(202, '获取用户资料异常');
         }
 
