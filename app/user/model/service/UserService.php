@@ -112,8 +112,8 @@ class UserService
             $medoo->rollBack();
             art_assign(202, $e->getMessage());
         }
-        $userInfo['quantity'] = $userInfoQuantity;
-        return $userInfo;
+        //$userInfo['quantity'] = $userInfoQuantity;
+        return 'https://'.$arr_state[0].'/auth?token='.$userInfo['token'].'&agent='.$agentInfo['id'];
     }
 
     private static function makeUserQuantity($userInfo, $agentInfo)
@@ -204,10 +204,10 @@ class UserService
             if (empty($userQuantityInfo)){
                 throw new \Exception('积分数据异常');
             }
-            if ((float)$userQuantityInfo['quantity'] < (float)$params['quantity']){
+            if ((float)$userQuantityInfo['quantity'] < $params['quantity']){
                 throw new \Exception('下分异常');
             }
-            $pdoDoc = $medoo->update('user_quantity',['quantity[-]'=>(float)$params['quantity']],[
+            $pdoDoc = $medoo->update('user_quantity',['quantity[-]'=>$params['quantity']],[
                 'user_id'=>$userInfo['id'],
                 'agent_id'=>$userInfo['agent_id'],
                 'quantity'=>(float)$userQuantityInfo['quantity']

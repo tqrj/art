@@ -32,6 +32,7 @@ class WsService
 
     /**
      * 连接上之后加入到该房间分组
+     * @todo 我是个傻逼 直接发送到群组 有人自然能收到~
      */
     public function joinGroup()
     {
@@ -92,7 +93,7 @@ class WsService
             return;
         }
         try {
-            $params['quantity'] = $matches[1];
+            $params['quantity'] = (float)$matches[1];
             UserService::pay($params);
         }catch (HttpException $e){
             art_assign_ws($e->getStatusCode(),$e->getMessage(),[],$this->userInfo['agent_id']);
@@ -112,7 +113,7 @@ class WsService
             return;
         }
         try {
-            $params['quantity'] = $matches[1];
+            $params['quantity'] = (float)$matches[1];
             UserService::reBack($params);
         }catch (HttpException $e){
             art_assign_ws($e->getStatusCode(),$e->getMessage(),[],$this->userInfo['agent_id']);

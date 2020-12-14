@@ -21,7 +21,7 @@ class User
     {
         $params = UserLogic::auth();
         $result = UserService::auth($params);
-        art_assign(200,'success',$result);
+        art_assign(200,'success','',$result);
     }
 
     public function info()

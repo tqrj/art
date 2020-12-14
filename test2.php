@@ -1,19 +1,44 @@
 <?php
-
-$res = null;
-$res = serialize($res);
-var_dump(unserialize($res));
+$str="23 24 25 26 32 34 35 36 42 43 45 46 52 53 54 56 62 63 64 65";
+$str_ex = explode(' ',$str);
+var_dump($str_ex);
+////$res = false;
+////var_dump(empty($res));
+///**
+// * @param string $code
+// * @param string $site
+// * @return string
+// */
+//function _siteCode($code,$site)
+//{
+//    $site = str_replace('万','0',$site);
+//    $site = str_replace('千','1',$site);
+//    $site = str_replace('百','2',$site);
+//    $site = str_replace('十','3',$site);
+//    $site = str_replace('个','4',$site);
+//    $siteLen = strlen($site);
+//    $resCode = '';
+//    for ($i = 0 ;$i < $siteLen;$i++){
+//        $resCode .= substr($code,substr($site,$i,1),1);
+//    }
+//    return $resCode;
+//}
+// //echo substr('123456',0,1);
+//echo _siteCode('91904','');
+//$res = null;
+//$res = serialize($res);
+//var_dump(unserialize($res));
 //echo "$res";
 //echo preg_match("#上(\d+)#","上1上2",$res);
 //var_dump($res);
 
-//require 'vendor/autoload.php';
-//
-//$carbon = \Carbon\Carbon::now('Asia/Shanghai');
-//$carStart = \Carbon\Carbon::now()->addDays(10);
-//$carEnd = \Carbon\Carbon::now()->subDays(10);
-//echo $carbon->isSameMonth($carStart);
-//echo $carbon->tz;
+/*require 'vendor/autoload.php';
+
+$carbon = \Carbon\Carbon::parse(art_d(),'Asia/Shanghai');
+
+echo $carbon->diffInRealMinutes('2020-12-13 17:20:00',);*/
+
+//echo $carbon->diffInMinutes($carbon1);
 
 //$test ='ddd';
 //$data[0][0] = 111;
