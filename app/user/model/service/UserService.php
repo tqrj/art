@@ -71,6 +71,7 @@ class UserService
                 $userInfo['create_time'] = $time;
                 $userInfo['update_time'] = $time;
                 $userInfo['nickname'] = $result['nickname'];
+                $userInfo['status'] = 1;
                 $pdoDoc = $medoo->insert('user', $userInfo);
                 if (!$pdoDoc->rowCount()) {
                     throw new \Exception('添加用户出错');
@@ -105,7 +106,7 @@ class UserService
                 }
             }
             if ($userInfo['headimgurl'] !== $result['headimgurl']) {
-                $medoo->update('user', ['headimgurl' => $result['headimgurl']], ['user_id' => $userInfo['id']]);
+                $medoo->update('user', ['headimgurl' => $result['headimgurl']], ['id' => $userInfo['id']]);
             }
             $medoo->commit();
         } catch (\Exception $e) {
