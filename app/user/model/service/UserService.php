@@ -51,7 +51,8 @@ class UserService
             'status',
             'refresh_token',
             'openid',
-            'headimgurl'
+            'headimgurl',
+            'token'
         ], [
             'openid' => $result['openid'],
         ]);
