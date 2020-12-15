@@ -80,10 +80,11 @@ class RoomService
             $issue = $redis->get(self::ROOM_ISSUE . $agent_info['id']);
             $CarbonIssue = Carbon::parse(art_d(), 'Asia/Shanghai');
             $diff = $CarbonIssue->diffInRealSeconds($nowLottery[1]);
-
+            echo 'diff:'.$diff.PHP_EOL;
+            echo $nowLottery[1];
             //如果redis没有获取到期号就是第一次 把当前期号设置进去
             if (empty($issue)) {
-                echo 'diff:'.$diff;
+
                 $redis->set(self::ROOM_ISSUE . $agent_info['id'], $nowLottery[0], $diff + mt_rand(10, 20));
                 $issue = $nowLottery[0];
             }
