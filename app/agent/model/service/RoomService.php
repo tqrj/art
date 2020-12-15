@@ -55,7 +55,6 @@ class RoomService
                 return;
             } else if ($roomInfo['status'] == 0) {
                 echo '房间定时器被清除了2';
-                $medoo->update('room', ['timerID' => 0], ['id' => $roomInfo['id']]);
                 art_assign_ws(200, '房间已关闭', [], $agent_info['id']);
                 Timer::clear($timer_id);
                 return;
@@ -385,7 +384,7 @@ class RoomService
             art_assign(202, '房间已经被关闭');
         }
         if ($roomInfo['status']) {
-            $bool = $medoo->update('room', ['status' => 0], ['agent_id' => $agentInfo['id']])->rowCount();
+            $bool = $medoo->update('room', ['status' => 0,'timeID'=>0], ['agent_id' => $agentInfo['id']])->rowCount();
             if (!$bool) {
                 art_assign(202, '更新数据出错');
             }
