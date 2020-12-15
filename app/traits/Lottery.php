@@ -44,8 +44,11 @@ class Lottery
         if ($result === '识别失败'){
             return false;
         }
-
-        return explode('<-8888->',(string)$result);
+        $result = explode('<-8888->',(string)$result);
+        if (!is_array($result) or count($result) != 9 or $result[0] !== 1){
+            return false;
+        }
+        return $result;
     }
 
     /**

@@ -1,7 +1,8 @@
 <?php
-$str="23 24 25 26 32 34 35 36 42 43 45 46 52 53 54 56 62 63 64 65";
-$str_ex = explode(' ',$str);
-var_dump($str_ex);
+echo (substr(time(),6));
+//$exp = "#\d{1,}#";
+//echo preg_match($exp,"下单0.1");
+
 ////$res = false;
 ////var_dump(empty($res));
 ///**

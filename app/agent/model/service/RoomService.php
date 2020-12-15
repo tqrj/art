@@ -19,8 +19,8 @@ class RoomService
 {
     const ROOM_ISSUE = 'room_issue_';
     const ROOM_CLOSE_MSG = 'room_close_msg_';
-    const ROOM_STATUS_SETTLE = 4003;
-    const ROOM_STATUS_CLOSE = 5003;
+    const ROOM_STATUS_SETTLE = 1002;
+    const ROOM_STATUS_CLOSE = 2002;
 
     /**
      * @return array

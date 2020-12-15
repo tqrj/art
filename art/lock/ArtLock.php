@@ -56,7 +56,7 @@ class ArtLock
             return $this->lockStatus;
         };
         //我这种写法唯一缺陷，这里可能会有可能在下一个锁获取到情况出现误删除 这种机率应该很小的~后面如果有需要考虑再换成lua
-        //换成lua 上面的超时判断和下面的del放一起~
+        //换成lua 上面的超时判断和下面的del也就是一条lua命令了~
         $bool = $redis->del('ArtLock' . $this->lockKey);
         Redis::getInstance()->close($redis);
         return $bool;
