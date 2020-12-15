@@ -73,7 +73,7 @@ class WsService
     {
         $exp = '历史走势图|历史图|走势图|开奖图|开奖|长条|历史';
         if ($this->_codeExp($exp, $message) != false) {
-            art_assign_ws(Lottery::LOTTERY_TYPE_OLD, 'success', Lottery::getCode(Lottery::LOTTERY_TYPE_OLD), $this->agentInfo['agent_id']);
+            art_assign_ws(Lottery::LOTTERY_TYPE_OLD, 'success', Lottery::getCode(Lottery::LOTTERY_TYPE_OLD), $this->userInfo['agent_id']);
             return true;
         }
         $exp = '查流水';
