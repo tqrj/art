@@ -67,7 +67,7 @@ $pidPool->on('workerStart', function ($Pool, int $id) {
                     WsApp::run($request, $ws, $frame);
                     WsApp::end();
                 } catch (HttpException $e) {
-                    _art_assign_ws($e->getStatusCode(), $e->getMessage(),$e->getData(),$e->getSelfWsId(),$e->getRecvId(),$e->getWsGroup());
+                    _art_assign_ws($e->getStatusCode(), $e->getMessage(),$e->getData(),$wsId);
                     WsApp::end();
                 } catch (ClassNotFoundException $e) {
                     _art_assign_ws(404, $e->getMessage(),[],0,$wsId);

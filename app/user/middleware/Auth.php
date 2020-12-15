@@ -60,7 +60,7 @@ class Auth
             $map
             );
         if (!$result) {
-            throw new HttpException(202, '账户过期或Token错误');
+            throw new HttpException(202, '账户过期或Token错误',[]);
         }
         $redis = Redis::getInstance()->getConnection();
         $redis->setex('user_' . $token.'_'.$agent_id, 120, serialize($result));
