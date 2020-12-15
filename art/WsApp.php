@@ -32,7 +32,7 @@ class WsApp extends BaseApp
     public static function init(Request $request,Response $ws,Frame $frame)
     {
         self::initBase();
-        $frame->data = json_decode($frame->data,true);
+        $frame->data = json_decode(urldecode($frame->data),true);
         if (!is_array($frame->data)){
             throw new HttpException(404, 'data error',[],'',0,$ws->artWsId);
         }
