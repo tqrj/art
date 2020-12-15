@@ -43,7 +43,9 @@ class RoomService
                 art_assign(202, '更新数据出错');
             }
         }
-
+        $redis = \art\db\Redis::getInstance()->getConnection();
+        $redis->del(self::ROOM_ISSUE . $agentInfo['id']);
+        \art\db\Redis::getInstance()->close($redis);
         //开启房间定时器
         Timer::tick(5000, function (int $timer_id, $agent_info, Medoo $medoo) {
             //这里不要每次都去查数据库 可以redis 记录一下在等待开奖的期号，然后每次去查服务的当前期号如果不是当前期号了就查该期号的结果
@@ -78,8 +80,10 @@ class RoomService
             $issue = $redis->get(self::ROOM_ISSUE . $agent_info['id']);
             $CarbonIssue = Carbon::parse(art_d(), 'Asia/Shanghai');
             $diff = $CarbonIssue->diffInRealSeconds($nowLottery[1]);
+
             //如果redis没有获取到期号就是第一次 把当前期号设置进去
             if (empty($issue)) {
+                echo 'diff:'.$diff;
                 $redis->set(self::ROOM_ISSUE . $agent_info['id'], $nowLottery[0], $diff + mt_rand(10, 20));
                 $issue = $nowLottery[0];
             }
