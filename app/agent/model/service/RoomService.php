@@ -34,7 +34,7 @@ class RoomService
         if (!$roomInfo) {
             art_assign(202, '房间数据异常');
         }
-        if ($roomInfo['timerID'] && $roomInfo['status']) {
+        if ($roomInfo['timerID'] or $roomInfo['status']) {
             art_assign(202, '房间已经开启');
         }
         if (!$roomInfo['status']) {
@@ -42,9 +42,6 @@ class RoomService
             if (!$bool) {
                 art_assign(202, '更新数据出错');
             }
-        }
-        if ($roomInfo['timerID']) {
-            return [];
         }
 
         //开启房间定时器
@@ -253,7 +250,18 @@ class RoomService
                 '[><]user(u)' => ['o.user_id' => 'id'],
                 '[><]user_quantity(q)' => ['o.user_id' => 'user_id']
             ],
-            ['o.*', 'u.nickname', 'q.quantity(user_quantity)'],
+            [
+                'o.id',
+                'o.quantity',
+                'o.play_code_count',
+                'o.play_site',
+                'o.single_quantity',
+                'o.line',
+                'o.user_id',
+                'o.agent_id',
+                'u.nickname',
+                'q.quantity(user_quantity)'
+            ],
             [
                 'o.agent_id' => $agentId,
                 'o.issue' => $issue,

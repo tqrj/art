@@ -24,7 +24,6 @@ class PDO
     private function __construct()
     {
         if (empty($this->pools)) {
-            echo '创建了一次连接池';
             $this->pools = new PDOPool(
                 (new PDOConfig())
                     ->withHost(Database::$host)

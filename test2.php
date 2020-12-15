@@ -1,5 +1,9 @@
 <?php
-echo (substr(time(),6));
+$matches = [];
+$bool = preg_match("#(上|充|加|上分|充值|充钱|加钱|加分)(\d+)#", '上1212', $matches);
+echo $bool.PHP_EOL;
+var_dump($matches);
+//echo (substr(time(),6));
 //$exp = "#\d{1,}#";
 //echo preg_match($exp,"下单0.1");
 

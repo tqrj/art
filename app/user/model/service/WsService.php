@@ -105,12 +105,12 @@ class WsService
     private function checkPay($message)
     {
         $matches = [];
-        $bool = preg_match("#上|充|加|上分|充值|充钱|加钱|加分(\d+)#", $message, $matches);
+        $bool = preg_match("#(上|充|加|上分|充值|充钱|加钱|加分)(\d+)#", $message, $matches);
         if (!$bool) {
             return false;
         }
         try {
-            $params['quantity'] = (float)$matches[1];
+            $params['quantity'] = (float)$matches[2];
             UserService::pay($params);
             art_assign_ws(200, '[' . $this->userInfo['nickname'] . '] 上分受理中', [], $this->userInfo['agent_id']);
         } catch (HttpException $e) {
@@ -126,12 +126,12 @@ class WsService
     private function checkReBack($message)
     {
         $matches = [];
-        $bool = preg_match("#下|减|提|拿|下分|减分|提现|提钱|拿钱(\d+)#", $message, $matches);
+        $bool = preg_match("#(下|减|提|拿|下分|减分|提现|提钱|拿钱)(\d+)#", $message, $matches);
         if (!$bool) {
             return false;
         }
         try {
-            $params['quantity'] = (float)$matches[1];
+            $params['quantity'] = (float)$matches[2];
             UserService::reBack($params);
             art_assign_ws(200, '[' . $this->userInfo['nickname'] . '] 下分受理中', [], $this->userInfo['agent_id']);
         } catch (HttpException $e) {
