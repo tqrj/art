@@ -206,5 +206,10 @@ function art_assign(int $code = 200, $msg = "success",$data = [], string $locati
  */
 function art_assign_ws(int $code = 200, $msg = "success",$data = [], string $wsGroup = '',int $recvId = 0,int $selfWsId = 0)
 {
-    throw new \art\exception\HttpException($code,$msg,$data,'',$selfWsId,$recvId,$wsGroup);
+    $message['code']= $code;
+    $message['msg'] = $msg;
+    $message['data'] = $data;
+    $message = json_encode($message);
+    \art\ws\ArtWs::pushMsg($message,$selfWsId,$recvId,$wsGroup);
+    //throw new \art\exception\HttpException($code,$msg,$data,'',$selfWsId,$recvId,$wsGroup);
 }
