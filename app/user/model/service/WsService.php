@@ -49,7 +49,7 @@ class WsService
      */
     public function push($params)
     {
-        art_assign_ws(200, htmlspecialchars($params['message']), [], $this->userInfo['agent_id']);
+        art_assign_ws(200, htmlspecialchars($params['message']), [], $this->userInfo['agent_id'],$this->userInfo['id'],);
         if ($this->checkScore($params['message'])) {
             return;
         } elseif ($this->checkPay($params['message'])) {
