@@ -388,7 +388,7 @@ class RoomService
             art_assign(202, '房间已经被关闭');
         }
         if ($roomInfo['status']) {
-            $bool = $medoo->update('room', ['status' => 0,'timeID'=>0], ['agent_id' => $agentInfo['id']])->rowCount();
+            $bool = $medoo->update('room', ['status' => 0,'timerID'=>0], ['agent_id' => $agentInfo['id']])->rowCount();
             if (!$bool) {
                 art_assign(202, '更新数据出错');
             }
