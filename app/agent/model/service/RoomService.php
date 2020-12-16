@@ -176,11 +176,6 @@ class RoomService
 
             $orderResultData = [];
             $orderResultData['nickname'] = $userInfo['nickname'];
-            //用户历史总流水
-            $orderResultData['past_sum_quantity'] = $medoo->sum('order','quantity', [
-                'agent_id'=>$agentId,
-                'user_id'=>$userInfo['id']
-            ]);
             $orderSumQuantity = 0;
             array_walk($userOrderList,function ($orderInfo) use (&$orderResultData,&$orderSumQuantity){
                    $temp['play_method'] = $orderInfo['play_method'];
@@ -191,6 +186,11 @@ class RoomService
                    $orderResultData['orderList'][] = $temp;
                    $orderSumQuantity += (float)$orderInfo['quantity'];
             });
+            //用户历史总流水
+            $orderResultData['past_sum_quantity'] = $medoo->sum('order','quantity', [
+                'agent_id'=>$agentId,
+                'user_id'=>$userInfo['id']
+            ]);
             $orderResultData['order_sum_quantity'] = $orderSumQuantity;
             $orderResultData['user_quantity'] = $userInfo['quantity'];
             $result['orderResultList'][] = $orderResultData;
@@ -285,7 +285,7 @@ class RoomService
                 'o.issue' => $issue,
                 'o.status' => 0,
                 'u.status' => 1,
-                'ORDER'=>['u.nickname'=>'ASC']
+                'ORDER'=>['u.id'=>'ASC']
             ]);
         $result['issue'] = $issue;
         $result['lottery'] = $lotteryCode;

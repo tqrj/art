@@ -9,6 +9,7 @@ use app\user\model\service\PostService;
 
 class Post
 {
+    private $isHttp = true;
     /**
      * 注单列表
      */
