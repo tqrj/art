@@ -146,8 +146,9 @@ class RoomService
                 'u.status' => 1,
                 'q.status'=>1
             ]);
-        $result['issue'] = $issue;
         $result = [];
+        $result['issue'] = $issue;
+        $result['orderResultList'] = [];
         array_walk($userList,function ($userInfo) use($medoo,$agentId,$issue,&$result){
 
             $userOrderList = $medoo->select('order(o)',
@@ -280,6 +281,7 @@ class RoomService
             ]);
         $result['issue'] = $issue;
         $result['lottery'] = $lotteryCode;
+        $result['orderResultList'] = [];
         $orderResultList = [];
         array_walk($orderList, function ($orderInfo, $key) use ($medoo, $issue, $lotteryCode, &$orderResultList) {
 //            $lotteryCode = Lottery::getCode(Lottery::LOTTERY_TYPE_check,$orderInfo['issue']);
