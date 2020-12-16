@@ -154,9 +154,10 @@ class WsService
         if ($expMsg == false) {
             return false;
         }
-        $userInfo = Context::get('authInfo');
-        $medoo = new Medoo();
+        $medoo = $this->medoo;
         $roomInfo = $medoo->get('room', '*', ['agent_id' => $userInfo['agent_id']]);
+        $userInfo = Context::get('authInfo');
+        $userInfo['quantity'] = (float)$medoo->get('user_quantity','quantity',['user_id'=>$userInfo['id'],'agent_id'=>$userInfo['agent_id']]);
         $class = '';
         switch ($expMsg[2]) {
             case '一定':
@@ -206,7 +207,7 @@ class WsService
         if ($roomRule['max'] < $expMsg[6]){
             return false;
         }
-        if ((float)$userInfo['quantity']< (float)$expMsg[7]){
+        if ($userInfo['quantity']< (float)$expMsg[7]){
             art_assign_ws(200,$userInfo['nickname'].' 账户积分不足:'.$userInfo['quantity'],[],$userInfo['agent_id']);
             return false;
         }
@@ -281,7 +282,7 @@ class WsService
             echo '退单:开奖信息错误' . PHP_EOL;
             return false;
         }
-        $medoo = new Medoo();
+        $medoo = $this->medoo;
         $roomInfo = $medoo->get('room', '*', ['agent_id' => $userInfo['agent_id']]);
         $reCode = (int)$matches[1];
         $redis = \art\db\Redis::getInstance()->getConnection();
