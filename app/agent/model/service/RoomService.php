@@ -81,9 +81,7 @@ class RoomService
             $issue = $redis->get(self::ROOM_ISSUE . $agent_info['id']);
             $CarbonIssue = Carbon::parse(art_d(), 'Asia/Shanghai');
             $diff = $CarbonIssue->diffInRealSeconds($nowLottery[1]);
-            echo $CarbonIssue->toDateTimeString().PHP_EOL;
-            echo 'diff:'.$diff.PHP_EOL;
-            echo $nowLottery[1].PHP_EOL;
+            echo $CarbonIssue->toDateTimeString().' diff:'.$diff.PHP_EOL;
             //如果redis没有获取到期号就是第一次 把当前期号设置进去
             if (empty($issue)) {
 
@@ -111,10 +109,10 @@ class RoomService
             //有期号 且是上一期那么就结算 并设置为当前期
             if (!empty($issue) and $issue === $nowLottery[3]) {
                 echo '进入结算成功'.$issue.PHP_EOL;
+                art_assign_ws(200, $issue . '期，开' . $nowLottery[4], [], $agent_info['id']);
                 self::settleOrder($agent_info['id'], $issue, $nowLottery[4]);//结算订单
                 $redis->set(self::ROOM_ISSUE . $agent_info['id'], $nowLottery[0], $diff + mt_rand(10, 20));
                 \art\db\Redis::getInstance()->close($redis);
-                art_assign_ws(200, $issue . '期，开' . $nowLottery[4], [], $agent_info['id']);
                 return;
             }
             echo '开奖可能出现问题' . $issue.PHP_EOL;
