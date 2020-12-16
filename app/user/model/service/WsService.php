@@ -157,7 +157,7 @@ class WsService
             return false;
         }
         $medoo = $this->medoo;
-        $userInfo = Context::get('authInfo');
+        $userInfo = $this->userInfo;
         $userInfo['quantity'] = (float)$medoo->get('user_quantity','quantity',['user_id'=>$userInfo['id'],'agent_id'=>$userInfo['agent_id']]);
         $roomInfo = $medoo->get('room', '*', ['agent_id' => $userInfo['agent_id']]);
         $class = '';
@@ -278,13 +278,14 @@ class WsService
         if (!$bool) {
             return false;
         }
-        $userInfo =$this->userInfo;
         $nowLottery = Lottery::getCode(Lottery::LOTTERY_TYPE_now);
         if (count($nowLottery) != 5) {
             echo '退单:开奖信息错误' . PHP_EOL;
             return false;
         }
         $medoo = $this->medoo;
+        $userInfo =$this->userInfo;
+        $userInfo['quantity'] = (float)$medoo->get('user_quantity','quantity',['user_id'=>$userInfo['id'],'agent_id'=>$userInfo['agent_id']]);
         $roomInfo = $medoo->get('room', '*', ['agent_id' => $userInfo['agent_id']]);
         $reCode = (int)$matches[1];
         $redis = \art\db\Redis::getInstance()->getConnection();
