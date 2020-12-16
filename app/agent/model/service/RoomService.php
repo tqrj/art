@@ -146,6 +146,7 @@ class RoomService
                 'u.status' => 1,
                 'q.status'=>1
             ]);
+        $result['issue'] = $issue;
         $result = [];
         array_walk($userList,function ($userInfo) use($medoo,$agentId,$issue,&$result){
 
@@ -185,7 +186,7 @@ class RoomService
             });
             $resultTemp['order_sum_quantity'] = $orderSumQuantity;
             $resultTemp['user_quantity'] = $userInfo['quantity'];
-            $result[] = $resultTemp;
+            $result['orderResultList'][] = $resultTemp;
         });
         art_assign_ws(self::ROOM_STATUS_CLOSE, '', $result, $agentId);
     }
