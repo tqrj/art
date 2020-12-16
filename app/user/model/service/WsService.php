@@ -278,7 +278,7 @@ class WsService
         if (!$bool) {
             return false;
         }
-        $userInfo = Context::get('userInfo');
+        $userInfo =$this->userInfo;
         $nowLottery = Lottery::getCode(Lottery::LOTTERY_TYPE_now);
         if (count($nowLottery) != 5) {
             echo '退单:开奖信息错误' . PHP_EOL;

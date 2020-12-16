@@ -300,7 +300,6 @@ class RoomService
             $playerTempData['nickname'] = $orderInfo['nickname'];
             $playerTempData['order_quantity'] = $orderInfo['quantity'];
             $playerTempData['play_code_count'] = $orderInfo['play_code_count'];
-            $playerTempData['play_code_count'] = $orderInfo['play_code_count'];
             isset($quantityTemp[$orderInfo['user_id']])?true:$quantityTemp[$orderInfo['user_id']] = 0;
             $playerTempData['user_quantity'] = (float)$orderInfo['user_quantity'] + $quantityTemp[$orderInfo['user_id']];
             $playerTempData['whether_hit'] = 0;
@@ -343,7 +342,7 @@ class RoomService
                 return;
             }
             $playerTempData['whether_hit'] = $whetherScore[1];
-            $playerTempData['user_quantity'] += (float)$whetherScore[1] ;
+            $playerTempData['user_quantity'] += (float)$whetherScore[1];
             $quantityTemp[$orderInfo['user_id']] +=$whetherScore[1];
             $orderResultList[] = $playerTempData;
         });
