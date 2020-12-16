@@ -146,6 +146,7 @@ class RoomService
                 'u.status' => 1,
                 'q.status'=>1
             ]);
+        echo 'F盘取到的用户数量'.count($userList);
         $result = [];
         $result['issue'] = $issue;
         $result['orderResultList'] = [];
@@ -172,26 +173,26 @@ class RoomService
                     'ORDER'=>['o.play_method'=>'ASC']
                 ]);
 
-            $resultTemp = [];
-            $resultTemp['nickname'] = $userInfo['nickname'];
+            $orderResultData = [];
+            $orderResultData['nickname'] = $userInfo['nickname'];
             //用户历史总流水
-            $resultTemp['past_sum_quantity'] = $medoo->sum('order','quantity', [
+            $orderResultData['past_sum_quantity'] = $medoo->sum('order','quantity', [
                 'agent_id'=>$agentId,
                 'user_id'=>$userInfo['id']
             ]);
             $orderSumQuantity = 0;
-            array_walk($userOrderList,function ($orderInfo) use (&$resultTemp,&$orderSumQuantity){
+            array_walk($userOrderList,function ($orderInfo) use (&$orderResultData,&$orderSumQuantity){
                    $temp['play_method'] = $orderInfo['play_method'];
                    $temp['play_site'] = $orderInfo['play_site'];
                    $temp['play_code'] = $orderInfo['play_code'];
                    $temp['single_quantity'] = $orderInfo['single_quantity'];
                    $temp['quantity'] = $orderInfo['quantity'];
-                   $resultTemp['orderList'][] = $temp;
+                   $orderResultData['orderList'][] = $temp;
                    $orderSumQuantity += (float)$orderInfo['quantity'];
             });
-            $resultTemp['order_sum_quantity'] = $orderSumQuantity;
-            $resultTemp['user_quantity'] = $userInfo['quantity'];
-            $result['orderResultList'][] = $resultTemp;
+            $orderResultData['order_sum_quantity'] = $orderSumQuantity;
+            $orderResultData['user_quantity'] = $userInfo['quantity'];
+            $result['orderResultList'][] = $orderResultData;
         });
         art_assign_ws(self::ROOM_STATUS_CLOSE, '', $result, $agentId);
     }
@@ -288,8 +289,9 @@ class RoomService
         $result['issue'] = $issue;
         $result['lottery'] = $lotteryCode;
         $result['orderResultList'] = [];
+        $quantityTemp = 0;
         $orderResultList = [];
-        array_walk($orderList, function ($orderInfo) use ($medoo, $issue, $lotteryCode, &$orderResultList) {
+        array_walk($orderList, function ($orderInfo) use ($medoo, $issue, $lotteryCode,&$quantityTemp, &$orderResultList) {
 //            $lotteryCode = Lottery::getCode(Lottery::LOTTERY_TYPE_check,$orderInfo['issue']);
 //            if (empty($lotteryCode) or $lotteryCode == false){
 //                return;
@@ -298,7 +300,7 @@ class RoomService
             $playerTempData['order_quantity'] = $orderInfo['quantity'];
             $playerTempData['play_code_count'] = $orderInfo['play_code_count'];
             $playerTempData['play_code_count'] = $orderInfo['play_code_count'];
-            $playerTempData['user_quantity'] = (float)$orderInfo['user_quantity'];
+            $playerTempData['user_quantity'] = (float)$orderInfo['user_quantity'] + $quantityTemp;
             $playerTempData['whether_hit'] = 0;
             $whetherScore = self::_whetherScore($lotteryCode, $issue, $orderInfo['play_site'], $orderInfo['single_quantity'], $orderInfo['line']);
             if ($whetherScore[0] == false) {
@@ -339,7 +341,8 @@ class RoomService
                 return;
             }
             $playerTempData['whether_hit'] = $whetherScore[1];
-            $playerTempData['user_quantity'] += $whetherScore[1];
+            $playerTempData['user_quantity'] += (float)$whetherScore[1] ;
+            $quantityTemp +=$whetherScore[1];
             $orderResultList[] = $playerTempData;
         });
         $result['orderResultList'] = $orderResultList;
