@@ -45,7 +45,7 @@ class Lottery
             return false;
         }
         $result = explode('<-8888->',(string)$result);
-        if (!is_array($result) or count($result) != 9 or $result[0] !== 1){
+        if (!is_array($result) or count($result) != 9 or $result[0] != 1){
             return false;
         }
         return $result;
