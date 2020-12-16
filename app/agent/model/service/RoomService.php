@@ -129,13 +129,13 @@ class RoomService
     private static function closeNotes($agentId,$issue)
     {
         $medoo = new Medoo();
-        $userList = $medoo->debug()->select('user_quantity(q)',
+        $userList = $medoo->select('user_quantity(q)',
             [
                 '[><]user(u)' => ['q.user_id' => 'id'],
                 '[><]order(o)'=>['q.user_id'=>'user_id']
             ],
             [
-                'u.id',
+                'u.id'=>Medoo::raw('DISTINCT (u.id)'),
                 'q.quantity',
                 'u.nickname'
             ],
