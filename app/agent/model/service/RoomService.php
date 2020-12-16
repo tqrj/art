@@ -66,6 +66,7 @@ class RoomService
             //第一次被开启，需要先结清之前的账单，然后 获取即将开奖的号码，以及马上需要开奖的时间 放入table
             //然后定时检查该害差多久开始封盘，以及是不是已经开奖，已经开奖了就马上算账！
             if (!$roomInfo['timerID']) {
+                echo '第一次开启补单'.PHP_EOL;
                 $medoo->update('room', ['timerID' => $timer_id], ['id' => $roomInfo['id']]);
                 self::repairOrder($agent_info['id']);//补单处理
                 art_assign_ws(200, '房间已开启', [], $agent_info['id']);
@@ -73,7 +74,7 @@ class RoomService
             }
             $nowLottery = Lottery::getCode(Lottery::LOTTERY_TYPE_now);
             if (count($nowLottery) != 5) {
-                echo '开奖信息错误';
+                echo '开奖信息错误'.PHP_EOL;
                 return;
             }
             $redis = \art\db\Redis::getInstance()->getConnection();
@@ -91,8 +92,10 @@ class RoomService
             }
             //封盘处理
             if ((int)$diff <= (int)$roomInfo['closeTime']) {
+
                 $bool = $redis->set(self::ROOM_CLOSE_MSG . $agent_info['id'] . $nowLottery[0], '1', ['nx', 'ex' => $diff + mt_rand(10, 20)],);
                 if ($bool) {
+                    echo '成功封盘'.$issue.PHP_EOL;
                     art_assign_ws(200, $roomInfo['notice_close'], [], $agent_info['id']);
                     self::closeNotes($agent_info['id'],$issue);//F盘清账通知消息
                 }
@@ -101,18 +104,20 @@ class RoomService
             }
             //有期号 且是当前期那么一样返回
             if (!empty($issue) and $issue === $nowLottery[0]) {
+                echo '有期号且是当前期'.$issue.PHP_EOL;
                 \art\db\Redis::getInstance()->close($redis);
                 return;
             }
             //有期号 且是上一期那么就结算 并设置为当前期
             if (!empty($issue) and $issue === $nowLottery[3]) {
+                echo '进入结算成功'.$issue.PHP_EOL;
                 self::settleOrder($agent_info['id'], $issue, $nowLottery[4]);//结算订单
                 $redis->set(self::ROOM_ISSUE . $agent_info['id'], $nowLottery[0], $diff + mt_rand(10, 20));
                 \art\db\Redis::getInstance()->close($redis);
                 art_assign_ws(200, $issue . '期，开' . $nowLottery[4], [], $agent_info['id']);
                 return;
             }
-            echo '开奖可能出现问题' . $issue;
+            echo '开奖可能出现问题' . $issue.PHP_EOL;
             \art\db\Redis::getInstance()->close($redis);
         }, $agentInfo, $medoo);
         return [];
