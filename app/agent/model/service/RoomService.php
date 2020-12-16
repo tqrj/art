@@ -259,10 +259,7 @@ class RoomService
     private static function settleOrder($agentId, $issue, $lotteryCode)
     {
         $medoo = new Medoo();
-        echo '结单'.PHP_EOL;
-        echo $agentId.PHP_EOL;
-        echo $issue.PHP_EOL;
-        $orderList = $medoo->debug()->select('order(o)',
+        $orderList = $medoo->select('order(o)',
             [
                 '[><]user(u)' => ['o.user_id' => 'id'],
                 '[><]user_quantity(q)' => ['o.user_id' => 'user_id']
@@ -287,12 +284,11 @@ class RoomService
                 'u.status' => 1,
                 'ORDER'=>['u.nickname'=>'ASC']
             ]);
-        echo '---'.PHP_EOL;
         $result['issue'] = $issue;
         $result['lottery'] = $lotteryCode;
         $result['orderResultList'] = [];
         $orderResultList = [];
-        array_walk($orderList, function ($orderInfo, $key) use ($medoo, $issue, $lotteryCode, &$orderResultList) {
+        array_walk($orderList, function ($orderInfo) use ($medoo, $issue, $lotteryCode, &$orderResultList) {
 //            $lotteryCode = Lottery::getCode(Lottery::LOTTERY_TYPE_check,$orderInfo['issue']);
 //            if (empty($lotteryCode) or $lotteryCode == false){
 //                return;
@@ -336,14 +332,14 @@ class RoomService
                 }
                 QuantityLogService::push($orderInfo['user_id'], $orderInfo['agent_id'], $orderData['loc_quantity_ret'], '封盘结算 订单ID' . $orderInfo['id']);
                 $medoo->commit();
-                $playerTempData['whether_hit'] = $whetherScore[1];
-                $playerTempData['user_quantity'] += $whetherScore[1];
-                $orderResultList[] = $playerTempData;
             } catch (\Exception $e) {
+                echo $e->getMessage();
                 $medoo->rollBack();
                 return;
             }
-
+            $playerTempData['whether_hit'] = $whetherScore[1];
+            $playerTempData['user_quantity'] += $whetherScore[1];
+            $orderResultList[] = $playerTempData;
         });
         $result['orderResultList'] = $orderResultList;
         art_assign_ws(self::ROOM_STATUS_SETTLE, '', $result, $agentId);
