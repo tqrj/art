@@ -129,7 +129,7 @@ class RoomService
     private static function closeNotes($agentId,$issue)
     {
         $medoo = new Medoo();
-        $userList = $medoo->select('user_quantity(q)',
+        $userList = $medoo->debug()->select('user_quantity(q)',
             [
                 '[><]user(u)' => ['q.user_id' => 'id'],
                 '[><]order(o)'=>['q.user_id'=>'user_id']
@@ -289,7 +289,7 @@ class RoomService
         $result['issue'] = $issue;
         $result['lottery'] = $lotteryCode;
         $result['orderResultList'] = [];
-        $quantityTemp = 0;
+        $quantityTemp = [];
         $orderResultList = [];
         array_walk($orderList, function ($orderInfo) use ($medoo, $issue, $lotteryCode,&$quantityTemp, &$orderResultList) {
 //            $lotteryCode = Lottery::getCode(Lottery::LOTTERY_TYPE_check,$orderInfo['issue']);
@@ -300,7 +300,7 @@ class RoomService
             $playerTempData['order_quantity'] = $orderInfo['quantity'];
             $playerTempData['play_code_count'] = $orderInfo['play_code_count'];
             $playerTempData['play_code_count'] = $orderInfo['play_code_count'];
-            $playerTempData['user_quantity'] = (float)$orderInfo['user_quantity'] + $quantityTemp;
+            $playerTempData['user_quantity'] = (float)$orderInfo['user_quantity'] + $quantityTemp[$orderInfo['user_id']];
             $playerTempData['whether_hit'] = 0;
             $whetherScore = self::_whetherScore($lotteryCode, $issue, $orderInfo['play_site'], $orderInfo['single_quantity'], $orderInfo['line']);
             if ($whetherScore[0] == false) {
@@ -342,7 +342,7 @@ class RoomService
             }
             $playerTempData['whether_hit'] = $whetherScore[1];
             $playerTempData['user_quantity'] += (float)$whetherScore[1] ;
-            $quantityTemp +=$whetherScore[1];
+            $quantityTemp[$orderInfo['user_id']] +=$whetherScore[1];
             $orderResultList[] = $playerTempData;
         });
         $result['orderResultList'] = $orderResultList;
