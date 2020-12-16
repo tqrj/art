@@ -207,7 +207,7 @@ class RoomService
             'agent_id' => $agentId,
             'status' => 0
         ]);
-        array_walk($orderList, function ($orderInfo, $key) use ($medoo) {
+        array_walk($orderList, function ($orderInfo) use ($medoo) {
             $lotteryCode = Lottery::getCode(Lottery::LOTTERY_TYPE_check, $orderInfo['issue']);
             if (empty($lotteryCode) or $lotteryCode == false) {
                 return;
@@ -234,7 +234,7 @@ class RoomService
                 $pdoDoc = $medoo->update('user_quantity', [
                     'quantity[+]' => $orderData['loc_quantity_ret']
                 ], [
-                    'user_id' => $orderInfo['id'],
+                    'user_id' => $orderInfo['user_id'],
                     'agent_id' => $orderInfo['agent_id'],
                     'quantity' => $userQuantity
                 ]);
@@ -244,6 +244,7 @@ class RoomService
                 QuantityLogService::push($orderInfo['user_id'], $orderInfo['agent_id'], $orderData['loc_quantity_ret'], '开盘补单 订单ID' . $orderInfo['id']);
                 $medoo->commit();
             } catch (\Exception $e) {
+                echo $e->getMessage();
                 $medoo->rollBack();
                 return;
             }
@@ -323,7 +324,7 @@ class RoomService
                 $pdoDoc = $medoo->update('user_quantity', [
                     'quantity[+]' => $orderData['loc_quantity_ret']
                 ], [
-                    'user_id' => $orderInfo['id'],
+                    'user_id' => $orderInfo['user_id'],
                     'agent_id' => $orderInfo['agent_id'],
                     'quantity' => $userQuantity
                 ]);
