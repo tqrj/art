@@ -157,7 +157,11 @@ class RoomService
                     '[><]user_quantity(q)' => ['o.user_id' => 'user_id']
                 ],
                 [
-                    ['o.play_method','o.play_site','o.play_code','o.single_quantity','o.quantity'],
+                    'o.play_method',
+                    'o.play_site',
+                    'o.play_code',
+                    'o.single_quantity',
+                    'o.quantity',
                 ],
                 [
                     'u.id'=>$userInfo['id'],
@@ -262,10 +266,11 @@ class RoomService
             ],
             [
                 'o.id',
-                'o.quantity',
                 'o.play_code_count',
                 'o.play_site',
+                'o.quantity',
                 'o.single_quantity',
+                'o.loc_quantity',
                 'o.line',
                 'o.user_id',
                 'o.agent_id',

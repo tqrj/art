@@ -155,9 +155,9 @@ class WsService
             return false;
         }
         $medoo = $this->medoo;
-        $roomInfo = $medoo->get('room', '*', ['agent_id' => $userInfo['agent_id']]);
         $userInfo = Context::get('authInfo');
         $userInfo['quantity'] = (float)$medoo->get('user_quantity','quantity',['user_id'=>$userInfo['id'],'agent_id'=>$userInfo['agent_id']]);
+        $roomInfo = $medoo->get('room', '*', ['agent_id' => $userInfo['agent_id']]);
         $class = '';
         switch ($expMsg[2]) {
             case '一定':
@@ -207,7 +207,7 @@ class WsService
         if ($roomRule['max'] < $expMsg[6]){
             return false;
         }
-        if ($userInfo['quantity']< (float)$expMsg[7]){
+        if ($userInfo['quantity'] < (float)$expMsg[7]){
             art_assign_ws(200,$userInfo['nickname'].' 账户积分不足:'.$userInfo['quantity'],[],$userInfo['agent_id']);
             return false;
         }
@@ -236,7 +236,7 @@ class WsService
         $orderData['create_time'] = art_d();
         $orderData['update_time'] = $orderData['create_time'];
         $msg = $userInfo['nickname']." {$issue}期".PHP_EOL.$orderData['play_method'].'-'.$orderData['play_site'].PHP_EOL;
-        $msg.= $orderData['exp_msg'].PHP_EOL.'组'.$orderData['quantity'].'扣'.$orderData['quantity'].'余'.$userInfo['quantity']-$orderData['quantity'].PHP_EOL;
+        $msg.= $orderData['exp_msg'].PHP_EOL.'组'.$orderData['quantity'].'扣'.$orderData['quantity'].'余'.$userInfo['quantity']-(float)$orderData['quantity'].PHP_EOL;
         $medoo->beginTransaction();
         try {
             $pdoDoc = $medoo->update('user_quantity',[
