@@ -133,7 +133,7 @@ class RoomService
             ],
             [
                 'u.id',
-                'u.quantity',
+                'q.quantity',
                 'u.nickname'
             ],
             [
