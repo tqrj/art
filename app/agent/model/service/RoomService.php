@@ -135,7 +135,7 @@ class RoomService
                 '[><]order(o)'=>['q.user_id'=>'user_id']
             ],
             [
-                'u.id'=>Medoo::raw('DISTINCT (u.id'),
+                'u.id'=>Medoo::raw('DISTINCT u.id'),
                 'q.quantity',
                 'u.nickname'
             ],
@@ -300,6 +300,7 @@ class RoomService
             $playerTempData['order_quantity'] = $orderInfo['quantity'];
             $playerTempData['play_code_count'] = $orderInfo['play_code_count'];
             $playerTempData['play_code_count'] = $orderInfo['play_code_count'];
+            isset($quantityTemp[$orderInfo['user_id']])?true:$quantityTemp[$orderInfo['user_id']] = 0;
             $playerTempData['user_quantity'] = (float)$orderInfo['user_quantity'] + $quantityTemp[$orderInfo['user_id']];
             $playerTempData['whether_hit'] = 0;
             $whetherScore = self::_whetherScore($lotteryCode, $issue, $orderInfo['play_site'], $orderInfo['single_quantity'], $orderInfo['line']);
