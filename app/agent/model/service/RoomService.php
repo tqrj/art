@@ -128,7 +128,7 @@ class RoomService
         $medoo = new Medoo();
         $userList = $medoo->select('user_quantity(q)',
             [
-                '[><]user(u)' => ['o.user_id' => 'id'],
+                '[><]user(u)' => ['q.user_id' => 'id'],
                 '[><]order(o)'=>['q.user_id'=>'user_id']
             ],
             [
