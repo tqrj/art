@@ -259,7 +259,10 @@ class RoomService
     private static function settleOrder($agentId, $issue, $lotteryCode)
     {
         $medoo = new Medoo();
-        $orderList = $medoo->select('order(o)',
+        echo '结单'.PHP_EOL;
+        echo $agentId.PHP_EOL;
+        echo $issue.PHP_EOL;
+        $orderList = $medoo->debug()->select('order(o)',
             [
                 '[><]user(u)' => ['o.user_id' => 'id'],
                 '[><]user_quantity(q)' => ['o.user_id' => 'user_id']
@@ -284,6 +287,7 @@ class RoomService
                 'u.status' => 1,
                 'ORDER'=>['u.nickname'=>'ASC']
             ]);
+        echo '---'.PHP_EOL;
         $result['issue'] = $issue;
         $result['lottery'] = $lotteryCode;
         $result['orderResultList'] = [];
