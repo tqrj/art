@@ -147,11 +147,13 @@ class WsService
      */
     private function checkOrder($message)
     {
+        echo '进入识别了'.PHP_EOL;
         if (empty($message) or !preg_match("#\d{1,}#", $message)) {
             return false;
         }
         $expMsg = Lottery::parseExp($message);
         if ($expMsg == false) {
+            echo '没有识别成功'.$expMsg.PHP_EOL;
             return false;
         }
         $medoo = $this->medoo;
