@@ -135,11 +135,12 @@ class RoomService
                 '[><]order(o)'=>['q.user_id'=>'user_id']
             ],
             [
-                'u.id'=>Medoo::raw('DISTINCT u.id'),
+                'u.id',
                 'q.quantity',
                 'u.nickname'
             ],
             [
+                'GROUP'=>'u.id',
                 'o.agent_id' => $agentId,
                 'o.issue' => $issue,
                 'o.status' => 0,
