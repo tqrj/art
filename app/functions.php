@@ -4,6 +4,7 @@
 use art\context\Context;
 use art\WsApp;
 
+date_default_timezone_set("Asia/Shanghai");
 /**
  * 针对无键名数组unset 避免jsonEncode变成对象
  * @param $value
