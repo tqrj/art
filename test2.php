@@ -1,7 +1,6 @@
 <?php
-$time = time();
-echo $time.PHP_EOL;
-echo substr($time, 6);
+$a=12;
+echo false?abs($a):-$a;
 //echo iconv("gb2312//IGNORE","utf-8",'我去你妈');;
 //$matches = [];
 //$bool = preg_match("#(上|充|加|上分|充值|充钱|加钱|加分)(\d+)#", '上1212', $matches);

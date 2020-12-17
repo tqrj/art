@@ -189,7 +189,8 @@ class RoomService
             //用户历史总流水
             $orderResultData['past_sum_quantity'] = $medoo->sum('order','quantity', [
                 'agent_id'=>$agentId,
-                'user_id'=>$userInfo['id']
+                'user_id'=>$userInfo['id'],
+                'status'=>[1,0]
             ]);
             $orderResultData['order_sum_quantity'] = $orderSumQuantity;
             $orderResultData['user_quantity'] = $userInfo['quantity'];

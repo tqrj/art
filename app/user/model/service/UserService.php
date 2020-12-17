@@ -143,7 +143,7 @@ class UserService
                 'u.id',
                 'nickname',
                 'headimgurl',
-                'refresh_token',
+//                'refresh_token',
                 'openid',
                 'quantity',
                 'q.status',

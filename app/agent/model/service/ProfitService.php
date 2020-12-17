@@ -20,7 +20,7 @@ class ProfitService
         $agentInfo = Context::get('authInfo');
         $medoo = new Medoo();
         $result = $medoo->select('user_quantity','*',[
-            'agent_id'=>$agentInfo['agent_id'],
+            'agent_id'=>$agentInfo['id'],
             'status'=>0,
             'type'=>1,
             'LIMIT'=>[$params['page'],$params['limit']],
@@ -34,7 +34,7 @@ class ProfitService
         $agentInfo = Context::get('authInfo');
         $medoo = new Medoo();
         $result = $medoo->select('user_quantity','*',[
-            'agent_id'=>$agentInfo['agent_id'],
+            'agent_id'=>$agentInfo['id'],
             'status'=>0,
             'type'=>-1,
             'LIMIT'=>[$params['page'],$params['limit']],
@@ -47,7 +47,7 @@ class ProfitService
     {
         $medoo = new Medoo();
         $agentInfo = Context::get('authInfo');
-        $applyInfo = $medoo->get('points',[
+        $applyInfo = $medoo->get('points','*',[
             'id'=>$params['id'],
             'agent_id'=>$agentInfo['id'],
             'status'=>0
@@ -56,6 +56,7 @@ class ProfitService
             art_assign(202,'数据异常');
         }
         $agentInfo['type'] == 1?$mark='上分请求处理通过':$mark='下分请求处理通过';
+        $applyInfo['quantity'] = $applyInfo['type'] == 1?abs($applyInfo['quantity']):-$applyInfo['quantity'];
         $medoo->beginTransaction();
         try {
             QuantityLogService::push($agentInfo['user_id'],$agentInfo['id'],$applyInfo['quantity'],$mark);
@@ -122,8 +123,8 @@ class ProfitService
         $medoo = new Medoo();
         $max = $medoo->max('order',['agent_id'=>$agentInfo['id']],'create_time');
         $min = $medoo->min('order',['agent_id'=>$agentInfo['id']],'create_time');
-        $maxCar = Carbon::parse($max,'CST');
-        $minCar = Carbon::parse($min,'CST');
+        $maxCar = Carbon::parse($max,'Asia/Shanghai');
+        $minCar = Carbon::parse($min,'Asia/Shanghai');
         $betArt = [];
         $result = [];
         $n=0;
@@ -141,10 +142,22 @@ class ProfitService
             ]);
             $result[$key]['playCodeCount'] = $medoo->sum('order','play_code_count',[
                 'agent_id'=>$agentInfo['id'],
+                'status'=>1,
                 'create_time[<>]'=>[$item[0],$item[1]]
             ]);
             $result[$key]['quantityCount'] = $medoo->sum('order','quantity',[
                 'agent_id'=>$agentInfo['id'],
+                'status'=>1,
+                'create_time[<>]'=>[$item[0],$item[1]]
+            ]);
+            $result[$key]['flyQuantityRetCount'] = $medoo->sum('order','fly_quantity_ret',[
+                'agent_id'=>$agentInfo['id'],
+                'status'=>1,
+                'create_time[<>]'=>[$item[0],$item[1]]
+            ]);
+            $result[$key]['locQuantityRetCount'] = $medoo->sum('order','loc_quantity_ret',[
+                'agent_id'=>$agentInfo['id'],
+                'status'=>1,
                 'create_time[<>]'=>[$item[0],$item[1]]
             ]);
             $result[$key]['timeStartShow'] = date('n-j',strtotime($item[0]));
@@ -183,10 +196,22 @@ class ProfitService
             ]);
             $result[$key]['playCodeCount'] = $medoo->sum('order','play_code_count',[
                 'agent_id'=>$agentInfo['id'],
+                'status'=>1,
                 'create_time[<>]'=>[$item[0],$item[1]]
             ]);
             $result[$key]['quantityCount'] = $medoo->sum('order','quantity',[
                 'agent_id'=>$agentInfo['id'],
+                'status'=>1,
+                'create_time[<>]'=>[$item[0],$item[1]]
+            ]);
+            $result[$key]['flyQuantityRetCount'] = $medoo->sum('order','fly_quantity_ret',[
+                'agent_id'=>$agentInfo['id'],
+                'status'=>1,
+                'create_time[<>]'=>[$item[0],$item[1]]
+            ]);
+            $result[$key]['locQuantityRetCount'] = $medoo->sum('order','loc_quantity_ret',[
+                'agent_id'=>$agentInfo['id'],
+                'status'=>1,
                 'create_time[<>]'=>[$item[0],$item[1]]
             ]);
             $result[$key]['timeStartShow'] = date('n-j',strtotime($item[0]));

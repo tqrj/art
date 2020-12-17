@@ -147,7 +147,6 @@ class WsService
      */
     private function checkOrder($message)
     {
-        echo '进入识别了'.PHP_EOL;
         if (empty($message) or !preg_match("#\d{1,}#", $message)) {
             return false;
         }
@@ -196,7 +195,7 @@ class WsService
         $CarbonIssue = Carbon::parse(art_d(), 'Asia/Shanghai');
         $diff = $CarbonIssue->diffInRealSeconds($nowLottery[1]);
         if ((int)$diff <= (int)$roomInfo['closeTime']) {
-            echo 'ws:已封盘' . PHP_EOL;
+            art_assign_ws(200,$userInfo['nickname'].' :当前已经封盘',[],$userInfo['agent_id']);
             return false;
         }
         $roomRule = $medoo->get('room_rule', '*', ['agent_id' => $userInfo['agent_id'], 'class' => $class]);
