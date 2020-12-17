@@ -214,7 +214,7 @@ class WsService
             return false;
         }
         $temp = 5 + strlen($userInfo['agent_id']);
-        $orderData['orderNo'] = $issue . substr(time(), $temp) . $userInfo['agent_id'];
+        $orderData['orderNo'] = $issue . substr(time(), $temp) .mt_rand(100,999). $userInfo['agent_id'];
         $orderData['game'] = 'hn5f';
         $orderData['user_id'] = $userInfo['id'];
         $orderData['agent_id'] = $userInfo['agent_id'];
