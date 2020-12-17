@@ -40,7 +40,8 @@ class Lottery
             echo $client->errMsg;
             return false;
         }
-        $result = urldecode(mb_substr($result,4));
+        //$result = urldecode(mb_substr($result,4));
+        $result = iconv("gb2312//IGNORE","utf-8",mb_substr($result,4));
         if ($result === '识别失败'){
             return false;
         }
@@ -87,14 +88,14 @@ class Lottery
             echo $client->errMsg;
             return false;
         }
-        $result = mb_substr($result,4);
-        if($result == '%E6%9F%A5%E8%AF%A2%E5%A4%B1%E8%B4%A5'){
+        $result = iconv("gb2312//IGNORE","utf-8",mb_substr($result,4));
+        if($result == '查询失败'){
             return false;
         }
         if ($type == self::LOTTERY_TYPE_now){
-            $result = explode(',',urldecode($result));
+            $result = explode(',',$result);
         }elseif($type == self::LOTTERY_TYPE_OLD){
-            $result = explode('|',urldecode($result));
+            $result = explode('|',$result);
         }
         return $result;
     }

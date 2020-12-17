@@ -1,4 +1,5 @@
 <?php
+echo iconv("gb2312//IGNORE","utf-8",'我去你妈');;
 //$matches = [];
 //$bool = preg_match("#(上|充|加|上分|充值|充钱|加钱|加分)(\d+)#", '上1212', $matches);
 //echo $bool.PHP_EOL;
@@ -37,7 +38,7 @@
 //echo preg_match("#上(\d+)#","上1上2",$res);
 //var_dump($res);
 
-require 'vendor/autoload.php';
+/*require 'vendor/autoload.php';
 
 use Carbon\Carbon;
 
@@ -45,7 +46,7 @@ $carbon = \Carbon\Carbon::parse(art_d(),'Asia/Shanghai');
 $CarbonIssue = Carbon::parse(art_d(), 'Asia/Shanghai');
 $diff = $CarbonIssue->diffInRealSeconds('2020-12-15 19:55:00');
 echo $CarbonIssue->toDateTimeString();
-echo $diff;
+echo $diff;*/
 
 //echo $carbon->diffInMinutes($carbon1);
 
