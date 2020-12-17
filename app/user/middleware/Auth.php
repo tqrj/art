@@ -10,7 +10,6 @@ use art\db\Redis;
 use art\exception\HttpException;
 use art\HttpApp;
 use art\request\Request;
-use art\ws\ArtWs;
 use Swoole\Http\Response;
 
 class Auth
@@ -61,7 +60,7 @@ class Auth
             $map
             );
         if (!$result) {
-            art_assign_ws(202,'账户过期或Token错误',[],0,Context::get('response')->artWsId);
+            throw new HttpException(202, '账户过期或Token错误',[]);
         }
         $redis = Redis::getInstance()->getConnection();
         $redis->setex('user_' . $token.'_'.$agent_id, 120, serialize($result));
