@@ -55,7 +55,7 @@ class ProfitService
         if (!$applyInfo){
             art_assign(202,'数据异常');
         }
-        $agentInfo['type'] == 1?$mark='上分请求处理通过':$mark='下分请求处理通过';
+        $applyInfo['type'] == 1?$mark='上分请求处理通过':$mark='下分请求处理通过';
         $applyInfo['quantity'] = $applyInfo['type'] == 1?abs($applyInfo['quantity']):-$applyInfo['quantity'];
         $medoo->beginTransaction();
         try {
