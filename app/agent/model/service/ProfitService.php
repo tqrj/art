@@ -161,9 +161,9 @@ class ProfitService
                 'create_time[<>]' => [$item[0], $item[1]]
             ]);
             $result[$key]['timeStartShow'] = date('n-j', strtotime($item[0]));
-            $result[$key]['timeStart'] = $item[0];
+            $result[$key]['timeStart'] =  date('Y-m-d', strtotime($item[0]));
             $result[$key]['timeEndShow'] = date('n-j', strtotime($item[1]));
-            $result[$key]['timeEnd'] = $item[1];
+            $result[$key]['timeEnd'] = date('Y-m-d', strtotime($item[1]));
         }, $medoo);
         return $result;
     }
