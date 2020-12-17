@@ -87,7 +87,7 @@ class ProfitService
     {
         $medoo = new Medoo();
         $agentInfo = Context::get('authInfo');
-        $applyInfo = $medoo->get('points',[
+        $applyInfo = $medoo->get('points','*',[
             'id'=>$params['id'],
             'agent_id'=>$agentInfo['id'],
             'status'=>0
