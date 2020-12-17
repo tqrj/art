@@ -96,7 +96,7 @@ class PlayerService
         $medoo = new Medoo();
         $map['agent_id'] = $agentInfo['id'];
         $map['user_id'] = $params['playerId'];
-        QuantityLogService::push($map['user_id'],$map['agent_id'],$params['score'],'手动更改了玩家分数');
+        QuantityLogService::push($map['user_id'],$map['agent_id'],$params['score'],'主动修改');
         $pdoDoc = $medoo->update('user_quantity',['quantity'=>$params['score']],$map);
         if (!$pdoDoc->rowCount()){
             art_assign(202,'更新数据失败');

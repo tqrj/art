@@ -19,7 +19,7 @@ class ProfitService
     {
         $agentInfo = Context::get('authInfo');
         $medoo = new Medoo();
-        $result = $medoo->select('user_quantity','*',[
+        $result = $medoo->select('points','*',[
             'agent_id'=>$agentInfo['id'],
             'status'=>0,
             'type'=>1,
@@ -33,7 +33,7 @@ class ProfitService
     {
         $agentInfo = Context::get('authInfo');
         $medoo = new Medoo();
-        $result = $medoo->select('user_quantity','*',[
+        $result = $medoo->select('points','*',[
             'agent_id'=>$agentInfo['id'],
             'status'=>0,
             'type'=>-1,
