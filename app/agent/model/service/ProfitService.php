@@ -59,7 +59,7 @@ class ProfitService
         $applyInfo['quantity'] = $applyInfo['type'] == 1?abs($applyInfo['quantity']):-$applyInfo['quantity'];
         $medoo->beginTransaction();
         try {
-            QuantityLogService::push($agentInfo['user_id'],$agentInfo['id'],$applyInfo['quantity'],$mark);
+            QuantityLogService::push($applyInfo['user_id'],$applyInfo['agent_id'],$applyInfo['quantity'],$mark);
             $pdoDoc = $medoo->update('user_quantity',['quantity[+]'=>$applyInfo['quantity']],[
                 'user_id'=>$applyInfo['user_id'],
                 'agent_id'=>$agentInfo['id']
