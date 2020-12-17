@@ -121,8 +121,8 @@ class ProfitService
     {
         $agentInfo = Context::get('authInfo');
         $medoo = new Medoo();
-        $max = $medoo->max('order',['agent_id'=>$agentInfo['id']],'create_time');
-        $min = $medoo->min('order',['agent_id'=>$agentInfo['id']],'create_time');
+        $max = $medoo->max('order','create_time',['agent_id'=>$agentInfo['id']]);
+        $min = $medoo->min('order','create_time',['agent_id'=>$agentInfo['id']]);
         $maxCar = Carbon::parse($max,'Asia/Shanghai');
         $minCar = Carbon::parse($min,'Asia/Shanghai');
         $betArt = [];
