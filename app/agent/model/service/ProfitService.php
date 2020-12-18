@@ -109,8 +109,19 @@ class ProfitService
         if (!$applyInfo) {
             art_assign(202, '数据异常');
         }
+        $applyInfo['type'] == 1 ? $mark = '上分请求处理拒绝' : $mark = '下分请求处理拒绝';
+        $applyInfo['quantity'];
         $medoo->beginTransaction();
         try {
+            if($applyInfo['type'] == -1){
+                $pdoDoc = $medoo->update('user_quantity', ['quantity[+]' => $applyInfo['quantity']], [
+                    'user_id' => $applyInfo['user_id'],
+                    'agent_id' => $agentInfo['id']
+                ]);
+                if (!$pdoDoc->rowCount()) {
+                    throw new \Exception($pdoDoc->errorInfo());
+                }
+            }
             $pdoDoc = $medoo->update('points', ['status' => -1], [
                 'id' => $params['id'],
                 'agent_id' => $agentInfo['id'],
