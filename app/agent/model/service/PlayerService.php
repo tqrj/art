@@ -27,8 +27,8 @@ class PlayerService
         $map['q.agent_id'] = $agentInfo['id'];
         $medoo = new Medoo();
         return $medoo->select('user(u)',
-            ['[><]user_quantity(q)'=>['u.id'=>'user_id']],
-            ['u.id', 'u.nickname', 'q.quantity', 'u.group_id', 'u.status','q.create_time'],
+            ['[><]user_quantity(q)' => ['u.id' => 'user_id']],
+            ['u.id', 'u.nickname', 'q.quantity', 'u.group_id', 'u.status', 'q.create_time'],
             $map);
     }
 
@@ -42,7 +42,7 @@ class PlayerService
         $map['q.agent_id'] = $agentInfo['id'];
         $medoo = new Medoo();
         $userInfo = $medoo->get('user(u)',
-            ['[><]user_quantity(q)'=>['u.id'=>'user_id']],
+            ['[><]user_quantity(q)' => ['u.id' => 'user_id']],
             ['u.id', 'u.nickname', 'q.quantity', 'u.group_id', 'q.status'],
             $map);
         if (!$userInfo) {
@@ -54,14 +54,18 @@ class PlayerService
             'user_id' => $userInfo['id']
         ];
         $userInfo['order'] = $medoo->select('order', '*', $map);
-        $userInfo['quantityLog'] = $medoo->select('quantity_log', '*', $map);
+        $map['ORDER'] = ['status' => 'DESC'];
+        $map['type'] = 1;
+        $userInfo['points_pay'] = $medoo->select('points', '*', $map);
+        $map['type'] = -1;
+        $userInfo['points_reject'] = $medoo->select('points', '*', $map);
         return $userInfo;
     }
 
     public static function change($params)
     {
-        if (count($params)<2){
-            art_assign(202,'输入错误');
+        if (count($params) < 2) {
+            art_assign(202, '输入错误');
         }
         $agentInfo = Context::get('authInfo');
         $medoo = new Medoo();
@@ -71,11 +75,15 @@ class PlayerService
         $map['u.id'] = $params['playerId'];
         $map['q.agent_id'] = $agentInfo['id'];
         $userInfo = $medoo->get('user(u)',
-            ['[><]user_quantity(q)'=>['u.id'=>'user_id']],
-            ['u.id','salt'],
+            ['[><]user_quantity(q)' => ['u.id' => 'user_id']],
+            ['u.id', 'salt'],
             $map);
         if (!$userInfo) {
             art_assign(202, '用户信息错误');
+        }
+        if (empty($userInfo['salt'])) {
+            $params['salt'] = art_set_salt();
+            $userInfo['salt'] = $params['salt'];
         }
         if (!empty($params['pass'])) {
             $params['pass'] = art_set_password($params['pass'], $userInfo['salt']);
@@ -96,21 +104,21 @@ class PlayerService
         $medoo = new Medoo();
         $map['agent_id'] = $agentInfo['id'];
         $map['user_id'] = $params['playerId'];
-        QuantityLogService::push($map['user_id'],$map['agent_id'],$params['score'],'主动修改');
-        $pdoDoc = $medoo->update('user_quantity',['quantity'=>$params['score']],$map);
-        if (!$pdoDoc->rowCount()){
-            art_assign(202,'更新数据失败');
+        QuantityLogService::push($map['user_id'], $map['agent_id'], $params['score'], '主动修改');
+        $pdoDoc = $medoo->update('user_quantity', ['quantity' => $params['score']], $map);
+        if (!$pdoDoc->rowCount()) {
+            art_assign(202, '更新数据失败');
         }
-        return $medoo->get('user_quantity',['quantity'],$map);
+        return $medoo->get('user_quantity', ['quantity'], $map);
     }
 
     public static function del($params)
     {
         $agentInfo = Context::get('authInfo');
         $medoo = new Medoo();
-        $pdoDoc = $medoo->update('user_quantity',['status'=>-1],['user_id'=>$params['playerId'],'agent_id'=>$agentInfo['id']]);
-        if (!$pdoDoc->rowCount()){
-            art_assign(202,'删除失败');
+        $pdoDoc = $medoo->update('user_quantity', ['status' => -1], ['user_id' => $params['playerId'], 'agent_id' => $agentInfo['id']]);
+        if (!$pdoDoc->rowCount()) {
+            art_assign(202, '删除失败');
         }
         return [];
     }
