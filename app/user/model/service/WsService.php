@@ -78,11 +78,11 @@ class WsService
         }
         $exp = '查流水';
         if ($this->_codeExp($exp, $message) != false) {
-            $message = "[" . $this->userInfo['nickname'] . "] 您当前流水:" . $this->medoo->sum('order', [
+            $message = "[" . $this->userInfo['nickname'] . "] 您当前流水:" . $this->medoo->sum('order', 'quantity',[
                     'user_id' => $this->userInfo['id'],
                     'agent_id' => $this->userInfo['agent_id'],
                     'status' => 1
-                ], 'quantity');
+                ]);
             art_assign_ws(200, $message, [], $this->userInfo['agent_id']);
             return true;
         }

@@ -1,5 +1,6 @@
 <?php
-echo strtotime('2020-12-18 13:18:15');
+echo strtotime('2020-12-30 13:18:15').PHP_EOL;
+echo time();
 //$a=12;
 //echo false?abs($a):-$a;
 //echo iconv("gb2312//IGNORE","utf-8",'我去你妈');;
