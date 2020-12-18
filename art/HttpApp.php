@@ -34,6 +34,10 @@ class HttpApp extends BaseApp
     public static function init(Request $request,Response $response)
     {
         self::initBase();
+        //允许跨域访问
+        $response->header('Access-Control-Allow-Origin','*');
+        $response->header('Access-Control-Allow-Methods','POST');
+        $response->header('Access-Control-Allow-Headers','x-requested-with,content-type');
         Context::put('request',$request);
         Context::put('response',$response);
         $pathInfo = $request->server['request_uri'];

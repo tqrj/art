@@ -37,7 +37,7 @@ class AgentService
         if ($userInfo['status'] ==0){
             art_assign(202,'账号已禁用');
         }
-        unset($userInfo['salt']);
+        unset($userInfo['salt'],$userInfo['pass']);
         return $userInfo;
     }
 
