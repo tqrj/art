@@ -317,6 +317,7 @@ class RoomService
                 $orderData['loc_quantity_ret'] = $whetherScore[1] / $orderInfo['quantity'] * $orderInfo['loc_quantity'];
                 $orderData['whether_hit'] = 1;
                 $orderData['status'] = 1;
+                $orderData['lottery_code'] = $lotteryCode;
                 $pdoDoc = $medoo->update('order', $orderData, ['id' => $orderInfo['id']]);
                 if (!$pdoDoc->rowCount()) {
                     throw new \Exception('更新订单数据错误');

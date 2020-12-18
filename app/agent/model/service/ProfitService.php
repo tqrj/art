@@ -111,7 +111,7 @@ class ProfitService
         }
         $medoo->beginTransaction();
         try {
-            $pdoDoc = $medoo->update('points', ['status' => 1, 'update_time' => art_d()], [
+            $pdoDoc = $medoo->update('points', ['status' => 1], [
                 'id' => $params['id'],
                 'agent_id' => $agentInfo['id'],
                 'status' => 0
