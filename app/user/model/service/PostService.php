@@ -13,7 +13,23 @@ class PostService
     {
         $userInfo = Context::get('authInfo');
         $medoo = new Medoo();
-        $result = $medoo->select('order','*',[
+        $result = $medoo->select('order',
+            [
+                'game',
+                'issue',
+                'orderNo',
+                'reset_code',
+                'play_method',
+                'play_code',
+                'play_site',
+                'quantity',
+                'single_quantity',
+                'lottery_code',
+                'line',
+                'whether_hit',
+                'status',
+            ],
+            [
             'agent_id'=>$userInfo['agent_id'],
             'user_id'=>$userInfo['id'],
             'LIMIT'=>[$params['page'],$params['limit']],
