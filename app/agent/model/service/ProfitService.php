@@ -84,7 +84,7 @@ class ProfitService
             $pdoDoc = $medoo->update('points', ['status' => 1], [
                 'id' => $params['id'],
                 'agent_id' => $agentInfo['id'],
-                'status' => 1
+                'status' => 0
             ]);
             if (!$pdoDoc->rowCount()) {
                 throw new \Exception('更新错误');
@@ -111,10 +111,10 @@ class ProfitService
         }
         $medoo->beginTransaction();
         try {
-            $pdoDoc = $medoo->update('points', ['status' => 1], [
+            $pdoDoc = $medoo->update('points', ['status' => -1], [
                 'id' => $params['id'],
                 'agent_id' => $agentInfo['id'],
-                'status' => -1
+                'status' => 0
             ]);
             if (!$pdoDoc->rowCount()) {
                 throw new \Exception('更新错误');
