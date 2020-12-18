@@ -1,6 +1,20 @@
 <?php
-echo strtotime('2020-12-30 13:18:15').PHP_EOL;
-echo time();
+/**
+ * @param $dividend
+ * @param $divisor
+ * @return float|int
+ */
+/*function getRemainder($dividend,$divisor)
+{
+    $result = $dividend / $divisor;
+    $result = explode('.',$result);
+    if (count($result) == 1 ){
+        return 0;
+    }
+    return (float)("0.".$result[1]);
+}
+echo 50.001/0.1.PHP_EOL;
+echo getRemainder(50.001,0.1);*/
 //$a=12;
 //echo false?abs($a):-$a;
 //echo iconv("gb2312//IGNORE","utf-8",'我去你妈');;

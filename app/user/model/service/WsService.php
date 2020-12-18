@@ -10,6 +10,7 @@ use art\context\Context;
 use art\db\Medoo;
 use art\db\Redis;
 use art\exception\HttpException;
+use art\helper\Str;
 use art\ws\ArtWs;
 use Carbon\Carbon;
 use Swoole\Http\Response;
@@ -195,7 +196,7 @@ class WsService
         $CarbonIssue = Carbon::parse(art_d(), 'Asia/Shanghai');
         $diff = $CarbonIssue->diffInRealSeconds($nowLottery[1]);
         if ((int)$diff <= (int)$roomInfo['closeTime']) {
-            art_assign_ws(200,$userInfo['nickname'].' :当前已经封盘',[],$userInfo['agent_id']);
+            art_assign_ws(200,$userInfo['nickname'].': 当前已经封盘',[],$userInfo['agent_id']);
             return false;
         }
         $roomRule = $medoo->get('room_rule', '*', ['agent_id' => $userInfo['agent_id'], 'class' => $class]);
@@ -203,11 +204,18 @@ class WsService
             return false;
         }
         if ($roomRule['status'] != 1){
+            art_assign_ws(200,$userInfo['nickname'].': 暂不接收该玩法',[],$userInfo['agent_id']);
             return false;
         }
         if ($roomRule['max'] < $expMsg[6]){
+            art_assign_ws(200,$userInfo['nickname'].': 金额无效 单注金额超出'.$roomRule['max'],[],$userInfo['agent_id']);
             return false;
         }
+        if (!$this->asDecimal($expMsg[6],$roomRule['decimal'])){
+            art_assign_ws(200,$userInfo['nickname'].': 金额无效',[],$userInfo['agent_id']);
+            return false;
+        }
+
         if ($userInfo['quantity'] < (float)$expMsg[7]){
             art_assign_ws(200,$userInfo['nickname'].' 账户积分不足:'.$userInfo['quantity'],[],$userInfo['agent_id']);
             return false;
@@ -350,5 +358,50 @@ class WsService
             }
         }
         return false;
+    }
+
+
+    /**
+     * @param $quantity
+     * @param $decimal
+     * @return bool
+     */
+    private function asDecimal($quantity,$decimal):bool
+    {
+        switch ($decimal){
+            case 0:
+                $decimal = 0;
+                break;
+            case 1:
+                $decimal = 0.1;
+                break;
+            case 2:
+                $decimal = 0.01;
+                break;
+            case 3:
+                $decimal = 0.001;
+                break;
+        }
+        if ($decimal == 0 && $quantity < 1){
+            return false;
+        }elseif ($quantity < $decimal or $this->getRemainder($quantity,$decimal) != 0){
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * @param $dividend
+     * @param $divisor
+     * @return float|int
+     */
+    private function getRemainder($dividend,$divisor)
+    {
+        $result = $dividend / $divisor;
+        $result = explode('.',$result);
+        if (count($result) == 1 ){
+            return 0;
+        }
+        return (float)("0.".$result[1]);
     }
 }
