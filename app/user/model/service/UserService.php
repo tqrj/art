@@ -239,7 +239,7 @@ class UserService
     {
         $userInfo = Context::get('authInfo');
         $medoo = new Medoo();
-        $result = $medoo->select('user_quantity','*',[
+        $result = $medoo->select('points','*',[
             'agent_id'=>$userInfo['agent_id'],
             'user_id'=>$userInfo['id'],
             'type'=>1,
@@ -253,7 +253,7 @@ class UserService
     {
         $userInfo = Context::get('authInfo');
         $medoo = new Medoo();
-        $result = $medoo->select('user_quantity','*',[
+        $result = $medoo->select('points','*',[
             'agent_id'=>$userInfo['agent_id'],
             'user_id'=>$userInfo['id'],
             'type'=>-1,
