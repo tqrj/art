@@ -49,7 +49,6 @@ class RoomService
         //开启房间定时器
         Timer::tick(5000, function (int $timer_id, $agent_info, Medoo $medoo) {
             //这里不要每次都去查数据库 可以redis 记录一下在等待开奖的期号，然后每次去查服务的当前期号如果不是当前期号了就查该期号的结果
-
             $roomInfo = $medoo->get('room', '*', ['agent_id' => $agent_info['id']]);
             if (!$roomInfo) {
                 echo '房间定时器被清除了1';
@@ -61,7 +60,12 @@ class RoomService
                 Timer::clear($timer_id);
                 return;
             }
-
+            if ($agent_info['expire_time'] < time()){
+                echo '代理过期 房间定时器被清除了3';
+                art_assign_ws(200, '房间已关闭', [], $agent_info['id']);
+                Timer::clear($timer_id);
+                return;
+            }
             //如果是的话就是第一次被开启
             //第一次被开启，需要先结清之前的账单，然后 获取即将开奖的号码，以及马上需要开奖的时间 放入table
             //然后定时检查该害差多久开始封盘，以及是不是已经开奖，已经开奖了就马上算账！

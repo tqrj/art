@@ -41,6 +41,7 @@ class Auth
         if (!$result) {
             throw new HttpException(202, '账户过期或Token错误');
         }
+        $result['expire_time'] = strtotime($result['expire_time']);
         $redis = Redis::getInstance()->getConnection();
         $redis->setex('token_' . $token, 3600, serialize($result));
         Redis::getInstance()->close($redis);
