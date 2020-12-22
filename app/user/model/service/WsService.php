@@ -385,6 +385,8 @@ class WsService
         }
         if ($decimal == 0 && $quantity < 1){
             return false;
+        }elseif ($decimal == 0 && $quantity > 1 ){
+            return true;
         }elseif ($quantity < $decimal or $this->getRemainder($quantity,$decimal) != 0){
             return false;
         }
