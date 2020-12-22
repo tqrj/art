@@ -297,10 +297,6 @@ class RoomService
         $quantityTemp = [];
 
         array_walk($orderList, function ($orderInfo) use ($medoo, $issue, $lotteryCode,&$quantityTemp, &$userOrderList) {
-//            $lotteryCode = Lottery::getCode(Lottery::LOTTERY_TYPE_check,$orderInfo['issue']);
-//            if (empty($lotteryCode) or $lotteryCode == false){
-//                return;
-//            }
             $userOrderList[$orderInfo['user_id']]['nickname'] = $orderInfo['nickname'];
             $userOrderList[$orderInfo['user_id']]['user_id'] = $orderInfo['user_id'];
             $playerTempData['order_quantity'] = $orderInfo['quantity'];
