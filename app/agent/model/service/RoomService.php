@@ -196,6 +196,7 @@ class RoomService
                 'user_id'=>$userInfo['id'],
                 'status'=>[1,0]
             ]);
+            $orderResultData['user_id'] = $userInfo['id'];
             $orderResultData['order_sum_quantity'] = $orderSumQuantity;
             $orderResultData['user_quantity'] = $userInfo['quantity'];
             $result['orderResultList'][] = $orderResultData;
@@ -302,6 +303,7 @@ class RoomService
             $playerTempData['order_quantity'] = $orderInfo['quantity'];
             $playerTempData['play_code_count'] = $orderInfo['play_code_count'];
             $playerTempData['play_site'] = $orderInfo['play_site'];
+            $playerTempData['play_method'] = $orderInfo['play_method'];
             isset($quantityTemp[$orderInfo['user_id']])?true:$quantityTemp[$orderInfo['user_id']] = 0;
             $playerTempData['user_quantity'] = (float)$orderInfo['user_quantity'] + $quantityTemp[$orderInfo['user_id']];
             $playerTempData['whether_hit'] = 0;
@@ -349,9 +351,14 @@ class RoomService
             $userOrderList[$orderInfo['user_id']][] = $playerTempData;
             $quantityTemp[$orderInfo['user_id']] +=$whetherScore[1];
         });
-        array_walk($userOrderList,function ($item) use ($issue,$lotteryCode){
+        array_walk($userOrderList,function ($item) use ($issue,$lotteryCode,$agentId,$medoo){
             $item['issue'] = $issue;
             $item['lottery'] = $lotteryCode;
+            $item['past_sum_quantity'] = $medoo->sum('order','quantity', [
+                'agent_id'=>$agentId,
+                'user_id'=>$item['user_id'],
+                'status'=>[1,0]
+            ]);
             art_assign_ws(self::ROOM_STATUS_SETTLE,'success',$item,0,(int)ArtWs::uidToWsId($item['user_id']));
         });
         //art_assign_ws(self::ROOM_STATUS_SETTLE, '', $result, $agentId);

@@ -44,13 +44,15 @@ class RoomLogic
             'site_user',
             'site_pwd',
             'site_code',
-            'site_use'
+            'site_use',
+            'whether_water'
         ]);
         art_validate($params,[
             'closeTime'=>'require',
             'notice'=>'require',
             'notice_close'=>'require',
-            'site_use'=>'require|between:0,1'
+            'site_use'=>'require|between:0,1',
+            'whether_water'=>'require|between:0,1'
         ]);
         return $params;
     }
