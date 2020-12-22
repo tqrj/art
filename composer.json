@@ -4,7 +4,8 @@
     "require": {
         "php": ">=7.4",
         "swoole/ide-helper": "@dev",
-        "nesbot/carbon": "^2.42"
+        "nesbot/carbon": "^2.42",
+      "ext-redis": "*"
     },
     "authors": [
         {

@@ -32,7 +32,7 @@ class ArtLock
         do{
             $this->lockStatus = $redis->set('ArtLock' . $this->lockKey, 'lock', ['nx', 'ex' => $outTime]);
             if (false == $this->lockStatus){
-                System::sleep(0.02);
+                System::sleep(0.01);
             }
         }while(!$this->lockStatus);
         $this->microTime = microtime(true);

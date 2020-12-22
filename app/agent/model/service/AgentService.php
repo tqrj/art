@@ -84,8 +84,8 @@ class AgentService
         $data = art_verify();
         $data['verify_token'] = art_set_salt(10);
         $redis->set('verify_' . $data['verify_token'], $data['deCode'], 60);
-        unset($data['deCode']);
         Redis::getInstance()->close($redis);
+        unset($data['deCode']);
         return $data;
     }
 

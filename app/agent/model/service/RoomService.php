@@ -501,4 +501,11 @@ class RoomService
         }
         return [];
     }
+
+    public static function webSiteList()
+    {
+        $medoo = new Medoo();
+        $result = $medoo->select('website','*',['status'=>1]);
+        return $result;
+    }
 }

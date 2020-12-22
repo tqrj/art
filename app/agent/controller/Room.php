@@ -45,4 +45,10 @@ class Room
         $result = RoomService::info();
         art_assign(200,'success',$result);
     }
+
+    public function webSiteList()
+    {
+        $result = RoomService::webSiteList();
+        art_assign(200,'success',$result);
+    }
 }
