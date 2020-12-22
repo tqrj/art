@@ -292,17 +292,17 @@ class RoomService
                 'u.status' => 1,
                 'ORDER'=>['u.id'=>'ASC']
             ]);
-        $result['issue'] = $issue;
-        $result['lottery'] = $lotteryCode;
-        $result['orderResultList'] = [];
+
+        $userOrderList = [];
         $quantityTemp = [];
-        $orderResultList = [];
-        array_walk($orderList, function ($orderInfo) use ($medoo, $issue, $lotteryCode,&$quantityTemp, &$orderResultList) {
+
+        array_walk($orderList, function ($orderInfo) use ($medoo, $issue, $lotteryCode,&$quantityTemp, &$userOrderList) {
 //            $lotteryCode = Lottery::getCode(Lottery::LOTTERY_TYPE_check,$orderInfo['issue']);
 //            if (empty($lotteryCode) or $lotteryCode == false){
 //                return;
 //            }
-            $playerTempData['nickname'] = $orderInfo['nickname'];
+            $userOrderList[$orderInfo['user_id']]['nickname'] = $orderInfo['nickname'];
+            $userOrderList[$orderInfo['user_id']]['user_id'] = $orderInfo['user_id'];
             $playerTempData['order_quantity'] = $orderInfo['quantity'];
             $playerTempData['play_code_count'] = $orderInfo['play_code_count'];
             $playerTempData['play_site'] = $orderInfo['play_site'];
@@ -313,7 +313,7 @@ class RoomService
             if ($whetherScore[0] == false) {
                 //没中奖直接滚蛋
                 $medoo->update('order', ['status' => 1, 'update' => 1], ['id' => $orderInfo['id']]);
-                $orderResultList[] = $playerTempData;
+                $userOrderList[$orderInfo['user_id']][] = $playerTempData;
                 return;
             }
             $medoo->beginTransaction();
@@ -350,11 +350,15 @@ class RoomService
             }
             $playerTempData['whether_hit'] = $whetherScore[1];
             $playerTempData['user_quantity'] += (float)$whetherScore[1];
+            $userOrderList[$orderInfo['user_id']][] = $playerTempData;
             $quantityTemp[$orderInfo['user_id']] +=$whetherScore[1];
-            $orderResultList[] = $playerTempData;
         });
-        $result['orderResultList'] = $orderResultList;
-        art_assign_ws(self::ROOM_STATUS_SETTLE, '', $result, $agentId);
+        array_walk($userOrderList,function ($item) use ($issue,$lotteryCode){
+            $item['issue'] = $issue;
+            $item['lottery'] = $lotteryCode;
+            art_assign_ws(self::ROOM_STATUS_SETTLE,'success',$item,0,(int)ArtWs::uidToWsId($item['user_id']));
+        });
+        //art_assign_ws(self::ROOM_STATUS_SETTLE, '', $result, $agentId);
         return ;
     }
 

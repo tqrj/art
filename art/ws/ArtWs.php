@@ -42,6 +42,9 @@ class ArtWs
     //进程为键名
     private static Table $wsGroupTable;
 
+    //uid为键名 wsid为键值
+    private static Table $wsUidTable;
+
     private static array $wsGroup = [];
 
     private static array $wsObject = [];
@@ -67,6 +70,10 @@ class ArtWs
         self::$wsGroupTable->column('type', Table::TYPE_INT);
         self::$wsGroupTable->column('status', Table::TYPE_INT);
         self::$wsGroupTable->create();
+
+        self::$wsUidTable = new Table(1024);
+        self::$wsUidTable->column('wsId',Table::TYPE_INT);
+        self::$wsUidTable->create();
 
         return true;
     }
@@ -204,6 +211,16 @@ class ArtWs
     public static function hasGroup()
     {
 
+    }
+
+    public static function bindUid($wsId,$uid)
+    {
+        self::$wsUidTable->set($uid,['wsId'=>$wsId]);
+    }
+
+    public static function uidToWsId($uid)
+    {
+        return self::$wsUidTable->get($uid,'wsId');
     }
 
 

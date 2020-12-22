@@ -41,6 +41,7 @@ class WsService
      */
     public function joinGroup()
     {
+        ArtWs::bindUid($this->ws->artWsId,(int)$this->userInfo['id']);
         ArtWs::joinGroup($this->ws->artWsId, $this->userInfo['agent_id']);
     }
 

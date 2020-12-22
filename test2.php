@@ -1,4 +1,8 @@
 <?php
+
+$test['aaa'] = 1121;
+$test['ccc'] = 1212;
+
 /**
  * @param $dividend
  * @param $divisor
