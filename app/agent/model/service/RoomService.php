@@ -97,7 +97,7 @@ class RoomService
 
                 $bool = $redis->set(self::ROOM_CLOSE_MSG . $agent_info['id'] . $nowLottery[0], '1', ['nx', 'ex' => $diff + mt_rand(10, 20)],);
                 if ($bool) {
-                    echo '成功封盘'.$issue.PHP_EOL;
+                    //echo '成功封盘'.$issue.PHP_EOL;
                     art_assign_ws(200, $roomInfo['notice_close'], [], $agent_info['id']);
                     self::closeNotes($agent_info['id'],$issue);//F盘清账通知消息
                 }
@@ -106,13 +106,13 @@ class RoomService
             }
             //有期号 且是当前期那么一样返回
             if (!empty($issue) and $issue === $nowLottery[0]) {
-                echo '有期号且是当前期'.$issue.PHP_EOL;
+                //echo '有期号且是当前期'.$issue.PHP_EOL;
                 \art\db\Redis::getInstance()->close($redis);
                 return;
             }
             //有期号 且是上一期那么就结算 并设置为当前期
             if (!empty($issue) and $issue === $nowLottery[3]) {
-                echo '进入结算成功'.$issue.PHP_EOL;
+                //echo '进入结算成功'.$issue.PHP_EOL;
                 art_assign_ws(200, $issue . '期，开' . $nowLottery[4], [], $agent_info['id']);
                 self::settleOrder($agent_info['id'], $issue, $nowLottery[4]);//结算订单
                 $redis->set(self::ROOM_ISSUE . $agent_info['id'], $nowLottery[0], $diff + mt_rand(10, 20));
