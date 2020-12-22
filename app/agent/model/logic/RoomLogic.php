@@ -50,7 +50,7 @@ class RoomLogic
             'closeTime'=>'require',
             'notice'=>'require',
             'notice_close'=>'require',
-            'site_use'=>'require'
+            'site_use'=>'require|between:0,1'
         ]);
         return $params;
     }
