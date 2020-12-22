@@ -99,7 +99,10 @@ class RoomService
                 if ($bool) {
                     //echo '成功封盘'.$issue.PHP_EOL;
                     art_assign_ws(200, $roomInfo['notice_close'], [], $agent_info['id']);
-                    self::closeNotes($agent_info['id'],$issue);//F盘清账通知消息
+                    if ($roomInfo['whether_closeInfo'] == 1){
+                        self::closeNotes($agent_info['id'],$issue);//F盘清账通知消息
+                    }
+
                 }
 //                \art\db\Redis::getInstance()->close($redis);
 //                return;
@@ -268,6 +271,7 @@ class RoomService
     private static function settleOrder($agentId, $issue, $lotteryCode)
     {
         $medoo = new Medoo();
+        $roomInfo = $medoo->get('room', ['id', 'status', 'timerID'], ['agent_id' => $agentId]);
         $orderList = $medoo->select('order(o)',
             [
                 '[><]user(u)' => ['o.user_id' => 'id'],
@@ -351,14 +355,19 @@ class RoomService
             $userOrderList[$orderInfo['user_id']][] = $playerTempData;
             $quantityTemp[$orderInfo['user_id']] +=$whetherScore[1];
         });
-        array_walk($userOrderList,function ($item) use ($issue,$lotteryCode,$agentId,$medoo){
+        array_walk($userOrderList,function ($item) use ($issue,$lotteryCode,$agentId,$roomInfo,$medoo){
             $item['issue'] = $issue;
             $item['lottery'] = $lotteryCode;
-            $item['past_sum_quantity'] = $medoo->sum('order','quantity', [
-                'agent_id'=>$agentId,
-                'user_id'=>$item['user_id'],
-                'status'=>[1,0]
-            ]);
+            if ($roomInfo['whether_water'] == 1){
+                $item['whether_water'] = 1;
+                $item['past_sum_quantity'] = $medoo->sum('order','quantity', [
+                    'agent_id'=>$agentId,
+                    'user_id'=>$item['user_id'],
+                    'status'=>[1,0]
+                ]);
+            }else{
+                $item['whether_water'] = 0;
+            }
             art_assign_ws(self::ROOM_STATUS_SETTLE,'success',$item,0,(int)ArtWs::uidToWsId($item['user_id']));
         });
         //art_assign_ws(self::ROOM_STATUS_SETTLE, '', $result, $agentId);
