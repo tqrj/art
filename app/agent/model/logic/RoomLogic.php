@@ -53,7 +53,7 @@ class RoomLogic
             'closeTime'=>'require',
             'notice'=>'require',
             'notice_close'=>'require',
-            'notice_top',
+            'notice_top'=>'require',
             'site_use'=>'require|between:0,1',
             'whether_water'=>'require|between:0,1',
             'whether_closeInfo'=>'require|between:0,1'
