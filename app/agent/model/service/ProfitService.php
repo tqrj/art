@@ -18,15 +18,8 @@ class ProfitService
     {
         $agentInfo = Context::get('authInfo');
         $medoo = new Medoo();
-        $result['pending'] = $medoo->select('points', '*', [
+        $result = $medoo->select('points', '*', [
             'agent_id' => $agentInfo['id'],
-            'status' => 0,
-            'LIMIT' => [$params['page'], $params['limit']],
-            'ORDER' => ['id' => 'DESC']
-        ]);
-        $result['finish'] = $medoo->select('points', '*', [
-            'agent_id' => $agentInfo['id'],
-            'status' => [1,-1],
             'LIMIT' => [$params['page'], $params['limit']],
             'ORDER' => ['id' => 'DESC']
         ]);
