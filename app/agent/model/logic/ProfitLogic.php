@@ -21,6 +21,7 @@ class ProfitLogic
             'limit'=>'require|between:10,50',
             'page'=>'require|between:0,999',
         ]);
+        $params['page'] *= $params['limit'];
         return $params;
     }
 
@@ -34,6 +35,7 @@ class ProfitLogic
             'limit'=>'require|between:10,50',
             'page'=>'require|between:0,999',
         ]);
+        $params['page'] *= $params['limit'];
         return $params;
     }
 

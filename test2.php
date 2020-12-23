@@ -1,7 +1,16 @@
 <?php
 
-$test['aaa'] = 1121;
-$test['ccc'] = 1212;
+$keys =['key'=>1213];
+$params = ['key'=>121,'key3'=>212,'token'=>'ww'];
+$result = [];
+array_walk($keys, function ($item, $key) use ($params, &$result) {
+    if (is_int($key) && array_key_exists($item, $params)) {
+        $result[$item] = $params[$item];
+    } elseif (!is_int($key)) {
+        array_key_exists($key, $params)?$result[$key] = $params[$key]:$result[$key] = $item;
+    }
+});
+var_dump($result);
 
 /**
  * @param $dividend

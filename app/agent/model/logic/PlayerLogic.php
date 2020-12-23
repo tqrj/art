@@ -20,10 +20,11 @@ class PlayerLogic
             'keyWord'
         ]);
         art_validate($params,[
-            'limit'=>'require|between:10,50',
+            'limit'=>'require|between:5,50',
             'page'=>'require|between:0,999',
             'keyword'=>'length:1,12'
         ]);
+        $params['page'] *= $params['limit'];
         return $params;
     }
 
@@ -50,7 +51,7 @@ class PlayerLogic
         ]);
         art_validate($params,[
             'playerId'=>'require|number',
-            'limit'=>'require|between:10,50',
+            'limit'=>'require|between:5,50',
             'page'=>'require|between:1,999',
         ]);
     }
@@ -67,7 +68,7 @@ class PlayerLogic
         ]);
         art_validate($params,[
             'playerId'=>'require|number',
-            'limit'=>'require|between:10,50',
+            'limit'=>'require|between:5,50',
             'page'=>'require|between:1,999',
         ]);
     }

@@ -155,9 +155,6 @@ class RoomService
                 'q.status'=>1
             ]);
         echo 'F盘取到的用户数量'.count($userList);
-        $result = [];
-        $result['issue'] = $issue;
-        $result['orderResultList'] = [];
         array_walk($userList,function ($userInfo) use($medoo,$agentId,$issue,&$result){
 
             $userOrderList = $medoo->select('order(o)',
@@ -182,7 +179,9 @@ class RoomService
                 ]);
 
             $orderResultData = [];
+            $orderResultData['issue'] = $issue;
             $orderResultData['nickname'] = $userInfo['nickname'];
+            $orderResultData['user_id'] = $userInfo['id'];
             $orderSumQuantity = 0;
             array_walk($userOrderList,function ($orderInfo) use (&$orderResultData,&$orderSumQuantity){
                    $temp['play_method'] = $orderInfo['play_method'];
@@ -202,9 +201,10 @@ class RoomService
             $orderResultData['user_id'] = $userInfo['id'];
             $orderResultData['order_sum_quantity'] = $orderSumQuantity;
             $orderResultData['user_quantity'] = $userInfo['quantity'];
-            $result['orderResultList'][] = $orderResultData;
+            art_assign_ws(self::ROOM_STATUS_CLOSE, '', $orderResultData, 0,ArtWs::uidToWsId($userInfo['id']));
+            //$result['orderResultList'][] = $orderResultData;
         });
-        art_assign_ws(self::ROOM_STATUS_CLOSE, '', $result, $agentId);
+
     }
 
     /**
