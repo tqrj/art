@@ -28,6 +28,54 @@ class PlayerLogic
         return $params;
     }
 
+    public static function orderList()
+    {
+        $params = Request::only([
+            'page'=>0,
+            'limit'=>10,
+            'playerId',
+        ]);
+        art_validate($params,[
+            'limit'=>'require|between:5,50',
+            'page'=>'require|between:0,999',
+            'playerId'=>'require|number'
+        ]);
+        $params['page'] *= $params['limit'];
+        return $params;
+    }
+
+    public static function pointsPay()
+    {
+        $params = Request::only([
+            'page'=>0,
+            'limit'=>10,
+            'playerId',
+        ]);
+        art_validate($params,[
+            'limit'=>'require|between:5,50',
+            'page'=>'require|between:0,999',
+            'playerId'=>'require|number'
+        ]);
+        $params['page'] *= $params['limit'];
+        return $params;
+    }
+
+    public static function pointsReject()
+    {
+        $params = Request::only([
+            'page'=>0,
+            'limit'=>10,
+            'playerId',
+        ]);
+        art_validate($params,[
+            'limit'=>'require|between:5,50',
+            'page'=>'require|between:0,999',
+            'playerId'=>'require|number'
+        ]);
+        $params['page'] *= $params['limit'];
+        return $params;
+    }
+
     public static function info()
     {
         $params = Request::only([

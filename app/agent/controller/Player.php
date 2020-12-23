@@ -21,6 +21,27 @@ class Player
         art_assign(200,'success',$result);
     }
 
+    public function orderList()
+    {
+        $params = PlayerLogic::orderList();
+        $result = PlayerService::orderList($params);
+        art_assign(200,'success',$result);
+    }
+
+    public function pointsPay()
+    {
+        $params = PlayerLogic::pointsPay();
+        $result = PlayerService::pointsPay($params);
+        art_assign(200,'success',$result);
+    }
+
+    public function pointsReject()
+    {
+        $params = PlayerLogic::pointsReject();
+        $result = PlayerService::pointsReject($params);
+        art_assign(200,'success',$result);
+    }
+
     public function info()
     {
         $params = PlayerLogic::info();

@@ -48,18 +48,58 @@ class PlayerService
         if (!$userInfo) {
             art_assign(202, '用户ID错误');
         }
+//        $agentInfo = Context::get('authInfo');
+//        $map = [
+//            'agent_id' => $agentInfo['id'],
+//            'user_id' => $userInfo['id']
+//        ];
+        //$userInfo['order'] = $medoo->select('order', '*', $map);
+//        $map['ORDER'] = ['status' => 'DESC'];
+//        $map['type'] = 1;
+//        $userInfo['points_pay'] = $medoo->select('points', '*', $map);
+//        $map['type'] = -1;
+//        $userInfo['points_reject'] = $medoo->select('points', '*', $map);
+        return $userInfo;
+    }
+
+    public static function orderList($params)
+    {
         $agentInfo = Context::get('authInfo');
+        $medoo = new Medoo();
         $map = [
             'agent_id' => $agentInfo['id'],
-            'user_id' => $userInfo['id']
+            'user_id' => $params['playerId'],
+            'LIMIT'=> [$params['page'], $params['limit']]
         ];
-        $userInfo['order'] = $medoo->select('order', '*', $map);
-        $map['ORDER'] = ['status' => 'DESC'];
-        $map['type'] = 1;
-        $userInfo['points_pay'] = $medoo->select('points', '*', $map);
-        $map['type'] = -1;
-        $userInfo['points_reject'] = $medoo->select('points', '*', $map);
-        return $userInfo;
+        return $medoo->select('order', '*', $map);
+    }
+
+    public static function pointsPay($params)
+    {
+        $agentInfo = Context::get('authInfo');
+        $medoo = new Medoo();
+        $map = [
+            'agent_id' => $agentInfo['id'],
+            'user_id' => $params['playerId'],
+            'type'=>1,
+            'LIMIT'=> [$params['page'], $params['limit']],
+            'ORDER'=>['status' => 'DESC']
+        ];
+        return $medoo->select('points', '*', $map);
+    }
+
+    public static function pointsReject($params)
+    {
+        $agentInfo = Context::get('authInfo');
+        $medoo = new Medoo();
+        $map = [
+            'agent_id' => $agentInfo['id'],
+            'user_id' => $params['playerId'],
+            'type'=>-1,
+            'LIMIT'=> [$params['page'], $params['limit']],
+            'ORDER'=>['status' => 'DESC']
+        ];
+        return $medoo->select('points', '*', $map);
     }
 
     public static function change($params)
