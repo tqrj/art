@@ -81,9 +81,8 @@ class PlayerService
         $map = [
             'agent_id' => $agentInfo['id'],
             'user_id' => $params['playerId'],
-            'type'=>1,
             'LIMIT'=> [$params['page'], $params['limit']],
-            'ORDER'=>['status' => 'DESC']
+            'ORDER'=>['id' => 'DESC']
         ];
         return $medoo->select('points', '*', $map);
     }

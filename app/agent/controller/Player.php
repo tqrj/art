@@ -35,12 +35,12 @@ class Player
         art_assign(200,'success',$result);
     }
 
-    public function pointsReject()
+/*    public function pointsReject()
     {
         $params = PlayerLogic::pointsReject();
         $result = PlayerService::pointsReject($params);
         art_assign(200,'success',$result);
-    }
+    }*/
 
     public function info()
     {

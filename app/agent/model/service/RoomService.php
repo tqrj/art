@@ -231,6 +231,7 @@ class RoomService
             }
             $medoo->beginTransaction();
             try {
+                $orderData['profit'] = $orderInfo['quantity'] - $whetherScore[1];
                 $orderData['loc_quantity_ret'] = $whetherScore[1] / $orderInfo['quantity'] * $orderInfo['loc_quantity'];
                 $orderData['whether_hit'] = 1;
                 $orderData['status'] = 1;
@@ -321,6 +322,7 @@ class RoomService
             $medoo->beginTransaction();
             try {
 
+                $orderData['profit'] = $orderInfo['quantity'] - $whetherScore[1];
                 $orderData['loc_quantity_ret'] = $whetherScore[1] / $orderInfo['quantity'] * $orderInfo['loc_quantity'];
                 $orderData['whether_hit'] = 1;
                 $orderData['status'] = 1;
