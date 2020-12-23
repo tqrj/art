@@ -14,6 +14,13 @@ class Profit
 {
     private $isHttp = true;
 
+    public static function applyList()
+    {
+        $params = ProfitLogic::applyList();
+        $result = ProfitService::applyList($params);
+        art_assign(200,'success',$result);
+    }
+
     public function payApplyList()
     {
         $params = ProfitLogic::payApplyList();

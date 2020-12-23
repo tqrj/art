@@ -11,6 +11,20 @@ use art\request\Request;
  */
 class ProfitLogic
 {
+    public static function applyList()
+    {
+        $params = Request::only([
+            'page'=>0,
+            'limit'=>10,
+        ]);
+        art_validate($params,[
+            'limit'=>'require|between:10,50',
+            'page'=>'require|between:0,999',
+        ]);
+        $params['page'] *= $params['limit'];
+        return $params;
+    }
+
     public static function payApplyList()
     {
         $params = Request::only([
