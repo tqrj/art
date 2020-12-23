@@ -28,7 +28,7 @@ class PlayerService
         $medoo = new Medoo();
         return $medoo->select('user(u)',
             ['[><]user_quantity(q)' => ['u.id' => 'user_id']],
-            ['u.id', 'u.nickname', 'q.quantity', 'u.group_id','u.headimgurl', 'u.status', 'q.create_time'],
+            ['u.id', 'u.nickname','u.token', 'q.quantity', 'u.group_id','u.headimgurl', 'u.status', 'q.create_time'],
             $map);
     }
 
@@ -43,7 +43,7 @@ class PlayerService
         $medoo = new Medoo();
         $userInfo = $medoo->get('user(u)',
             ['[><]user_quantity(q)' => ['u.id' => 'user_id']],
-            ['u.id', 'u.nickname','u.headimgurl', 'q.quantity', 'u.group_id', 'q.status'],
+            ['u.id', 'u.nickname','u.token','u.headimgurl', 'q.quantity', 'u.group_id', 'q.status'],
             $map);
         if (!$userInfo) {
             art_assign(202, '用户ID错误');
