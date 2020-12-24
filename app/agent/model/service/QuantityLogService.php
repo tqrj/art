@@ -12,12 +12,13 @@ use art\db\Medoo;
  */
 class QuantityLogService
 {
-    public static function push($userId,$agentId,$quantity,string $mark)
+    public static function push($userId,$agentId,$quantity,$over,string $mark)
     {
         $medoo = new Medoo();
         $data['user_id'] = (int)$userId;
         $data['agent_id'] = (int)$agentId;
         $data['quantity'] = (float)$quantity;
+        $data['over'] = (float)$over;
         $data['mark'] = (string)$mark;
         $data['create_time'] = art_d();
         $data['update_time'] = $data['create_time'];

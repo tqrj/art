@@ -96,7 +96,6 @@ class ProfitService
         $applyInfo['quantity'] = $applyInfo['type'] == 1 ? abs($applyInfo['quantity']) : -$applyInfo['quantity'];
         $medoo->beginTransaction();
         try {
-            QuantityLogService::push($applyInfo['user_id'], $applyInfo['agent_id'], $applyInfo['quantity'], $mark);
             $pdoDoc = $medoo->update('user_quantity', ['quantity[+]' => $applyInfo['quantity']], [
                 'user_id' => $applyInfo['user_id'],
                 'agent_id' => $agentInfo['id']
@@ -112,11 +111,18 @@ class ProfitService
             if (!$pdoDoc->rowCount()) {
                 throw new \Exception('更新错误');
             }
+            $userQuantity = $medoo->get('user_quantity','quantity', [
+                'id' => $params['id'],
+                'agent_id' => $agentInfo['id'],
+                'status' => 0
+            ]);
+            QuantityLogService::push($applyInfo['user_id'], $applyInfo['agent_id'], $applyInfo['quantity'],$userQuantity, $mark);
             $medoo->commit();
         } catch (\Exception $e) {
             $medoo->rollBack();
             art_assign(202, $e->getMessage());
         }
+
         return [];
     }
 

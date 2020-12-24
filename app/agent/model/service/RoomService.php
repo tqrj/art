@@ -253,7 +253,7 @@ class RoomService
                 if (!$pdoDoc->rowCount()) {
                     throw new \Exception('更新用户数据错误');
                 }
-                QuantityLogService::push($orderInfo['user_id'], $orderInfo['agent_id'], $orderData['loc_quantity_ret'], '开盘补单 订单ID' . $orderInfo['id']);
+                QuantityLogService::push($orderInfo['user_id'], $orderInfo['agent_id'], $orderData['loc_quantity_ret'], $userQuantity+$orderData['loc_quantity_ret'],'开盘补单 订单ID' . $orderInfo['id']);
                 $medoo->commit();
             } catch (\Exception $e) {
                 echo $e->getMessage();
@@ -345,7 +345,7 @@ class RoomService
                 if (!$pdoDoc->rowCount()) {
                     throw new \Exception('更新用户数据错误');
                 }
-                QuantityLogService::push($orderInfo['user_id'], $orderInfo['agent_id'], $orderData['loc_quantity_ret'], '封盘结算 订单ID' . $orderInfo['id']);
+                QuantityLogService::push($orderInfo['user_id'], $orderInfo['agent_id'], $orderData['loc_quantity_ret'], $userQuantity + $orderData['loc_quantity_ret'],'封盘结算 订单ID' . $orderInfo['id']);
                 $medoo->commit();
             } catch (\Exception $e) {
                 echo $e->getMessage();
