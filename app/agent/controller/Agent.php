@@ -49,7 +49,7 @@ class Agent
     public function notice()
     {
         $result = AgentService::notice();
-        art_assign(200,$result);
+        art_assign(200,$result,[]);
     }
 
 }

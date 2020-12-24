@@ -117,6 +117,6 @@ class AgentService
     public static function notice()
     {
         $medoo = new Medoo();
-        return $medoo->get('config',['value'],['id'=>1]);
+        return $medoo->get('config','value',['id'=>1]);
     }
 }
