@@ -44,10 +44,6 @@ class RoomLogic
             'notice',
             'notice_close',
             'notice_top',
-            'site_user',
-            'site_pwd',
-            'site_code',
-            'site_use',
             'whether_water',
             'whether_closeInfo'
         ]);
@@ -58,9 +54,25 @@ class RoomLogic
             'notice'=>'require',
             'notice_close'=>'require',
             'notice_top'=>'require',
-            'site_use'=>'require|between:0,1',
             'whether_water'=>'require|between:0,1',
             'whether_closeInfo'=>'require|between:0,1'
+        ]);
+        return $params;
+    }
+
+    public static function changeSite()
+    {
+        $params = Request::only([
+            'site_user',
+            'site_pwd',
+            'site_code',
+            'site_use',
+        ]);
+        art_validate($params,[
+            'site_use'=>'require|between:0,1',
+            'site_user'=>'require',
+            'site_pwd'=>'require',
+            'site_code'=>'require',
         ]);
         return $params;
     }
