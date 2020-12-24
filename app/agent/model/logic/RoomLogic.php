@@ -39,6 +39,7 @@ class RoomLogic
     {
         $params = Request::only([
             'title',
+            'reTime',
             'closeTime',
             'notice',
             'notice_close',
@@ -52,6 +53,7 @@ class RoomLogic
         ]);
         art_validate($params,[
             'title'=>'require',
+            'reTime'=>'require',
             'closeTime'=>'require',
             'notice'=>'require',
             'notice_close'=>'require',

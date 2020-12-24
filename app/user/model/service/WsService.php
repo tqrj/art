@@ -306,20 +306,27 @@ class WsService
         $CarbonIssue = Carbon::parse(art_d(), 'Asia/Shanghai');
         $diff = $CarbonIssue->diffInRealSeconds($nowLottery[1]);
         if ((int)$diff <= (int)$roomInfo['closeTime']) {
-            echo '退单:已封盘' . PHP_EOL;
-            art_assign_ws(200,$userInfo['nickname'].' 当前已封盘','',$userInfo['agent_id']);
+            //echo '退单:已封盘' . PHP_EOL;
+            art_assign_ws(200,$userInfo['nickname'].' 退单失败:当前已封盘','',$userInfo['agent_id']);
+            return false;
+        }
+        $orderInfo = $medoo->get('order',['id','quantity','create_time'],
+            [
+                'agent_id'=>$userInfo['agent_id'],
+                'user_id'=>$userInfo['id'],
+                'reset_code'=>$reCode,
+                'issue'=>$issue
+            ]);
+        $diff = $CarbonIssue->diffInRealSeconds($orderInfo['create_time']);
+        if ((int)$diff >= (int)$roomInfo['reTime']) {
+            echo '退单:已超时' . PHP_EOL;
+            art_assign_ws(200,$userInfo['nickname'].' 退单失败:已经超过退单时间','',$userInfo['agent_id']);
             return false;
         }
 
-        $orderInfo = $medoo->get('order',['id','quantity'],
-            [
-            'agent_id'=>$userInfo['agent_id'],
-            'user_id'=>$userInfo['id'],
-            'reset_code'=>$reCode,
-            'issue'=>$issue
-            ]);
+
         if (empty($orderInfo)){
-            art_assign_ws(200,$userInfo['nickname'].' 没有查找到订单','',$userInfo['agent_id']);
+            art_assign_ws(200,$userInfo['nickname'].' 退单失败:没有查找到订单','',$userInfo['agent_id']);
             return false;
         }
         $medoo->beginTransaction();
