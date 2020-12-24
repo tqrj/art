@@ -18,7 +18,7 @@ class ProfitLogic
             'limit'=>10,
         ]);
         art_validate($params,[
-            'limit'=>'require|between:10,50',
+            'limit'=>'require|between:5,50',
             'page'=>'require|between:0,999',
         ]);
         $params['page'] *= $params['limit'];
@@ -32,7 +32,7 @@ class ProfitLogic
             'limit'=>10,
         ]);
         art_validate($params,[
-            'limit'=>'require|between:10,50',
+            'limit'=>'require|between:5,50',
             'page'=>'require|between:0,999',
         ]);
         $params['page'] *= $params['limit'];
@@ -46,7 +46,7 @@ class ProfitLogic
             'limit'=>10,
         ]);
         art_validate($params,[
-            'limit'=>'require|between:10,50',
+            'limit'=>'require|between:5,50',
             'page'=>'require|between:0,999',
         ]);
         $params['page'] *= $params['limit'];

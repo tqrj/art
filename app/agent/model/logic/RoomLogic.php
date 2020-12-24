@@ -38,6 +38,7 @@ class RoomLogic
     public static function change()
     {
         $params = Request::only([
+            'title',
             'closeTime',
             'notice',
             'notice_close',
@@ -50,6 +51,7 @@ class RoomLogic
             'whether_closeInfo'
         ]);
         art_validate($params,[
+            'title'=>'require',
             'closeTime'=>'require',
             'notice'=>'require',
             'notice_close'=>'require',

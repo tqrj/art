@@ -1,5 +1,28 @@
 <?php
 
+/**
+ * 位置取号码
+ * @param string $code
+ * @param string $site
+ * @return string
+ */
+function _siteCode($code, $site)
+{
+    $site = str_replace('万', '0', $site);
+    $site = str_replace('千', '1', $site);
+    $site = str_replace('百', '2', $site);
+    $site = str_replace('十', '3', $site);
+    $site = str_replace('个', '4', $site);
+    $siteLen = mb_strlen($site);
+    $resCode = '';
+    for ($i = 0; $i < $siteLen; $i++) {
+        $resCode .= mb_substr($code, mb_substr($site, $i, 1), 1);
+    }
+    return $resCode;
+}
+
+echo _siteCode('13428','万千百十个');
+/*
 $keys =['key'=>1213];
 $params = ['key'=>121,'key3'=>212,'token'=>'ww'];
 $result = [];
@@ -10,7 +33,7 @@ array_walk($keys, function ($item, $key) use ($params, &$result) {
         array_key_exists($key, $params)?$result[$key] = $params[$key]:$result[$key] = $item;
     }
 });
-var_dump($result);
+var_dump($result);*/
 
 /**
  * @param $dividend

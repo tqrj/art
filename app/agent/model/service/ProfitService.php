@@ -34,7 +34,7 @@ class ProfitService
             'u.status'=> 1,
             'LIMIT' => [$params['page'], $params['limit']],
             'ORDER' => ['id' => 'DESC']
-        ]);
+            ]);
         return $result;
     }
 
