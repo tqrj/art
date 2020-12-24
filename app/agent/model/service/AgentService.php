@@ -113,4 +113,10 @@ class AgentService
         }
         art_assign(202,'更新失败');
     }
+
+    public static function notice()
+    {
+        $medoo = new Medoo();
+        return $medoo->get('config',['value'],['id'=>1]);
+    }
 }

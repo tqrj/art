@@ -46,4 +46,10 @@ class Agent
         art_assign(200,'success',$result);
     }
 
+    public function notice()
+    {
+        $result = AgentService::notice();
+        art_assign(200,$result);
+    }
+
 }
