@@ -28,6 +28,13 @@ class Player
         art_assign(200,'success',$result);
     }
 
+    public function quantityLog()
+    {
+        $params = PlayerLogic::quantityLog();
+        $result = PlayerService::quantityLog($params);
+        art_assign(200,'success',$result);
+    }
+
     public function pointsPay()
     {
         $params = PlayerLogic::pointsPay();

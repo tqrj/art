@@ -69,7 +69,21 @@ class PlayerService
         $map = [
             'agent_id' => $agentInfo['id'],
             'user_id' => $params['playerId'],
-            'LIMIT'=> [$params['page'], $params['limit']]
+            'LIMIT'=> [$params['page'], $params['limit']],
+            'ORDER'=>['id'=>'DESC']
+        ];
+        return $medoo->select('order', '*', $map);
+    }
+
+    public static function quantityLog($params)
+    {
+        $agentInfo = Context::get('authInfo');
+        $medoo = new Medoo();
+        $map = [
+            'agent_id' => $agentInfo['id'],
+            'user_id' => $params['playerId'],
+            'LIMIT'=> [$params['page'], $params['limit']],
+            'ORDER'=>['id'=>'DESC']
         ];
         return $medoo->select('order', '*', $map);
     }
