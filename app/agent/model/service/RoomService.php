@@ -77,7 +77,7 @@ class RoomService
                 art_assign_ws(200, $roomInfo['notice'], [], $agent_info['id']);
             }
             $nowLottery = Lottery::getCode(Lottery::LOTTERY_TYPE_now);
-            if (count($nowLottery) != 5) {
+            if (!is_array($nowLottery) or count($nowLottery) != 5) {
                 echo '开奖信息错误'.PHP_EOL;
                 return;
             }
