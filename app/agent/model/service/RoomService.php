@@ -469,6 +469,21 @@ class RoomService
         return [];
     }
 
+    public static function changeSite($params)
+    {
+        $agentInfo = Context::get('authInfo');
+        $medoo = new Medoo();
+        $roomInfo = $medoo->get('room', ['id', 'status'], ['agent_id' => $agentInfo['id']]);
+        if (!$roomInfo) {
+            art_assign(202, '房间数据异常');
+        }
+        $pdoDoc = $medoo->update('room', $params, ['id' => $roomInfo['id']]);
+        if (!$pdoDoc->rowCount()) {
+            art_assign(202, '更新失败');
+        }
+        return [];
+    }
+
     public static function info()
     {
         $agentInfo = Context::get('authInfo');

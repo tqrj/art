@@ -43,7 +43,7 @@ class Room
     public function changeSite()
     {
         $params = RoomLogic::changeSite();
-        $result = RoomService::change($params);
+        $result = RoomService::changeSite($params);
         art_assign(200,'success',$result);
     }
 
