@@ -447,10 +447,21 @@ class RoomService
         if (!$roomInfo) {
             art_assign(202, '房间数据异常');
         }
-        $pdoDoc = $medoo->update('room_rule', $params, ['agent_id' => $agentInfo['id'], 'class' => $params['class']]);
-        if (!$pdoDoc->rowCount()) {
-            art_assign(202, '更新失败');
+        $medoo->beginTransaction();
+        try {
+            array_walk($params,function ($item,$key,$medoo) use ($agentInfo) {
+                $pdoDoc = $medoo->update('room_rule', $item, ['agent_id' => $agentInfo['id'], 'class' => $key + 1]);
+                if (!$pdoDoc->rowCount()) {
+                    art_assign(202, '更新失败');
+                }
+            },$medoo);
+            $medoo->commit();
+        }catch (\Exception $e){
+            $medoo->rollBack();
+            art_assign(202,$e->getMessage());
         }
+
+
         return [];
     }
 

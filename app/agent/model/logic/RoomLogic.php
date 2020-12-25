@@ -15,23 +15,35 @@ class RoomLogic
     public static function setRule()
     {
         $params = Request::only([
-            'class',
-            'line',
-            'max',
-            'eat',
-            'eatNum',
-            'decimal',
-            'status'
+            'rules',
         ]);
         art_validate($params,[
-            'class'=>'require|between:1,5',
-            'line'=>'require|gt:0',
-            'max'=>'require|gt:0',
-            'eat'=>'require|between:0,1',
-            'eatNum'=>'require|egt:0',
-            'decimal'=>'require|egt:0',
-            'status'=>'require|between:0,1'
+            'rules'=>'require',
         ]);
+        $params = json_decode($params['rules'],true);
+        if (!is_array($params) or count($params)!=5){
+            art_assign(202,'数据格式错误');
+        }
+        array_walk($params,function ($item){
+            art_validate($item,[
+                'line'=>'require|gt:0',
+                'max'=>'require|gt:0',
+                'eat'=>'require|between:0,1',
+                'eatNum'=>'require|egt:0',
+                'decimal'=>'require|egt:0',
+                'status'=>'require|between:0,1'
+            ]);
+        });
+
+//        $params = Request::only([
+//            'class',
+//            'line',
+//            'max',
+//            'eat',
+//            'eatNum',
+//            'decimal',
+//            'status'
+//        ]);
         return $params;
     }
 
