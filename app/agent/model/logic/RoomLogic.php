@@ -21,7 +21,7 @@ class RoomLogic
             'rules'=>'require',
         ]);
         $params = json_decode($params['rules'],true);
-        if (!is_array($params) or count($params)!=5){
+        if (!is_array($params) or count($params) != 5){
             art_assign(202,'数据格式错误');
         }
         array_walk($params,function ($item){

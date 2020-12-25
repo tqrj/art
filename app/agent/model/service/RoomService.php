@@ -460,8 +460,6 @@ class RoomService
             $medoo->rollBack();
             art_assign(202,$e->getMessage());
         }
-
-
         return [];
     }
 
