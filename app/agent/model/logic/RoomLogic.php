@@ -68,7 +68,7 @@ class RoomLogic
             'site_code',
             'site_use',
             'site_id',
-            'site_domain'
+            'site_domain'=>''
         ]);
         art_validate($params,[
             'site_use'=>'require|between:0,1',
