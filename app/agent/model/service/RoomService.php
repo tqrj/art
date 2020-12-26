@@ -35,12 +35,12 @@ class RoomService
             art_assign(202, '房间数据异常');
         }
         if ($roomInfo['timerID'] or $roomInfo['status']) {
-            art_assign(202, '房间已经开启');
+            art_assign(202, '请勿重复开启!');
         }
         if (!$roomInfo['status']) {
             $bool = $medoo->update('room', ['status' => 1], ['agent_id' => $agentInfo['id']])->rowCount();
             if (!$bool) {
-                art_assign(202, '更新数据出错');
+                art_assign(202, '更新数据出错!');
             }
         }
         $redis = \art\db\Redis::getInstance()->getConnection();
@@ -449,11 +449,8 @@ class RoomService
         }
         $medoo->beginTransaction();
         try {
-            array_walk($params,function ($item,$key,$medoo) use ($agentInfo) {
+            array_walk($params,function ($item,$key,Medoo $medoo) use ($agentInfo) {
                 $pdoDoc = $medoo->update('room_rule', $item, ['agent_id' => $agentInfo['id'], 'class' => $key + 1]);
-                if (!$pdoDoc->rowCount()) {
-                    art_assign(202, '更新失败');
-                }
             },$medoo);
             $medoo->commit();
         }catch (\Exception $e){

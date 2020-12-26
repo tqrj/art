@@ -26,8 +26,6 @@ class Database
 
     public static $size = 64;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public static $prefix = 'vae_';
 }
