@@ -52,7 +52,9 @@ class WsService
     public function push($params)
     {
 
-        art_assign_ws(200, htmlspecialchars($params['message']), [], $this->userInfo['agent_id'],0,$this->ws->artWsId,);
+        $data['authInfo'] = Context::get('authInfo');
+        unset($data['authInfo']['openid']);
+        art_assign_ws(200, htmlspecialchars($params['message']), $data, $this->userInfo['agent_id'],0,$this->ws->artWsId,);
         if ($this->checkScore($params['message'])) {
             return;
         } elseif ($this->checkPay($params['message'])) {
