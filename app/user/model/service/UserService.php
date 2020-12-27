@@ -115,7 +115,7 @@ class UserService
             art_assign(202, $e->getMessage());
         }
         //$userInfo['quantity'] = $userInfoQuantity;
-        return 'https://'.$arr_state[0].'/auth='.base64_encode('token='.$userInfo['token'].'&agent='.$agentInfo['id']);
+        return 'https://'.$arr_state[0].'/auth?'.base64_encode('token='.$userInfo['token'].'&agent='.$agentInfo['id']);
     }
 
     private static function makeUserQuantity($userInfo, $agentInfo)
