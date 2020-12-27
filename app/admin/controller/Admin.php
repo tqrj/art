@@ -33,7 +33,22 @@ class Admin
 
     public function change()
     {
-        $params = Request::only(['']);
+        $params = Request::only([
+            'username',
+            'pwd'
+        ]);
+        $medoo = new Medoo();
+        $adminInfo = $medoo->get('admin',['id','username','pwd','salt','token','status'],[
+            'username'=>$params['username'],
+            'status'=>1
+        ]);
+        $adminInfo['username'] = empty($params['username'])?$adminInfo['username']:$params['username'];
+        $adminInfo['pwd'] = empty($params['pwd'])?$adminInfo['pwd']:art_set_password($params['pwd'],$adminInfo['salt']);
+        $pdoDoc = $medoo->update('admin',$adminInfo,['id'=>$adminInfo['id']]);
+        if (!$pdoDoc->rowCount()){
+            art_assign(202,'更新失败');
+        }
+        art_assign(200,'success');
     }
 
 
