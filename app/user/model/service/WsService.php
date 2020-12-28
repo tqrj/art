@@ -27,12 +27,14 @@ class WsService
     protected Response $ws;//$artWsId
     protected $userInfo = null;
     protected Medoo $medoo;
+    protected $roomInfo;
 
     public function __construct()
     {
         $this->userInfo = Context::get('authInfo');
         $this->ws = Context::get('response');
         $this->medoo = new Medoo();
+        $this->roomInfo = $this->medoo->get('room', '*', ['agent_id' => $this->userInfo['agent_id']]);
     }
 
     /**
@@ -162,7 +164,7 @@ class WsService
         $medoo = $this->medoo;
         $userInfo = $this->userInfo;
         $userInfo['quantity'] = (float)$medoo->get('user_quantity','quantity',['user_id'=>$userInfo['id'],'agent_id'=>$userInfo['agent_id']]);
-        $roomInfo = $medoo->get('room', '*', ['agent_id' => $userInfo['agent_id']]);
+//        $roomInfo = $medoo->get('room', '*', ['agent_id' => $userInfo['agent_id']]);
         $class = '';
         switch ($expMsg[2]) {
             case '一定':
@@ -198,7 +200,7 @@ class WsService
         }
         $CarbonIssue = Carbon::parse(art_d(), 'Asia/Shanghai');
         $diff = $CarbonIssue->diffInRealSeconds($nowLottery[1]);
-        if ((int)$diff <= (int)$roomInfo['closeTime']) {
+        if ((int)$diff <= (int)$this->roomInfo['closeTime']) {
             art_assign_ws(200,$userInfo['nickname'].': 当前已经封盘',[],$userInfo['agent_id']);
             return false;
         }
@@ -296,7 +298,7 @@ class WsService
         $medoo = $this->medoo;
         $userInfo =$this->userInfo;
         $userInfo['quantity'] = (float)$medoo->get('user_quantity','quantity',['user_id'=>$userInfo['id'],'agent_id'=>$userInfo['agent_id']]);
-        $roomInfo = $medoo->get('room', '*', ['agent_id' => $userInfo['agent_id']]);
+//        $roomInfo = $medoo->get('room', '*', ['agent_id' => $userInfo['agent_id']]);
         $reCode = (int)$matches[1];
         $redis = \art\db\Redis::getInstance()->getConnection();
         $issue = $redis->get(RoomService::ROOM_ISSUE . $userInfo['agent_id']);
@@ -307,7 +309,7 @@ class WsService
         }
         $CarbonIssue = Carbon::parse(art_d(), 'Asia/Shanghai');
         $diff = $CarbonIssue->diffInRealSeconds($nowLottery[1]);
-        if ((int)$diff <= (int)$roomInfo['closeTime']) {
+        if ((int)$diff <= (int)$this->roomInfo['closeTime']) {
             //echo '退单:已封盘' . PHP_EOL;
             art_assign_ws(200,$userInfo['nickname'].' 退单失败:当前已封盘','',$userInfo['agent_id']);
             return false;
@@ -320,7 +322,7 @@ class WsService
                 'issue'=>$issue
             ]);
         $diff = $CarbonIssue->diffInRealSeconds($orderInfo['create_time']);
-        if ((int)$diff >= (int)$roomInfo['reTime']) {
+        if ((int)$diff >= (int)$this->roomInfo['reTime']) {
             echo '退单:已超时' . PHP_EOL;
             art_assign_ws(200,$userInfo['nickname'].' 退单失败:已经超过退单时间','',$userInfo['agent_id']);
             return false;

@@ -242,7 +242,7 @@ class UserService
         $result = $medoo->select('points','*',[
             'agent_id'=>$userInfo['agent_id'],
             'user_id'=>$userInfo['id'],
-            'type'=>1,
+            'type'=>[1,-1],
             'LIMIT'=>[$params['page'],$params['limit']],
             'ORDER'=>['id'=>'DESC']
             ]);
