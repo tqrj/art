@@ -17,7 +17,7 @@ class PromoteService
     {
         $agentInfo = Context::get('authInfo');
         $medoo = new Medoo();
-        $result = $medoo->select('domain',['id','domain','status','create_time'],['status'=>1]);
+        $result = $medoo->select('domain',['id','domain','status','create_time'],['status'=>1,'ORDER'=>['id'=>'DESC']]);
         array_walk($result,function (&$value,$key) use ($agentInfo)
         {
             $value['domain'].= $agentInfo['code'];

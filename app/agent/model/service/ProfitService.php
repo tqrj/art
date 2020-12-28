@@ -112,7 +112,7 @@ class ProfitService
                 throw new \Exception('更新错误');
             }
             $userQuantity = $medoo->get('user_quantity','quantity', [
-                'id' => $params['id'],
+                'id' => $applyInfo['user_id'],
                 'agent_id' => $agentInfo['id'],
                 'status' => 0
             ]);
