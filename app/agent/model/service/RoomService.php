@@ -282,6 +282,7 @@ class RoomService
                 'o.id',
                 'o.play_code_count',
                 'o.play_site',
+                'o.play_method',
                 'o.quantity',
                 'o.single_quantity',
                 'o.loc_quantity',

@@ -95,7 +95,13 @@ class Agent
             'pass_sec',
             'mobile',
             'pay_card',
-            'expire_time'
+            'expire_time',
+            'closeTime',
+            'reTime',
+            'notice'=>'',
+            'notice_top'=>'',
+            'notice_close'=>'',
+            'notice_help'=>''
         ]);
         art_validate($params,[
             'nickname|用户名称'=>'require|length:6,20',
@@ -103,7 +109,13 @@ class Agent
             'pass_sec|二级密码'=>'require|length:6',
             'mobile|手机号'=>'length:6,11',
             'pay_card|备注信息'=>'length:10,255',
-            'expire_time'=>'require'
+            'expire_time'=>'require',
+            'closeTime|封盘时间'=>'require',
+            'reTime|退单时间'=>'require',
+            'notice|开盘提示'=>'require',
+            'notice_top|顶部提示'=>'require',
+            'notice_close|封盘信息'=>'require',
+            'notice_help|帮助信息'=>'require'
         ]);
         $params['create_time'] = art_d();
         $params['update_time'] = art_d();
