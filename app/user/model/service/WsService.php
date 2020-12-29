@@ -23,6 +23,7 @@ use Swoole\WebSocket\Frame;
  */
 class WsService
 {
+    const WS_HANDEL = 1003;
     const ORDER_REST_INC = 'ORDER_REST_INC';
     protected Response $ws;//$artWsId
     protected $userInfo = null;
@@ -45,6 +46,10 @@ class WsService
     {
         ArtWs::bindUid($this->ws->artWsId,(int)$this->userInfo['id']);
         ArtWs::joinGroup($this->ws->artWsId, $this->userInfo['agent_id']);
+        $data['authInfo'] = Context::get('authInfo');
+        unset($data['authInfo']['openid']);
+        $data['groupSize'] = ArtWs::groupSize($this->userInfo['agent_id']);
+        art_assign_ws(self::WS_HANDEL, '', $data,0,$this->ws->artWsId);
     }
 
     /**

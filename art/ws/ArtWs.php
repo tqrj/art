@@ -214,6 +214,14 @@ class ArtWs
 
     }
 
+    public static function groupSize($groupName)
+    {
+        if (empty(self::$wsGroup[$groupName])){
+            return 0;
+        }
+        return count(self::$wsGroup[$groupName]);
+    }
+
     public static function bindUid($wsId,$uid)
     {
         self::$wsUidTable->set($uid,['wsId'=>$wsId]);
