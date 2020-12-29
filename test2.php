@@ -1,6 +1,10 @@
 <?php
 
-echo strtotime('2020-1-18 19:46:27');
+$heap = new SplMinHeap();
+$heap->insert([22,333]);
+$heap->insert([2,33]);
+$heap->insert([222,3]);
+var_dump($heap->extract()); ;
 /*
 $keys =['key'=>1213];
 $params = ['key'=>121,'key3'=>212,'token'=>'ww'];
