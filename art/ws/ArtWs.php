@@ -107,8 +107,10 @@ class ArtWs
             if ($row['status'] === 1) {
                 return;
             } elseif ($row['type'] === 1) {
-                if (!isset(self::$wsGroup[$row['group']])){
+                if (!is_array(self::$wsGroup[$row['group']])){
                     self::$wsGroup[$row['group']] = [];
+                }elseif (isset(array_flip(self::$wsGroup[$row['group']])[$row['wsId']])){
+                    return;
                 }
                 array_push(self::$wsGroup[$row['group']],$row['wsId']);
                 //self::$wsGroup[$row['group']][$row['wsId']] = $row['wsId'];
