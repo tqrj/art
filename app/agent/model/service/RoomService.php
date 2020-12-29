@@ -272,7 +272,7 @@ class RoomService
     private static function settleOrder($agentId, $issue, $lotteryCode)
     {
         $medoo = new Medoo();
-        $roomInfo = $medoo->get('room', ['id', 'status', 'timerID'], ['agent_id' => $agentId]);
+        $roomInfo = $medoo->get('room', ['id', 'status', 'timerID','whether_water'], ['agent_id' => $agentId]);
         $orderList = $medoo->select('order(o)',
             [
                 '[><]user(u)' => ['o.user_id' => 'id'],
