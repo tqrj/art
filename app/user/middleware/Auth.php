@@ -20,7 +20,7 @@ class Auth
      */
     public static function hand(): bool
     {
-        $passAction = ['auth','new','baseConfig'];
+        $passAction = ['auth','new','old','baseConfig'];
         $action = HttpApp::getActionName();
         if (false !== array_search($action, $passAction)) {
             return true;
