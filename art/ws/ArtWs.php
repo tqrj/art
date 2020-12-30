@@ -119,21 +119,6 @@ class ArtWs
                     art_unset($row['wsId'],self::$wsGroup[$row['group']]);
                     break;
             }
-//            if ($row['status'] === 1) {
-//                return;
-//            } elseif ($row['type'] === 1) {
-//                if (!isset(self::$wsGroup[$row['group']])){
-//                    self::$wsGroup[$row['group']] = [];
-//                }elseif (!isset(array_flip(self::$wsGroup[$row['group']])[$row['wsId']])){
-//                    array_push(self::$wsGroup[$row['group']],$row['wsId']);
-//                }
-//                //self::$wsGroup[$row['group']][$row['wsId']] = $row['wsId'];
-//            } else {
-//                //$key = array_search($row['wsId'], self::$wsGroup[$row['group']]);
-//                //array_splice(self::$wsGroup[$row['group']], $key, 1);
-//                art_unset($row['wsId'],self::$wsGroup[$row['group']]);
-//            }
-
             $row['status'] = 1;
             self::$wsGroupTable->set($poolId, $row);
         }, $poolId);
