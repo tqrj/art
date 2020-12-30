@@ -264,11 +264,11 @@ class UserService
     }
 
 
-    public static function baseConfig()
+    public static function baseConfig($agentId)
     {
-        $userInfo = Context::get('authInfo');
+//        $userInfo = Context::get('authInfo');
         $medoo = new Medoo();
-        $result = $medoo->get('room',['title','notice_top','notice_help','whether_water','whether_closeInfo'],['agent_id'=>$userInfo['agent_id']]);
+        $result = $medoo->get('room',['title','notice_top','notice_help','whether_water','whether_closeInfo'],['agent_id'=>$agentId]);
         return $result;
     }
 }

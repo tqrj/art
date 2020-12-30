@@ -5,6 +5,7 @@ namespace app\user\controller;
 
 use app\user\model\logic\UserLogic;
 use app\user\model\service\UserService;
+use art\request\Request;
 
 /**
  * Class User 用户信息
@@ -62,7 +63,9 @@ class User
 
     public function baseConfig()
     {
-        $result = UserService::baseConfig();
+        $params = Request::only(['agentId']);
+        $params['agentId'] = isset($params['agentId'])?$params['agentId']:0;
+        $result = UserService::baseConfig($params['agentId']);
         art_assign(200,'success',$result);
     }
 
