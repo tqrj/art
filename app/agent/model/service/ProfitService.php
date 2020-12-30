@@ -214,6 +214,11 @@ class ProfitService
                 'status' => 1,
                 'create_time[<>]' => [$item[0], $item[1]]
             ]);
+            $result[$key]['profitCount'] = $medoo->sum('order', 'profit', [
+                'agent_id' => $agentInfo['id'],
+                'status' => 1,
+                'create_time[<>]' => [$item[0], $item[1]]
+            ]);
             $result[$key]['timeStartShow'] = date('n-j', strtotime($item[0]));
             $result[$key]['timeStart'] =  date('Y-m-d', strtotime($item[0]));
             $result[$key]['timeEndShow'] = date('n-j', strtotime($item[1]));
@@ -265,6 +270,11 @@ class ProfitService
                 'create_time[<>]' => [$item[0], $item[1]]
             ]);
             $result[$key]['locQuantityRetCount'] = $medoo->sum('order', 'loc_quantity_ret', [
+                'agent_id' => $agentInfo['id'],
+                'status' => 1,
+                'create_time[<>]' => [$item[0], $item[1]]
+            ]);
+            $result[$key]['profitCount'] = $medoo->sum('order', 'profit', [
                 'agent_id' => $agentInfo['id'],
                 'status' => 1,
                 'create_time[<>]' => [$item[0], $item[1]]
