@@ -287,7 +287,7 @@ class RoomService
                 'o.single_quantity',
                 'o.loc_quantity',
                 'o.line',
-                'o.pay_code',
+                'o.play_code',
                 'o.user_id',
                 'o.agent_id',
                 'u.nickname',
