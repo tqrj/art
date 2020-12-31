@@ -1,6 +1,7 @@
 <?php
 
-var_dump(strpos("12121", '2'));
+echo 1/0;
+//var_dump(strpos("12121", '2'));
 //$arr = [];
 //array_push($arr,1);
 //$arr = array_flip($arr);

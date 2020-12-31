@@ -314,7 +314,7 @@ class RoomService
             isset($quantityTemp[$orderInfo['user_id']])?true:$quantityTemp[$orderInfo['user_id']] = 0;
             $playerTempData['user_quantity'] = (float)$orderInfo['user_quantity'] + $quantityTemp[$orderInfo['user_id']];
             $playerTempData['whether_hit'] = 0;
-            $whetherScore = self::_whetherScore($lotteryCode, $orderInfo['pay_code'], $orderInfo['play_site'], $orderInfo['single_quantity'], $orderInfo['line']);
+            $whetherScore = self::_whetherScore($lotteryCode, $orderInfo['play_code'], $orderInfo['play_site'], $orderInfo['single_quantity'], $orderInfo['line']);
             if ($whetherScore[0] == false) {
                 //没中奖直接滚蛋
                 $medoo->update('order', ['status' => 1, 'update' => 1], ['id' => $orderInfo['id']]);
