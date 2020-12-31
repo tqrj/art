@@ -380,20 +380,23 @@ class RoomService
     /**
      * 是否中奖。如果中奖了就返回true和中奖金额
      * @param $lotteryCode
-     * @param $oderCode
+     * @param $orderCode
      * @param $siteCode
      * @param $singleQuantity
      * @param $line
      * @return array
      */
-    private static function _whetherScore($lotteryCode, $oderCode, $siteCode, $singleQuantity, $line)
+    private static function _whetherScore($lotteryCode, $orderCode, $siteCode, $singleQuantity, $line)
     {
         $result[0] = false;
         $result[1] = 0;
         $hitCode = self::_siteCode($lotteryCode, $siteCode);
-        if (strpos($oderCode, $hitCode) == -1) {
+        echo 'hitCode'.$hitCode.PHP_EOL;
+        echo 'orderCode'.$orderCode.PHP_EOL;
+        if (strpos($orderCode, $hitCode) == -1) {
             return $result;
         }
+        echo '中了'.PHP_EOL;
         $result[0] = true;
         $result[1] = $singleQuantity * (float)$line;
         return $result;
