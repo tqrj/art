@@ -17,13 +17,13 @@ class Room
     public function switchOpen()
     {
         $result = RoomService::switchOpen();
-        art_assign(200,'success',$result);
+        art_assign(200,'房间开启成功',$result);
     }
 
     public function switchClose()
     {
         $result = RoomService::switchClose();
-        art_assign(200,'success',$result);
+        art_assign(200,'房间关闭成功',$result);
     }
 
     public function setRule()

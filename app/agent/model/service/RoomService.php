@@ -223,7 +223,7 @@ class RoomService
             if (empty($lotteryCode) or $lotteryCode == false) {
                 return;
             }
-            $whetherScore = self::_whetherScore($lotteryCode, $orderInfo['issue'], $orderInfo['play_site'], $orderInfo['single_quantity'], $orderInfo['line']);
+            $whetherScore = self::_whetherScore($lotteryCode, $orderInfo['play_code'], $orderInfo['play_site'], $orderInfo['single_quantity'], $orderInfo['line']);
             if ($whetherScore[0] == false) {
                 //没中奖直接滚蛋
                 $medoo->update('order', ['status' => 1, 'update' => 1], ['id' => $orderInfo['id']]);
@@ -287,6 +287,7 @@ class RoomService
                 'o.single_quantity',
                 'o.loc_quantity',
                 'o.line',
+                'o.pay_code',
                 'o.user_id',
                 'o.agent_id',
                 'u.nickname',
@@ -313,7 +314,7 @@ class RoomService
             isset($quantityTemp[$orderInfo['user_id']])?true:$quantityTemp[$orderInfo['user_id']] = 0;
             $playerTempData['user_quantity'] = (float)$orderInfo['user_quantity'] + $quantityTemp[$orderInfo['user_id']];
             $playerTempData['whether_hit'] = 0;
-            $whetherScore = self::_whetherScore($lotteryCode, $issue, $orderInfo['play_site'], $orderInfo['single_quantity'], $orderInfo['line']);
+            $whetherScore = self::_whetherScore($lotteryCode, $orderInfo['pay_code'], $orderInfo['play_site'], $orderInfo['single_quantity'], $orderInfo['line']);
             if ($whetherScore[0] == false) {
                 //没中奖直接滚蛋
                 $medoo->update('order', ['status' => 1, 'update' => 1], ['id' => $orderInfo['id']]);
@@ -393,7 +394,7 @@ class RoomService
         $hitCode = self::_siteCode($lotteryCode, $siteCode);
         echo 'hitCode'.$hitCode.PHP_EOL;
         echo 'orderCode'.$orderCode.PHP_EOL;
-        if (strpos($orderCode, $hitCode) == -1) {
+        if (strpos($orderCode, $hitCode) === false) {
             return $result;
         }
         echo '中了'.PHP_EOL;

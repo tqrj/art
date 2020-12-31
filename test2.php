@@ -1,9 +1,10 @@
 <?php
 
-$arr = [];
-array_push($arr,1);
-$arr = array_flip($arr);
-var_dump($arr);
+var_dump(strpos("12121", '2'));
+//$arr = [];
+//array_push($arr,1);
+//$arr = array_flip($arr);
+//var_dump($arr);
 /*
 $keys =['key'=>1213];
 $params = ['key'=>121,'key3'=>212,'token'=>'ww'];
