@@ -226,7 +226,7 @@ class RoomService
             $whetherScore = self::_whetherScore($lotteryCode, $orderInfo['play_code'], $orderInfo['play_site'], $orderInfo['single_quantity'], $orderInfo['line']);
             if ($whetherScore[0] == false) {
                 //没中奖直接滚蛋
-                $medoo->update('order', ['status' => 1, 'update' => art_d()], ['id' => $orderInfo['id']]);
+                $medoo->update('order', ['whether_hit'=>-1,'status' => 1, 'update_time' => art_d()], ['id' => $orderInfo['id']]);
                 return;
             }
             $medoo->beginTransaction();
