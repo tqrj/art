@@ -372,7 +372,7 @@ class RoomService
             }
             $item['user_quantity'] = $medoo->get('user_quantity', 'quantity', [
                 'user_id' => $item['user_id'],
-                'agent_id' => $item['agent_id']
+                'agent_id' => $agentId
             ]);
             art_assign_ws(self::ROOM_STATUS_SETTLE,'success',$item,0,(int)ArtWs::uidToWsId($item['user_id']));
         });
