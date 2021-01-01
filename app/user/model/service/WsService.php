@@ -362,7 +362,7 @@ class WsService
         }
         $msg  =$userInfo['nickname'].' 退单成功'.PHP_EOL;
         $msg.= '退'.$orderInfo['quantity'].'余'.($userInfo['quantity'] + $orderInfo['quantity']);
-        art_assign_ws(200,[],$msg,$userInfo['agent_id']);
+        art_assign_ws(200,$msg,[],$userInfo['agent_id']);
         return true;
     }
 

@@ -302,7 +302,7 @@ class RoomService
             ]);
 
         $userOrderList = [];
-        $quantityTemp = [];
+//        $quantityTemp = [];
 
         array_walk($orderList, function ($orderInfo) use ($medoo, $issue, $lotteryCode,&$quantityTemp, &$userOrderList) {
             $userOrderList[$orderInfo['user_id']]['nickname'] = $orderInfo['nickname'];
@@ -312,7 +312,7 @@ class RoomService
             $playerTempData['play_site'] = $orderInfo['play_site'];
             $playerTempData['play_method'] = $orderInfo['play_method'];
             isset($quantityTemp[$orderInfo['user_id']])?true:$quantityTemp[$orderInfo['user_id']] = 0;
-            $playerTempData['user_quantity'] = (float)$orderInfo['user_quantity'] + $quantityTemp[$orderInfo['user_id']];
+//            $playerTempData['user_quantity'] = (float)$orderInfo['user_quantity'] + $quantityTemp[$orderInfo['user_id']];
             $playerTempData['whether_hit'] = 0;
             $whetherScore = self::_whetherScore($lotteryCode, $orderInfo['play_code'], $orderInfo['play_site'], $orderInfo['single_quantity'], $orderInfo['line']);
             if ($whetherScore[0] == false) {
@@ -355,9 +355,7 @@ class RoomService
                 return;
             }
             $playerTempData['whether_hit'] = $whetherScore[1];
-            $playerTempData['user_quantity'] += (float)$whetherScore[1];
             $userOrderList[$orderInfo['user_id']][] = $playerTempData;
-            $quantityTemp[$orderInfo['user_id']] +=$whetherScore[1];
         });
         array_walk($userOrderList,function ($item) use ($issue,$lotteryCode,$agentId,$roomInfo,$medoo){
             $item['issue'] = $issue;
@@ -372,6 +370,10 @@ class RoomService
             }else{
                 $item['whether_water'] = 0;
             }
+            $item['user_quantity'] = $medoo->get('user_quantity', 'quantity', [
+                'user_id' => $item['user_id'],
+                'agent_id' => $item['agent_id']
+            ]);
             art_assign_ws(self::ROOM_STATUS_SETTLE,'success',$item,0,(int)ArtWs::uidToWsId($item['user_id']));
         });
         //art_assign_ws(self::ROOM_STATUS_SETTLE, '', $result, $agentId);
@@ -392,12 +394,12 @@ class RoomService
         $result[0] = false;
         $result[1] = 0;
         $hitCode = self::_siteCode($lotteryCode, $siteCode);
-        echo 'hitCode'.$hitCode.PHP_EOL;
-        echo 'orderCode'.$orderCode.PHP_EOL;
+//        echo 'hitCode'.$hitCode.PHP_EOL;
+//        echo 'orderCode'.$orderCode.PHP_EOL;
         if (strpos($orderCode, $hitCode) === false) {
             return $result;
         }
-        echo '中了'.PHP_EOL;
+//        echo '中了'.PHP_EOL;
         $result[0] = true;
         $result[1] = $singleQuantity * (float)$line;
         return $result;
@@ -528,7 +530,7 @@ class RoomService
             art_assign(202, '创建房间信息失败');
         }
         $roomRule['agent_id'] = $agentId;
-        $roomRule['line'] = 97;
+        $roomRule['line'] = 9.7;
         $roomRule['max'] = 1000;
         $roomRule['eat'] = 0;
         $roomRule['eatNum'] = 20;
