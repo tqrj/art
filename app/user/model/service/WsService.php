@@ -255,7 +255,7 @@ class WsService
         $orderData['create_time'] = art_d();
         $orderData['update_time'] = $orderData['create_time'];
         $msg = $userInfo['nickname']." {$issue}期".PHP_EOL.$orderData['play_method'].'-'.$orderData['play_site'].PHP_EOL;
-        $msg.= '组'.$orderData['quantity'].'扣'.$orderData['quantity'].'余'.((float)$userInfo['quantity']-(float)$orderData['quantity']).PHP_EOL;
+        $msg.= '组'.$orderData['play_code_count'].'扣'.$orderData['quantity'].'余'.((float)$userInfo['quantity']-(float)$orderData['quantity']).PHP_EOL;
         $medoo->beginTransaction();
         try {
             $pdoDoc = $medoo->update('user_quantity',[
