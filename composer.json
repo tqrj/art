@@ -5,7 +5,8 @@
         "php": ">=7.4",
         "swoole/ide-helper": "@dev",
         "nesbot/carbon": "^2.42",
-      "ext-redis": "*"
+      "ext-redis": "*",
+      "ext-bcmath": "*"
     },
     "authors": [
         {
