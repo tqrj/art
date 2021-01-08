@@ -123,7 +123,8 @@ class ProfitService
             $medoo->rollBack();
             art_assign(202, $e->getMessage());
         }
-        $wsId = (int)ArtWs::uidToWsId($applyInfo['user_id']);
+        $wsId = ArtWs::uidToWsId((int)$applyInfo['user_id']);
+        echo '通知wsId'.$wsId;
         if ($wsId !== false){
             art_assign_ws(200, 'success', $mark, 0, $wsId);
         }
@@ -168,7 +169,7 @@ class ProfitService
             $medoo->rollBack();
             art_assign(202, $e->getMessage());
         }
-        $wsId = (int)ArtWs::uidToWsId($applyInfo['user_id']);
+        $wsId = ArtWs::uidToWsId((int)$applyInfo['user_id']);
         if ($wsId !== false){
             art_assign_ws(200, 'success', $mark, 0, $wsId);
         }
