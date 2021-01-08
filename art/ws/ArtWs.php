@@ -111,7 +111,8 @@ class ArtWs
                 case 1:
                     if (!isset(self::$wsGroup[$row['group']])){
                         self::$wsGroup[$row['group']] = [];
-                    }elseif (!isset(array_flip(self::$wsGroup[$row['group']])[$row['wsId']])){
+                    }
+                    if (!isset(array_flip(self::$wsGroup[$row['group']])[$row['wsId']])){
                         array_push(self::$wsGroup[$row['group']],$row['wsId']);
                     }
                     break;
