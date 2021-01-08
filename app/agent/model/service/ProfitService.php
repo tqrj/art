@@ -5,6 +5,7 @@ namespace app\agent\model\service;
 
 use art\context\Context;
 use art\db\Medoo;
+use art\ws\ArtWs;
 use Carbon\Carbon;
 
 /**
@@ -122,7 +123,10 @@ class ProfitService
             $medoo->rollBack();
             art_assign(202, $e->getMessage());
         }
-
+        $wsId = (int)ArtWs::uidToWsId($applyInfo['user_id']);
+        if ($wsId !== false){
+            art_assign_ws(200, 'success', $mark, 0, $wsId);
+        }
         return [];
     }
 
@@ -163,6 +167,10 @@ class ProfitService
         } catch (\Exception $e) {
             $medoo->rollBack();
             art_assign(202, $e->getMessage());
+        }
+        $wsId = (int)ArtWs::uidToWsId($applyInfo['user_id']);
+        if ($wsId !== false){
+            art_assign_ws(200, 'success', $mark, 0, $wsId);
         }
         return [];
     }

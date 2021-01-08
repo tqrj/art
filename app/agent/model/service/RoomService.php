@@ -24,7 +24,6 @@ class RoomService
 
     /**
      * @return array
-     * @todo 房间定时开奖算账害没有写
      */
     public static function switchOpen()
     {
@@ -60,7 +59,7 @@ class RoomService
                 Timer::clear($timer_id);
                 return;
             }
-            if ($agent_info['expire_time'] < time()){
+            if ($agent_info['expire_time'] < time()) {
                 echo '代理过期 房间定时器被清除了3';
                 art_assign_ws(200, '房间已关闭', [], $agent_info['id']);
                 Timer::clear($timer_id);
@@ -70,7 +69,7 @@ class RoomService
             //第一次被开启，需要先结清之前的账单，然后 获取即将开奖的号码，以及马上需要开奖的时间 放入table
             //然后定时检查该害差多久开始封盘，以及是不是已经开奖，已经开奖了就马上算账！
             if (!$roomInfo['timerID']) {
-                echo '第一次开启补单'.PHP_EOL;
+                echo '第一次开启补单' . PHP_EOL;
                 $medoo->update('room', ['timerID' => $timer_id], ['id' => $roomInfo['id']]);
                 self::repairOrder($agent_info['id']);//补单处理
                 art_assign_ws(200, '房间已开启', [], $agent_info['id']);
@@ -78,7 +77,7 @@ class RoomService
             }
             $nowLottery = Lottery::getCode(Lottery::LOTTERY_TYPE_now);
             if (!is_array($nowLottery) or count($nowLottery) != 5) {
-                echo '开奖信息错误'.PHP_EOL;
+                echo '开奖信息错误' . PHP_EOL;
                 return;
             }
             $redis = \art\db\Redis::getInstance()->getConnection();
@@ -99,8 +98,8 @@ class RoomService
                 if ($bool) {
                     //echo '成功封盘'.$issue.PHP_EOL;
                     art_assign_ws(200, $roomInfo['notice_close'], [], $agent_info['id']);
-                    if ($roomInfo['whether_closeInfo'] == 1){
-                        self::closeNotes($agent_info['id'],$issue);//F盘清账通知消息
+                    if ($roomInfo['whether_closeInfo'] == 1) {
+                        self::closeNotes($agent_info['id'], $issue);//F盘清账通知消息
                     }
 
                 }
@@ -122,7 +121,7 @@ class RoomService
                 \art\db\Redis::getInstance()->close($redis);
                 return;
             }
-            echo '开奖可能出现问题' . $issue.PHP_EOL;
+            echo '开奖可能出现问题' . $issue . PHP_EOL;
             \art\db\Redis::getInstance()->close($redis);
         }, $agentInfo, $medoo);
         return [];
@@ -133,13 +132,13 @@ class RoomService
      * @param $agentId
      * @param $issue
      */
-    private static function closeNotes($agentId,$issue)
+    private static function closeNotes($agentId, $issue)
     {
         $medoo = new Medoo();
         $userList = $medoo->select('user_quantity(q)',
             [
                 '[><]user(u)' => ['q.user_id' => 'id'],
-                '[><]order(o)'=>['q.user_id'=>'user_id']
+                '[><]order(o)' => ['q.user_id' => 'user_id']
             ],
             [
                 'u.id',
@@ -147,15 +146,14 @@ class RoomService
                 'u.nickname'
             ],
             [
-                'GROUP'=>'u.id',
+                'GROUP' => 'u.id',
                 'o.agent_id' => $agentId,
                 'o.issue' => $issue,
                 'o.status' => 0,
                 'u.status' => 1,
-                'q.status'=>1
+                'q.status' => 1
             ]);
-        echo 'F盘取到的用户数量'.count($userList);
-        array_walk($userList,function ($userInfo) use($medoo,$agentId,$issue,&$result){
+        array_walk($userList, function ($userInfo) use ($medoo, $agentId, $issue, &$result) {
 
             $userOrderList = $medoo->select('order(o)',
                 [
@@ -170,12 +168,12 @@ class RoomService
                     'o.quantity',
                 ],
                 [
-                    'u.id'=>$userInfo['id'],
+                    'u.id' => $userInfo['id'],
                     'o.agent_id' => $agentId,
                     'o.issue' => $issue,
                     'o.status' => 0,
                     'u.status' => 1,
-                    'ORDER'=>['o.play_method'=>'ASC']
+                    'ORDER' => ['o.play_method' => 'ASC']
                 ]);
 
             $orderResultData = [];
@@ -183,25 +181,25 @@ class RoomService
             $orderResultData['nickname'] = $userInfo['nickname'];
             $orderResultData['user_id'] = $userInfo['id'];
             $orderSumQuantity = 0;
-            array_walk($userOrderList,function ($orderInfo) use (&$orderResultData,&$orderSumQuantity){
-                   $temp['play_method'] = $orderInfo['play_method'];
-                   $temp['play_site'] = $orderInfo['play_site'];
-                   $temp['play_code'] = $orderInfo['play_code'];
-                   $temp['single_quantity'] = $orderInfo['single_quantity'];
-                   $temp['quantity'] = $orderInfo['quantity'];
-                   $orderResultData['orderList'][] = $temp;
-                   $orderSumQuantity += (float)$orderInfo['quantity'];
+            array_walk($userOrderList, function ($orderInfo) use (&$orderResultData, &$orderSumQuantity) {
+                $temp['play_method'] = $orderInfo['play_method'];
+                $temp['play_site'] = $orderInfo['play_site'];
+                $temp['play_code'] = $orderInfo['play_code'];
+                $temp['single_quantity'] = $orderInfo['single_quantity'];
+                $temp['quantity'] = $orderInfo['quantity'];
+                $orderResultData['orderList'][] = $temp;
+                $orderSumQuantity += (float)$orderInfo['quantity'];
             });
             //用户历史总流水
-            $orderResultData['past_sum_quantity'] = $medoo->sum('order','quantity', [
-                'agent_id'=>$agentId,
-                'user_id'=>$userInfo['id'],
-                'status'=>[1,0]
+            $orderResultData['past_sum_quantity'] = $medoo->sum('order', 'quantity', [
+                'agent_id' => $agentId,
+                'user_id' => $userInfo['id'],
+                'status' => [1, 0]
             ]);
             $orderResultData['user_id'] = $userInfo['id'];
             $orderResultData['order_sum_quantity'] = $orderSumQuantity;
             $orderResultData['user_quantity'] = $userInfo['quantity'];
-            art_assign_ws(self::ROOM_STATUS_CLOSE, '', $orderResultData, 0,ArtWs::uidToWsId($userInfo['id']));
+            art_assign_ws(self::ROOM_STATUS_CLOSE, '', $orderResultData, 0, (int)ArtWs::uidToWsId($userInfo['id']));
             //$result['orderResultList'][] = $orderResultData;
         });
 
@@ -226,15 +224,21 @@ class RoomService
             $whetherScore = self::_whetherScore($lotteryCode, $orderInfo['play_code'], $orderInfo['play_site'], $orderInfo['single_quantity'], $orderInfo['line']);
             if ($whetherScore[0] == false) {
                 //没中奖直接滚蛋
-                $medoo->update('order', ['lottery_code'=>$lotteryCode,'whether_hit'=>-1,'status' => 1, 'update_time' => art_d()], ['id' => $orderInfo['id']]);
+                $medoo->update('order',
+                    [
+                        'profit'=>$orderInfo['quantity'],
+                        'lottery_code' => $lotteryCode,
+                        'whether_hit' => -1,
+                        'status' => 1,
+                        'update_time' => art_d()
+                    ],
+                    ['id' => $orderInfo['id']]);
                 return;
             }
             $medoo->beginTransaction();
             try {
-//                $orderData['profit'] = $orderInfo['quantity'] - $whetherScore[1];
-                $orderData['profit'] = bcsub($orderInfo['quantity'] , $whetherScore[1],4);
-//                $orderData['loc_quantity_ret'] = $whetherScore[1] / $orderInfo['quantity'] * $orderInfo['loc_quantity'];
-                $orderData['loc_quantity_ret'] = bcmul(bcdiv($whetherScore[1],$orderInfo['quantity'],4),$orderInfo['loc_quantity'],4);
+                $orderData['profit'] = bcsub($orderInfo['quantity'], $whetherScore[1], 4);
+                $orderData['loc_quantity_ret'] = bcmul(bcdiv($whetherScore[1], $orderInfo['quantity'], 4), $orderInfo['loc_quantity'], 4);
                 $orderData['whether_hit'] = 1;
                 $orderData['status'] = 1;
                 $pdoDoc = $medoo->update('order', $orderData, ['id' => $orderInfo['id']]);
@@ -255,7 +259,7 @@ class RoomService
                 if (!$pdoDoc->rowCount()) {
                     throw new \Exception('更新用户数据错误');
                 }
-                QuantityLogService::push($orderInfo['user_id'], $orderInfo['agent_id'], $orderData['loc_quantity_ret'], $userQuantity+$orderData['loc_quantity_ret'],'开盘补单 订单ID' . $orderInfo['id']);
+                QuantityLogService::push($orderInfo['user_id'], $orderInfo['agent_id'], $orderData['loc_quantity_ret'], $userQuantity + $orderData['loc_quantity_ret'], '开盘补单 订单ID' . $orderInfo['id']);
                 $medoo->commit();
             } catch (\Exception $e) {
                 echo $e->getMessage();
@@ -274,7 +278,7 @@ class RoomService
     private static function settleOrder($agentId, $issue, $lotteryCode)
     {
         $medoo = new Medoo();
-        $roomInfo = $medoo->get('room', ['id', 'status', 'timerID','whether_water'], ['agent_id' => $agentId]);
+        $roomInfo = $medoo->get('room', ['id', 'status', 'timerID', 'whether_water'], ['agent_id' => $agentId]);
         $orderList = $medoo->select('order(o)',
             [
                 '[><]user(u)' => ['o.user_id' => 'id'],
@@ -300,35 +304,41 @@ class RoomService
                 'o.issue' => $issue,
                 'o.status' => 0,
                 'u.status' => 1,
-                'ORDER'=>['u.id'=>'ASC']
+                'ORDER' => ['u.id' => 'ASC']
             ]);
 
         $userOrderList = [];
 //        $quantityTemp = [];
 
-        array_walk($orderList, function ($orderInfo) use ($medoo, $issue, $lotteryCode,&$quantityTemp, &$userOrderList) {
+        array_walk($orderList, function ($orderInfo) use ($medoo, $issue, $lotteryCode, &$userOrderList) {
             $userOrderList[$orderInfo['user_id']]['nickname'] = $orderInfo['nickname'];
             $userOrderList[$orderInfo['user_id']]['user_id'] = $orderInfo['user_id'];
             $playerTempData['order_quantity'] = $orderInfo['quantity'];
             $playerTempData['play_code_count'] = $orderInfo['play_code_count'];
             $playerTempData['play_site'] = $orderInfo['play_site'];
             $playerTempData['play_method'] = $orderInfo['play_method'];
-            isset($quantityTemp[$orderInfo['user_id']])?true:$quantityTemp[$orderInfo['user_id']] = 0;
-//            $playerTempData['user_quantity'] = (float)$orderInfo['user_quantity'] + $quantityTemp[$orderInfo['user_id']];
             $playerTempData['whether_hit'] = 0;
             $whetherScore = self::_whetherScore($lotteryCode, $orderInfo['play_code'], $orderInfo['play_site'], $orderInfo['single_quantity'], $orderInfo['line']);
             if ($whetherScore[0] == false) {
                 //没中奖直接滚蛋
-                $medoo->update('order', ['lottery_code'=>$lotteryCode,'whether_hit'=>-1,'status' => 1, 'update_time' => art_d()], ['id' => $orderInfo['id']]);
+                $medoo->update('order',
+                    [
+                        'profit'=>$orderInfo['quantity'],
+                        'lottery_code' => $lotteryCode,
+                        'whether_hit' => -1,
+                        'status' => 1,
+                        'update_time' => art_d()
+                    ],
+                    ['id' => $orderInfo['id']]);
                 $userOrderList[$orderInfo['user_id']][] = $playerTempData;
                 return;
             }
             $medoo->beginTransaction();
             try {
 
-                $orderData['profit'] = bcsub($orderInfo['quantity'] , $whetherScore[1],4);
+                $orderData['profit'] = bcsub($orderInfo['quantity'], $whetherScore[1], 4);
 //                $orderData['loc_quantity_ret'] = $whetherScore[1] / $orderInfo['quantity'] * $orderInfo['loc_quantity'];
-                $orderData['loc_quantity_ret'] = bcmul(bcdiv($whetherScore[1],$orderInfo['quantity'],4),$orderInfo['loc_quantity'],4);
+                $orderData['loc_quantity_ret'] = bcmul(bcdiv($whetherScore[1], $orderInfo['quantity'], 4), $orderInfo['loc_quantity'], 4);
                 $orderData['whether_hit'] = 1;
                 $orderData['status'] = 1;
                 $orderData['lottery_code'] = $lotteryCode;
@@ -350,7 +360,7 @@ class RoomService
                 if (!$pdoDoc->rowCount()) {
                     throw new \Exception('更新用户数据错误');
                 }
-                QuantityLogService::push($orderInfo['user_id'], $orderInfo['agent_id'], $orderData['loc_quantity_ret'], $userQuantity + $orderData['loc_quantity_ret'],'封盘结算 订单ID' . $orderInfo['id']);
+                QuantityLogService::push($orderInfo['user_id'], $orderInfo['agent_id'], $orderData['loc_quantity_ret'], $userQuantity + $orderData['loc_quantity_ret'], '封盘结算 订单ID' . $orderInfo['id']);
                 $medoo->commit();
             } catch (\Exception $e) {
                 echo $e->getMessage();
@@ -360,27 +370,27 @@ class RoomService
             $playerTempData['whether_hit'] = $whetherScore[1];
             $userOrderList[$orderInfo['user_id']][] = $playerTempData;
         });
-        array_walk($userOrderList,function ($item) use ($issue,$lotteryCode,$agentId,$roomInfo,$medoo){
+        array_walk($userOrderList, function ($item) use ($issue, $lotteryCode, $agentId, $roomInfo, $medoo) {
             $item['issue'] = $issue;
             $item['lottery'] = $lotteryCode;
-            if ($roomInfo['whether_water'] == 1){
+            if ($roomInfo['whether_water'] == 1) {
                 $item['whether_water'] = 1;
-                $item['past_sum_quantity'] = $medoo->sum('order','quantity', [
-                    'agent_id'=>$agentId,
-                    'user_id'=>$item['user_id'],
-                    'status'=>[1,0]
+                $item['past_sum_quantity'] = $medoo->sum('order', 'quantity', [
+                    'agent_id' => $agentId,
+                    'user_id' => $item['user_id'],
+                    'status' => [1, 0]
                 ]);
-            }else{
+            } else {
                 $item['whether_water'] = 0;
             }
             $item['user_quantity'] = $medoo->get('user_quantity', 'quantity', [
                 'user_id' => $item['user_id'],
                 'agent_id' => $agentId
             ]);
-            art_assign_ws(self::ROOM_STATUS_SETTLE,'success',$item,0,(int)ArtWs::uidToWsId($item['user_id']));
+            art_assign_ws(self::ROOM_STATUS_SETTLE, 'success', $item, 0, (int)ArtWs::uidToWsId($item['user_id']));
         });
         //art_assign_ws(self::ROOM_STATUS_SETTLE, '', $result, $agentId);
-        return ;
+        return;
     }
 
     /**
@@ -404,7 +414,7 @@ class RoomService
         }
 //        echo '中了'.PHP_EOL;
         $result[0] = true;
-        $result[1] = bcmul($singleQuantity,(float)$line,4);
+        $result[1] = bcmul($singleQuantity, (float)$line, 4);
         return $result;
     }
 
@@ -441,7 +451,7 @@ class RoomService
             art_assign(202, '房间已经被关闭');
         }
         if ($roomInfo['status']) {
-            $bool = $medoo->update('room', ['status' => 0,'timerID'=>0], ['agent_id' => $agentInfo['id']])->rowCount();
+            $bool = $medoo->update('room', ['status' => 0, 'timerID' => 0], ['agent_id' => $agentInfo['id']])->rowCount();
             if (!$bool) {
                 art_assign(202, '更新数据出错');
             }
@@ -459,13 +469,13 @@ class RoomService
         }
         $medoo->beginTransaction();
         try {
-            array_walk($params,function ($item,$key,Medoo $medoo) use ($agentInfo) {
+            array_walk($params, function ($item, $key, Medoo $medoo) use ($agentInfo) {
                 $pdoDoc = $medoo->update('room_rule', $item, ['agent_id' => $agentInfo['id'], 'class' => $key + 1]);
-            },$medoo);
+            }, $medoo);
             $medoo->commit();
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             $medoo->rollBack();
-            art_assign(202,$e->getMessage());
+            art_assign(202, $e->getMessage());
         }
         return [];
     }
@@ -554,7 +564,7 @@ class RoomService
     public static function webSiteList()
     {
         $medoo = new Medoo();
-        $result = $medoo->select('website','*',['status'=>1]);
+        $result = $medoo->select('website', '*', ['status' => 1]);
         return $result;
     }
 }
