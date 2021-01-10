@@ -29,7 +29,7 @@ class PostService
                 'whether_hit',
                 'began_quantity',
                 'after_quantity',
-                'after_quantity+loc_quantity_ret+fly_quantity_ret(end_quantity)',
+                'end_quantity'=>Medoo::raw('after_quantity+loc_quantity_ret+fly_quantity_ret'),
                 'status',
             ],
             [
