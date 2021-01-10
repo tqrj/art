@@ -99,7 +99,8 @@ class ProfitService
         try {
             $pdoDoc = $medoo->update('user_quantity', ['quantity[+]' => $applyInfo['quantity']], [
                 'user_id' => $applyInfo['user_id'],
-                'agent_id' => $agentInfo['id']
+                'agent_id' => $agentInfo['id'],
+                'status' => 0
             ]);
             if (!$pdoDoc->rowCount()) {
                 throw new \Exception($pdoDoc->errorInfo());
@@ -125,7 +126,7 @@ class ProfitService
         }
         $wsId = ArtWs::uidToWsId((int)$applyInfo['user_id']);
         if ($wsId !== false){
-            art_assign_ws(200, $mark,[], 0, (int)$wsId);
+            art_assign_ws(200, $mark.':'.$applyInfo['quantity'],[], 0, (int)$wsId);
         }
         return [];
     }

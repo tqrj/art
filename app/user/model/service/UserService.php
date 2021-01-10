@@ -97,6 +97,9 @@ class UserService
                     'agent_id' => $agentInfo['id'],
                     'status' => 1
                 ]);
+                if (!empty($userInfoQuantity) && $userInfoQuantity['status'] != 1){
+                    throw new \Exception('用户被封停');
+                }
                 if (empty($userInfoQuantity)) {
                     $userInfoQuantity = self::makeUserQuantity($userInfo, $agentInfo);
                     $pdoDoc = $medoo->insert('user_quantity', $userInfoQuantity);

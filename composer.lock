@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b1ee15101193d57fa284e53b53b2f3ac",
+    "content-hash": "1fc434453dbf04c9bed2821fcdabca59",
     "packages": [
         {
             "name": "nesbot/carbon",
@@ -471,6 +471,48 @@
                 }
             ],
             "time": "2020-09-28T13:05:58+00:00"
+        },
+        {
+            "name": "yi-tin/redis",
+            "version": "V1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tqrj/YiTin-redis.git",
+                "reference": "e2e6ae3cc9d9dc7efa3148eca489572693d05a12"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tqrj/YiTin-redis/zipball/e2e6ae3cc9d9dc7efa3148eca489572693d05a12",
+                "reference": "e2e6ae3cc9d9dc7efa3148eca489572693d05a12",
+                "shasum": ""
+            },
+            "require": {
+                "ext-redis": "*",
+                "php": "^7.4 || ^8.0",
+                "swoole/ide-helper": "@dev"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "YiTin\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MulanPSL-1.0"
+            ],
+            "authors": [
+                {
+                    "name": "一听",
+                    "email": "10880665@qq.com"
+                }
+            ],
+            "description": "swoole-redis-pool",
+            "support": {
+                "issues": "https://github.com/tqrj/YiTin-redis/issues",
+                "source": "https://github.com/tqrj/YiTin-redis/tree/V1.0"
+            },
+            "time": "2021-01-09T10:05:32+00:00"
         }
     ],
     "packages-dev": [],
@@ -482,7 +524,9 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.4"
+        "php": ">=7.4",
+        "ext-redis": "*",
+        "ext-bcmath": "*"
     },
     "platform-dev": [],
     "plugin-api-version": "2.0.0"

@@ -6,7 +6,8 @@
         "swoole/ide-helper": "@dev",
         "nesbot/carbon": "^2.42",
       "ext-redis": "*",
-      "ext-bcmath": "*"
+      "ext-bcmath": "*",
+        "yi-tin/redis": "^1.0"
     },
     "authors": [
         {
@@ -24,7 +25,5 @@
         "files": [
             "app/functions.php"
         ]
-    },
-    "require-dev": {
     }
 }
