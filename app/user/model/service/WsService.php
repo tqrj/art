@@ -318,7 +318,7 @@ class WsService
         array_walk($expMsg,function ($item)use ($message,&$resMsg){
             $temp ='';
             $this->payOrder($item,$message,$temp);
-            $resMsg.=($temp.'--------');
+            $resMsg.=($temp.PHP_EOL.'--------'.PHP_EOL);
         });
         substr($resMsg,0,strripos($resMsg,'--------'));
         art_assign_ws(200,$resMsg,[],$this->userInfo['agent_id']);
