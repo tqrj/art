@@ -46,8 +46,9 @@ class RoomService
         $redis->del(self::ROOM_ISSUE . $agentInfo['id']);
         \art\db\Redis::getInstance()->close($redis);
         //开启房间定时器
-        Timer::tick(5000, function (int $timer_id, $agent_info, Medoo $medoo) {
+        Timer::tick(10000, function (int $timer_id, $agent_info) {
             //这里不要每次都去查数据库 可以redis 记录一下在等待开奖的期号，然后每次去查服务的当前期号如果不是当前期号了就查该期号的结果
+            $medoo = new Medoo();
             $roomInfo = $medoo->get('room', '*', ['agent_id' => $agent_info['id']]);
             if (!$roomInfo) {
                 echo '房间定时器被清除了1';
