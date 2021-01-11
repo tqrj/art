@@ -70,7 +70,7 @@ class WsService
             return;
         } elseif ($this->checkReOrder($params['message'])) {
             return;
-        } elseif ($this->checkOrder($params['message'])) {
+        } elseif ($this->checkOrderEx($params['message'])) {
             return;
         };
         //if ($params)
