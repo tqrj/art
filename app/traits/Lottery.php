@@ -46,7 +46,7 @@ class Lottery
         if ($data === '识别失败'){
             return [];
         }
-        $temps = explode('||||',(string)$data);
+        $temps = explode('rn',(string)$data);
         array_walk($temps,function ($item) use(&$result){
             $temp = explode('<-->',$item);
             if (!is_array($temp) or count($temp) != 9 or $temp[0] != 1){
