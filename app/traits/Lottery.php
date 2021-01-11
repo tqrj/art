@@ -40,7 +40,6 @@ class Lottery
             echo $client->errMsg;
             return [];
         }
-        //$data = urldecode(mb_substr($data,4));
         $data = iconv("gb2312//IGNORE","utf-8",mb_substr($data,4));
         $temps = explode('rn',(string)$data);
         array_walk($temps,function ($item) use(&$result){
