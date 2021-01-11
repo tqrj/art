@@ -48,7 +48,7 @@ class Lottery
         }
         $temps = explode('||||',(string)$data);
         array_walk($temps,function ($item) use(&$result){
-            $temp = explode('<-8888->',$item);
+            $temp = explode('<-->',$item);
             if (!is_array($temp) or count($temp) != 9 or $temp[0] != 1){
                 return;
             }
