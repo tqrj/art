@@ -43,6 +43,10 @@ class Lottery
         }
         //$data = urldecode(mb_substr($data,4));
         $data = iconv("gb2312//IGNORE","utf-8",mb_substr($data,4));
+        $inSet = strpos($data,'N');
+        if ($inSet === 0){
+            $data = substr($data,1,strlen($data)-1);
+        }
         if ($data === '识别失败'){
             return [];
         }

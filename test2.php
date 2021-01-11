@@ -1,6 +1,8 @@
 <?php
 $str='qqqqqaaaacccqqqq';
-echo substr($str,0,strripos($str,'qqqq'));
+//echo iconv('GB2312','UTF-8',$str);
+var_dump(strpos($str,'qww'));
+echo substr($str,strpos($str,'q') + 1,strlen($str)-1);
 
 
 //
