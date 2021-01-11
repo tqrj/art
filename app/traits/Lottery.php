@@ -32,7 +32,6 @@ class Lottery
             echo "connect failed. Error: {$client->errCode}\n";
             return false;
         }
-        $str = urlencode($str);
         $len  = pack('i',strlen($str)+4);
         $client->send($len.$str);
         $data = $client->recv();
@@ -43,13 +42,6 @@ class Lottery
         }
         //$data = urldecode(mb_substr($data,4));
         $data = iconv("gb2312//IGNORE","utf-8",mb_substr($data,4));
-        $inSet = strpos($data,'N');
-        if ($inSet === 0){
-            $data = substr($data,1,strlen($data)-1);
-        }
-        if ($data === '识别失败'){
-            return [];
-        }
         $temps = explode('rn',(string)$data);
         array_walk($temps,function ($item) use(&$result){
             $temp = explode('<-->',$item);
@@ -83,11 +75,11 @@ class Lottery
             return false;
         }
         if ($type  == self::LOTTERY_TYPE_OLD){
-            $str = urlencode(self::LOTTERY_TYPE_OLD);
+            $str =self::LOTTERY_TYPE_OLD;
         }elseif ($type == self::LOTTERY_TYPE_now){
-            $str = urlencode(self::LOTTERY_TYPE_now);
+            $str = self::LOTTERY_TYPE_now;
         }elseif ($type == self::LOTTERY_TYPE_check){
-            $str = urlencode(self::LOTTERY_TYPE_check.'|'.$code);
+            $str =self::LOTTERY_TYPE_check.'|'.$code;
         }
         $len  = pack('i',strlen($str)+4);
         $client->send($len.$str);
