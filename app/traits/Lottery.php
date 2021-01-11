@@ -18,6 +18,7 @@ class Lottery
      */
     public static function parseExp($str)
     {
+        $result = [];
         $client = new Client(SWOOLE_SOCK_TCP);
         $client->set([
             'open_length_check'     => true,
@@ -34,21 +35,25 @@ class Lottery
         $str = urlencode($str);
         $len  = pack('i',strlen($str)+4);
         $client->send($len.$str);
-        $result = $client->recv();
+        $data = $client->recv();
         $client->close();
-        if ($result == ''){
+        if ($data == ''){
             echo $client->errMsg;
-            return false;
+            return [];
         }
-        //$result = urldecode(mb_substr($result,4));
-        $result = iconv("gb2312//IGNORE","utf-8",mb_substr($result,4));
-        if ($result === '识别失败'){
-            return false;
+        //$data = urldecode(mb_substr($data,4));
+        $data = iconv("gb2312//IGNORE","utf-8",mb_substr($data,4));
+        if ($data === '识别失败'){
+            return [];
         }
-        $result = explode('<-8888->',(string)$result);
-        if (!is_array($result) or count($result) != 9 or $result[0] != 1){
-            return false;
-        }
+        $temps = explode('||||',(string)$data);
+        array_walk($temps,function ($item) use(&$result){
+            $temp = explode('<-8888->',$item);
+            if (!is_array($temp) or count($temp) != 9 or $temp[0] != 1){
+                return;
+            }
+            $result[] = $temp;
+        });
         return $result;
     }
 
