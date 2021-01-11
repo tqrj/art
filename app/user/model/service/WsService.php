@@ -311,16 +311,21 @@ class WsService
         $CarbonIssue = Carbon::parse(art_d(), 'Asia/Shanghai');
         $diff = $CarbonIssue->diffInRealSeconds($nowLottery[1]);
         if ((int)$diff <= (int)$this->roomInfo['closeTime']) {
-            art_assign_ws(200,$this->userInfo['nickname'].': 当前已经封盘',[],$userInfo['agent_id']);
+            art_assign_ws(200,$this->userInfo['nickname'].': 当前已经封盘',[],$this->userInfo['agent_id']);
             return false;
         }
-        array_walk($expMsg,function ($item)use ($message){
-            $this->payOrder($item,$message);
+        $resMsg = '';
+        array_walk($expMsg,function ($item)use ($message,&$resMsg){
+            $temp ='';
+            $this->payOrder($item,$message,$temp);
+            $resMsg.=($temp.'--------');
         });
+        substr($resMsg,0,strripos($resMsg,'--------'));
+        art_assign_ws(200,$resMsg,[],$this->userInfo['agent_id']);
     }
 
 
-    private function payOrder(array $expMsg, $message)
+    private function payOrder(array $expMsg, $message,&$resMsg)
     {
         $medoo = $this->medoo;
         $userInfo = $this->userInfo;
@@ -368,25 +373,27 @@ class WsService
         if (empty($roomRule)) {
             return false;
         }
+        $resMsg = $userInfo['nickname']." {$issue}期".PHP_EOL.$expMsg[2].'-'.$expMsg[3].PHP_EOL;
+        $resMsg.= '组'.$expMsg[5].'扣'.$expMsg[7].'余'.((float)$userInfo['quantity']-(float)$expMsg[7]).PHP_EOL;
         if ($roomRule['status'] != 1){
-            art_assign_ws(200,$userInfo['nickname'].': 暂不接收该玩法',[],$userInfo['agent_id']);
+            $resMsg.='暂不接收该玩法';
             return false;
         }
         if ($roomRule['max'] < $expMsg[6]){
-            art_assign_ws(200,$userInfo['nickname'].': 金额无效 单注金额超出'.$roomRule['max'],[],$userInfo['agent_id']);
+            $resMsg.='金额无效 单注金额超出'.$roomRule['max'];
             return false;
         }
         if (!$this->asDecimal($expMsg[6],$roomRule['decimal'])){
-            art_assign_ws(200,$userInfo['nickname'].': 金额无效',[],$userInfo['agent_id']);
+            $resMsg.='金额无效';
             return false;
         }
 
         if ($userInfo['quantity'] < (float)$expMsg[7]){
-            art_assign_ws(200,$userInfo['nickname'].' 账户积分不足:'.$userInfo['quantity'],[],$userInfo['agent_id']);
+            $resMsg.='账户积分不足:'.$userInfo['quantity'];
             return false;
         }
         $temp = 5 + strlen($userInfo['agent_id']);
-        $orderData['orderNo'] = $issue . substr(time(), $temp) .mt_rand(100,999). $userInfo['agent_id'];
+        $orderData['orderNo'] = $issue . substr(time(), $temp) . $userInfo['agent_id'].mt_rand(100,999);
         $orderData['game'] = 'hn5f';
         $orderData['user_id'] = $userInfo['id'];
         $orderData['agent_id'] = $userInfo['agent_id'];
@@ -411,8 +418,6 @@ class WsService
         $orderData['update_time'] = $orderData['create_time'];
         $orderData['began_quantity'] = $userInfo['quantity'];
         $orderData['after_quantity'] = bcsub($userInfo['quantity'],$orderData['quantity'],4);
-        $msg = $userInfo['nickname']." {$issue}期".PHP_EOL.$orderData['play_method'].'-'.$orderData['play_site'].PHP_EOL;
-        $msg.= '组'.$orderData['play_code_count'].'扣'.$orderData['quantity'].'余'.((float)$userInfo['quantity']-(float)$orderData['quantity']).PHP_EOL;
         $medoo->beginTransaction();
         try {
             $pdoDoc = $medoo->update('user_quantity',[
@@ -432,12 +437,10 @@ class WsService
             $medoo->commit();
         }catch (\Exception $e){
             $medoo->rollBack();
-            $msg.= '【下单失败】';
-            art_assign_ws(200,$msg,[],$userInfo['agent_id']);
+            $resMsg.= '【下单失败】';
             return false;
         }
-        $msg.= '退单请发送:退'.$orderData['reset_code'];
-        art_assign_ws(200,$msg,[],$userInfo['agent_id']);
+        $resMsg.= '退单请发送:退'.$orderData['reset_code'];
         return true;
     }
 

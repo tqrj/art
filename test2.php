@@ -1,24 +1,28 @@
 <?php
+$str='qqqqqaaaacccqqqq';
+echo substr($str,0,strripos($str,'qqqq'));
 
-class cc{
 
-}
-
-class qq{
-    public cc $cc;
-    public function __call($name, $arguments)
-    {
-        echo $name;
-        // TODO: Implement __call() method.
-    }
-
-    public function qw()
-    {
-        var_dump(!empty($this->cc)?true:false);
-    }
-}
-
-var_dump(get_class_methods(Redis::class));
+//
+//class cc{
+//
+//}
+//
+//class qq{
+//    public cc $cc;
+//    public function __call($name, $arguments)
+//    {
+//        echo $name;
+//        // TODO: Implement __call() method.
+//    }
+//
+//    public function qw()
+//    {
+//        var_dump(!empty($this->cc)?true:false);
+//    }
+//}
+//
+//var_dump(get_class_methods(Redis::class));
 
 //echo 1/0;
 //var_dump(strpos("12121", '2'));
