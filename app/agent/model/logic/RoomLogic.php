@@ -58,7 +58,8 @@ class RoomLogic
             'notice_top',
             'whether_water',
             'whether_closeInfo',
-            'whether_track'
+            'whether_track',
+            'site_use'
         ]);
         art_validate($params,[
             'title'=>'require',
