@@ -115,7 +115,6 @@ class ProfitService
             $userQuantity = $medoo->get('user_quantity','quantity', [
                 'id' => $applyInfo['user_id'],
                 'agent_id' => $agentInfo['id'],
-                'status' => 0
             ]);
             QuantityLogService::push($applyInfo['user_id'], $applyInfo['agent_id'], $applyInfo['quantity'],$userQuantity, $mark);
             $medoo->commit();
