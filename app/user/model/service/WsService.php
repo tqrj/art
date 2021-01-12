@@ -24,6 +24,7 @@ use Swoole\WebSocket\Frame;
 class WsService
 {
     const WS_HANDEL = 1003;
+    const WS_PAY = 2003;
     const ORDER_REST_INC = 'ORDER_REST_INC';
     protected Response $ws;//$artWsId
     protected $userInfo = null;
@@ -44,7 +45,7 @@ class WsService
      */
     public function joinGroup()
     {
-        ArtWs::bindUid($this->ws->artWsId,(int)$this->userInfo['id']);
+        ArtWs::bindUid($this->ws->artWsId,$this->userInfo['id']);
         ArtWs::joinGroup($this->ws->artWsId, $this->userInfo['agent_id']);
         $data['authInfo'] = Context::get('authInfo');
         unset($data['authInfo']['openid']);
@@ -62,15 +63,15 @@ class WsService
         $data['authInfo'] = Context::get('authInfo');
         unset($data['authInfo']['openid']);
         art_assign_ws(200, htmlspecialchars($params['message']), $data, $this->userInfo['agent_id'],0,$this->ws->artWsId,);
-        if ($this->checkScore($params['message'])) {
+        if ($this->checkScore($params['message'])) { //查分
             return;
-        } elseif ($this->checkPay($params['message'])) {
+        } elseif ($this->checkPay($params['message'])) { //上分
             return;
-        } elseif ($this->checkReBack($params['message'])) {
+        } elseif ($this->checkReBack($params['message'])) { //退分
             return;
-        } elseif ($this->checkReOrder($params['message'])) {
+        } elseif ($this->checkReOrder($params['message'])) { //退单
             return;
-        } elseif ($this->checkOrderEx($params['message'])) {
+        } elseif ($this->checkOrderEx($params['message'])) { //下单
             return;
         };
         //if ($params)
@@ -124,6 +125,7 @@ class WsService
             $params['quantity'] = (float)$matches[2];
             UserService::pay($params);
             art_assign_ws(200, '[' . $this->userInfo['nickname'] . '] 上分受理中', [], $this->userInfo['agent_id']);
+            art_assign_ws(self::WS_PAY, '[' . $this->userInfo['nickname'] . '] 请求上分', [], 0,ArtWs::uidToWsId('agent'.$this->userInfo['agent_id']));
         } catch (HttpException $e) {
             art_assign_ws($e->getStatusCode(), $e->getMessage(), [], $this->userInfo['agent_id']);
         }

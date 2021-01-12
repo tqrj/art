@@ -72,7 +72,25 @@ class PlayerService
             'LIMIT'=> [$params['page'], $params['limit']],
             'ORDER'=>['id'=>'DESC']
         ];
-        return $medoo->select('order', '*', $map);
+        return $medoo->select('order',
+        [
+            'game',
+            'issue',
+            'orderNo',
+            'reset_code',
+            'play_method',
+            'play_code',
+            'play_site',
+            'quantity',
+            'single_quantity',
+            'lottery_code',
+            'line',
+            'whether_hit',
+            'began_quantity',
+            'after_quantity',
+            'end_quantity'=>Medoo::raw('after_quantity+loc_quantity_ret+fly_quantity_ret'),
+            'status',
+        ], $map);
     }
 
     public static function quantityLog($params)

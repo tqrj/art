@@ -15,6 +15,7 @@ class Ws
     {
         $ws = Context::get('response');
         $authInfo = Context::get('authInfo');
+        ArtWs::bindUid($ws->artWsId,'agent'.$authInfo['id']);
         ArtWs::joinGroup($ws->artWsId, $authInfo['id']);
     }
 }
