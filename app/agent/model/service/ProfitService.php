@@ -201,36 +201,15 @@ class ProfitService
             $minCar->lt($maxCar) ? $betArt[$n][1] = $minCar->toDateTimeString() : $betArt[$n][1] = $maxCar->addDay()->toDateTimeString();
             $n += 1;
         } while ($minCar->lt($maxCar));
-        array_walk($betArt, function ($item, $key, Medoo $medoo) use (&$result, $agentInfo) {
-            $result[$key]['orderCount'] = $medoo->count('order', 'id', [
-                'agent_id' => $agentInfo['id'],
-                'create_time[<>]' => [$item[0], $item[1]]
-            ]);
-            $result[$key]['playCodeCount'] = $medoo->sum('order', 'play_code_count', [
-                'agent_id' => $agentInfo['id'],
-                'status' => 1,
-                'create_time[<>]' => [$item[0], $item[1]]
-            ]);
-            $result[$key]['quantityCount'] = $medoo->sum('order', 'quantity', [
-                'agent_id' => $agentInfo['id'],
-                'status' => 1,
-                'create_time[<>]' => [$item[0], $item[1]]
-            ]);
-            $result[$key]['flyQuantityRetCount'] = $medoo->sum('order', 'fly_quantity_ret', [
-                'agent_id' => $agentInfo['id'],
-                'status' => 1,
-                'create_time[<>]' => [$item[0], $item[1]]
-            ]);
-            $result[$key]['locQuantityRetCount'] = $medoo->sum('order', 'loc_quantity_ret', [
-                'agent_id' => $agentInfo['id'],
-                'status' => 1,
-                'create_time[<>]' => [$item[0], $item[1]]
-            ]);
-            $result[$key]['profitCount'] = $medoo->sum('order', 'profit', [
-                'agent_id' => $agentInfo['id'],
-                'status' => 1,
-                'create_time[<>]' => [$item[0], $item[1]]
-            ]);
+        array_walk($betArt, function ($item, $key, Medoo $medoo) use (&$result, $agentInfo,$map) {
+            $map['create_time[<>]'] = [$item[0], $item[1]];
+            $result[$key]['orderCount'] = $medoo->count('order', 'id', $map);
+            $map['status'] = 1;
+            $result[$key]['playCodeCount'] = $medoo->sum('order', 'play_code_count', $map);
+            $result[$key]['quantityCount'] = $medoo->sum('order', 'quantity', $map);
+            $result[$key]['flyQuantityRetCount'] = $medoo->sum('order', 'fly_quantity_ret', $map);
+            $result[$key]['locQuantityRetCount'] = $medoo->sum('order', 'loc_quantity_ret', $map);
+            $result[$key]['profitCount'] = $medoo->sum('order', 'profit', $map);
             $result[$key]['timeStartShow'] = date('n-j', strtotime($item[0]));
             $result[$key]['timeStart'] =  date('Y-m-d', strtotime($item[0]));
             $result[$key]['timeEndShow'] = date('n-j', strtotime($item[1]));
