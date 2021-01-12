@@ -55,7 +55,7 @@ $pidPool->on('workerStart', function ($Pool, int $id) {
                 break;
             } elseif ($frame === false) {
                 ArtWs::delWs($ws);
-                echo "error : " . swoole_last_error() . "\n";
+//                echo "error : " . swoole_last_error() . "\n";
                 break;
             } elseif ($frame->opcode == WEBSOCKET_OPCODE_PING){
                 $pingFrame = new Frame();

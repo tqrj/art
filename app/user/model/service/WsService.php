@@ -453,4 +453,60 @@ class WsService
         }
         return (float)("0.".$result[1]);
     }
+
+    /**
+     * 追码
+     * @param $message
+     * @return bool
+     */
+/*    private function afterCode($message)
+    {
+        $matches = [];
+        $bool = preg_match("#追码|追(\d{1,})期(\S+)#", $message, $matches);
+        if (!$bool) {
+            return false;
+        }
+        if (!$this->roomInfo['status'] or !$this->roomInfo['whether_track']){
+            return false;
+        }
+        $medoo = new Medoo();
+        $data['user_id'] = $this->userInfo['id'];
+        $data['agent_id'] = $this->userInfo['agent_id'];
+        $data['message'] = $matches[2];
+        $data['count'] = $matches[1];
+        $data['status'] = 1;
+        $data['create_time'] = art_d();
+        $pdoDoc = $medoo->insert('after',$data);
+        if (!$pdoDoc->rowCount()){
+            art_assign_ws(200,'追码失败',[],$this->userInfo['agent_id']);
+            return false;
+        }
+        art_assign_ws(200,'追码成功',[],$this->userInfo['agent_id']);
+        return true;
+    }
+
+    private function afterCodeRe($message)
+    {
+        $matches = [];
+        $bool = preg_match("#(取消追码|取消)(\S+)#", $message, $matches);
+        if (!$bool) {
+            return false;
+        }
+        $map = [];
+        if (count($matches) == 3){
+            $map['message'] = $matches[2];
+        }
+        $map['user_id'] = $this->userInfo['id'];
+        $map['agent_id'] = $this->userInfo['agent_id'];
+        $map['status'] = 1;
+        $medoo = new Medoo();
+        $pdoDoc = $medoo->update('after',['status'=>0],$map);
+        if (!$pdoDoc->rowCount()){
+            art_assign_ws(200,'取消失败',[],$this->userInfo['agent_id']);
+            return false;
+        }
+        $mark = count($matches) == 3 ? '取消成功:'.$matches[2]:'全部取消成功';
+        art_assign_ws(200,$mark,[],$this->userInfo['agent_id']);
+        return true;
+    }*/
 }
