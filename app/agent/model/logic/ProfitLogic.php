@@ -80,7 +80,7 @@ class ProfitLogic
 
     public static function profitList()
     {
-
+        return Request::only(['userId']);
     }
 
     public static function profitDetailList()
@@ -88,6 +88,7 @@ class ProfitLogic
         $params = Request::only([
             'timeStart',
             'timeEnd',
+            'userId'
         ]);
         art_validate($params,[
             'timeStart'=>'require',

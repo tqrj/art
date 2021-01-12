@@ -51,7 +51,8 @@ class Profit
 
     public function profitList()
     {
-        $result = ProfitService::profitList();
+        $params = ProfitLogic::profitList();
+        $result = ProfitService::profitList($params);
         art_assign(200,'success',$result);
     }
 
