@@ -113,7 +113,7 @@ class ProfitService
                 throw new \Exception('更新错误');
             }
             $userQuantity = $medoo->get('user_quantity','quantity', [
-                'id' => $applyInfo['user_id'],
+                'user_id' => $applyInfo['user_id'],
                 'agent_id' => $agentInfo['id'],
             ]);
             QuantityLogService::push($applyInfo['user_id'], $applyInfo['agent_id'], $applyInfo['quantity'],$userQuantity, $mark);
