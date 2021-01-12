@@ -100,7 +100,6 @@ class ProfitService
             $pdoDoc = $medoo->update('user_quantity', ['quantity[+]' => $applyInfo['quantity']], [
                 'user_id' => $applyInfo['user_id'],
                 'agent_id' => $agentInfo['id'],
-                'status' => 0
             ]);
             if (!$pdoDoc->rowCount()) {
                 throw new \Exception($pdoDoc->errorInfo());
