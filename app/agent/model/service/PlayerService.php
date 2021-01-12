@@ -111,7 +111,7 @@ class PlayerService
             'LIMIT'=> [$params['page'], $params['limit']],
             'ORDER'=>['id'=>'DESC']
         ];
-        return $medoo->debug()->select('quantity_log', ['mark','over','create_time','quantity'], $map);
+        return $medoo->select('quantity_log', ['mark','over','create_time','quantity'], $map);
     }
 
     public static function pointsPay($params)
