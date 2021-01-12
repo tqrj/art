@@ -56,7 +56,7 @@ class ArtWs
         }
         self::$wsAtomic = new Atomic();
 
-        self::$wsMsgTable = new Table(1024 * 1024);
+        self::$wsMsgTable = new Table(1024 * 10);
         self::$wsMsgTable->column('msg', Table::TYPE_STRING, 1024 * 1024);
         self::$wsMsgTable->column('sender', Table::TYPE_INT);
         self::$wsMsgTable->column('recver', Table::TYPE_INT);
@@ -64,14 +64,14 @@ class ArtWs
         self::$wsMsgTable->column('status', Table::TYPE_INT);
         self::$wsMsgTable->create();
 
-        self::$wsGroupTable = new Table(1024 * 1024);
+        self::$wsGroupTable = new Table(1024 * 10);
         self::$wsGroupTable->column('wsId', Table::TYPE_INT);
         self::$wsGroupTable->column('group', Table::TYPE_STRING, 40);
         self::$wsGroupTable->column('type', Table::TYPE_INT);
         self::$wsGroupTable->column('status', Table::TYPE_INT);
         self::$wsGroupTable->create();
 
-        self::$wsUidTable = new Table(1024 * 1024);
+        self::$wsUidTable = new Table(1024 * 10);
         self::$wsUidTable->column('wsId',Table::TYPE_STRING,40);
         self::$wsUidTable->create();
 
