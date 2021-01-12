@@ -25,6 +25,7 @@ class WsService
 {
     const WS_HANDEL = 1003;
     const WS_PAY = 2003;
+    const WS_REBACK = 3003;
     const ORDER_REST_INC = 'ORDER_REST_INC';
     protected Response $ws;//$artWsId
     protected $userInfo = null;
@@ -125,7 +126,7 @@ class WsService
             $params['quantity'] = (float)$matches[2];
             UserService::pay($params);
             art_assign_ws(200, '[' . $this->userInfo['nickname'] . '] 上分受理中', [], $this->userInfo['agent_id']);
-            art_assign_ws(self::WS_PAY, '[' . $this->userInfo['nickname'] . '] 请求上分', [], 0,ArtWs::uidToWsId('agent'.$this->userInfo['agent_id']));
+            art_assign_ws(self::WS_PAY, '[' . $this->userInfo['nickname'] . '] 请求上分 '.$params['quantity'], [], 0,ArtWs::uidToWsId('agent'.$this->userInfo['agent_id']));
         } catch (HttpException $e) {
             art_assign_ws($e->getStatusCode(), $e->getMessage(), [], $this->userInfo['agent_id']);
         }
@@ -147,6 +148,7 @@ class WsService
             $params['quantity'] = (float)$matches[2];
             UserService::reBack($params);
             art_assign_ws(200, '[' . $this->userInfo['nickname'] . '] 下分受理中', [], $this->userInfo['agent_id']);
+            art_assign_ws(self::WS_REBACK, '[' . $this->userInfo['nickname'] . '] 请求下分 '.$params['quantity'], [], 0,ArtWs::uidToWsId('agent'.$this->userInfo['agent_id']));
         } catch (HttpException $e) {
             art_assign_ws($e->getStatusCode(), $e->getMessage(), [], $this->userInfo['agent_id']);
         }
