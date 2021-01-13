@@ -77,10 +77,11 @@ class RoomService
                 art_assign_ws(200, $roomInfo['notice'], [], $agent_info['id']);
             }
             $nowLottery = Lottery::getCode(Lottery::LOTTERY_TYPE_now);
-            if (!is_array($nowLottery) or count($nowLottery) != 5) {
-                echo '开奖信息错误' . PHP_EOL;
-                return;
+            if (count($nowLottery) != 6) {
+                echo 'Ws:开奖信息错误' . PHP_EOL;
+                return false;
             }
+            $nowLottery = $nowLottery['raw'];
             $redis = \art\db\Redis::getInstance()->getConnection();
             $issue = $redis->get(self::ROOM_ISSUE . $agent_info['id']);
             $CarbonIssue = Carbon::parse(art_d(), 'Asia/Shanghai');
@@ -178,7 +179,7 @@ class RoomService
                 ]);
 
             $orderResultData = [];
-            $orderResultData['issue'] = $issue;
+            $orderResultData['issue'] = mb_strlen($issue) == 11 ? mb_substr($issue,8,3):$issue;
             $orderResultData['nickname'] = $userInfo['nickname'];
             $orderResultData['user_id'] = $userInfo['id'];
             $orderSumQuantity = 0;
@@ -371,8 +372,9 @@ class RoomService
             $playerTempData['whether_hit'] = $whetherScore[1];
             $userOrderList[$orderInfo['user_id']][] = $playerTempData;
         });
-        array_walk($userOrderList, function ($item) use ($issue, $lotteryCode, $agentId, $roomInfo, $medoo) {
-            $item['issue'] = $issue;
+        $showIssue =  mb_strlen($issue) == 11 ? mb_substr($issue,8,3):$issue;
+        array_walk($userOrderList, function ($item) use ($issue,$showIssue, $lotteryCode, $agentId, $roomInfo, $medoo) {
+            $item['issue'] = $showIssue;
             $item['lottery'] = $lotteryCode;
             if ($roomInfo['whether_water'] == 1) {
                 $item['whether_water'] = 1;

@@ -1,9 +1,12 @@
 <?php
 
-$matches = [];
+if ([]){
+    echo 1;
+}
+//$matches = [];
 //preg_match('#追码|追(\d{1,})期(\S+)#','追1期12345678-12345678-123659取二数合38',$matches);
-preg_match('#(取消追码|取消)(\S+)#','取消追码12345678-12345678-123659取二数合38',$matches);
-var_dump($matches);
+//preg_match('#(取消追码|取消)(\S+)#','取消追码12345678-12345678-123659取二数合38',$matches);
+//var_dump($matches);
 //
 //class cc{
 //

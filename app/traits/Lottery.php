@@ -32,7 +32,7 @@ class Lottery
             echo "connect failed. Error: {$client->errCode}\n";
             return false;
         }
-        $len  = pack('i',strlen($str)+4);
+        $len  = pack('i',mb_strlen($str)+4);
         $client->send($len.$str);
         $data = $client->recv();
         $client->close();
@@ -71,32 +71,68 @@ class Lottery
         if (!$client->connect('172.26.125.80', 9502))
         {
             echo "connect failed. Error: {$client->errCode}\n";
-            return false;
+            return [];
         }
         if ($type  == self::LOTTERY_TYPE_OLD){
-            $str =self::LOTTERY_TYPE_OLD;
+            $str = self::LOTTERY_TYPE_OLD;
         }elseif ($type == self::LOTTERY_TYPE_now){
             $str = self::LOTTERY_TYPE_now;
         }elseif ($type == self::LOTTERY_TYPE_check){
-            $str =self::LOTTERY_TYPE_check.'|'.$code;
+            $str = self::LOTTERY_TYPE_check.'|'.$code;
         }
-        $len  = pack('i',strlen($str)+4);
+        $len  = pack('i',mb_strlen($str)+4);
         $client->send($len.$str);
         $result = $client->recv();
         $client->close();
         if ($result == false){
             echo $client->errMsg;
-            return false;
+            return [];
         }
         $result = iconv("gb2312//IGNORE","utf-8",mb_substr($result,4));
         if($result == '查询失败'){
-            return false;
+            return [];
         }
         if ($type == self::LOTTERY_TYPE_now){
-            $result = explode(',',$result);
+            $result = self::nowDe($result);
         }elseif($type == self::LOTTERY_TYPE_OLD){
-            $result = explode('|',$result);
+            $result = self::oldDe($result);
         }
+        return $result;
+    }
+
+    private static function nowDe($data)
+    {
+        $result = [];
+        $dataArr = explode(',',$data);
+        if (count($dataArr)!=5){
+            return $dataArr;
+        }
+        $result['nowIssue'] = mb_strlen($dataArr[0]) == 11 ? mb_substr($dataArr[0],8,3):$dataArr[0];
+        $temp = mb_strpos($dataArr[1],' ');
+        $result['nowShowTime'] = mb_substr($dataArr[1],$temp,mb_strripos($dataArr[1],':') - $temp);
+        $result['lastShowTime'] = mb_substr($dataArr[2],$temp,mb_strripos($dataArr[2],':') - $temp);
+        $result['lastIssue'] = mb_strlen($dataArr[3]) == 11 ? mb_substr($dataArr[3],8,3):$dataArr[3];
+        $result['lastCode'] = mb_strlen($dataArr[4]) == 11 ? mb_substr($dataArr[4],8,3):$dataArr[4];
+        $result['raw'] = $dataArr;
+        return $result;
+    }
+
+    private static function oldDe($data)
+    {
+        $result = [];
+        $dataArr = explode('|',$data);
+        array_walk($dataArr,function ($item)use(&$result){
+            $itemArr = explode(',',$item);
+            if (count($itemArr) != 3){
+                return;
+            }
+            $temp = mb_strpos($itemArr[0],' ');
+            $tempArr['time'] = $itemArr[0];
+            $tempArr['showTime'] =  mb_substr($itemArr[0],$temp,mb_strripos($itemArr[0],':') - $temp);
+            $tempArr['issue'] = mb_strlen($itemArr[1]) == 11 ? mb_substr($itemArr[1],8,3):$itemArr[1];
+            $tempArr['code'] = mb_str_split($itemArr[2],1);
+            $result[] = $tempArr;
+        });
         return $result;
     }
 }

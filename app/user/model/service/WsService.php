@@ -167,10 +167,11 @@ class WsService
             return false;
         }
         $nowLottery = Lottery::getCode(Lottery::LOTTERY_TYPE_now);
-        if (count($nowLottery) != 5) {
+        if (count($nowLottery) != 6) {
             echo 'Ws:开奖信息错误' . PHP_EOL;
             return false;
         }
+        $nowLottery = $nowLottery['raw'];
         $redis = \art\db\Redis::getInstance()->getConnection();
         $issue = $redis->get(RoomService::ROOM_ISSUE . $this->userInfo['agent_id']);
         Redis::getInstance()->close($redis);
@@ -222,10 +223,12 @@ class WsService
             return false;
         }
         $nowLottery = Lottery::getCode(Lottery::LOTTERY_TYPE_now);
-        if (count($nowLottery) != 5) {
+        if (count($nowLottery) != 6) {
             echo 'Ws:开奖信息错误' . PHP_EOL;
             return false;
         }
+        $showNowLottery = $nowLottery;
+        $nowLottery = $nowLottery['raw'];
         $redis = \art\db\Redis::getInstance()->getConnection();
         $issue = $redis->get(RoomService::ROOM_ISSUE . $userInfo['agent_id']);
         Redis::getInstance()->close($redis);
@@ -243,7 +246,7 @@ class WsService
         if (empty($roomRule)) {
             return false;
         }
-        $resMsg = $userInfo['nickname']." {$issue}期".PHP_EOL.$expMsg[2].'-'.$expMsg[3].PHP_EOL;
+        $resMsg = $userInfo['nickname']." {$showNowLottery['nowIssue']}期".PHP_EOL.$expMsg[2].'-'.$expMsg[3].PHP_EOL;
         $resMsg.= '组'.$expMsg[5].'扣'.$expMsg[7].'余'.((float)$userInfo['quantity']-(float)$expMsg[7]).PHP_EOL;
         if ($roomRule['status'] != 1){
             $resMsg.='暂不接收该玩法';
@@ -326,10 +329,11 @@ class WsService
             return false;
         }
         $nowLottery = Lottery::getCode(Lottery::LOTTERY_TYPE_now);
-        if (count($nowLottery) != 5) {
-            echo '退单:开奖信息错误' . PHP_EOL;
+        if (count($nowLottery) != 6) {
+            echo 'Ws:开奖信息错误' . PHP_EOL;
             return false;
         }
+        $nowLottery = $nowLottery['raw'];
         $medoo = $this->medoo;
         $userInfo =$this->userInfo;
         $userInfo['quantity'] = (float)$medoo->get('user_quantity','quantity',['user_id'=>$userInfo['id'],'agent_id'=>$userInfo['agent_id']]);

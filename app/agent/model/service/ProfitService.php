@@ -124,7 +124,7 @@ class ProfitService
         }
         $wsId = ArtWs::uidToWsId((int)$applyInfo['user_id']);
         if ($wsId !== false){
-            art_assign_ws(200, $mark.':'.$applyInfo['quantity'],[], 0, (int)$wsId);
+            art_assign_ws(200, $mark.':'.$applyInfo['quantity'].'当前:'.$userQuantity,[], 0, (int)$wsId);
         }
         return [];
     }
