@@ -108,7 +108,7 @@ class Lottery
             return $dataArr;
         }
         $result['nowIssue'] = mb_strlen($dataArr[0]) == 11 ? mb_substr($dataArr[0],8,3):$dataArr[0];
-        $temp = mb_strpos($dataArr[1],' ');
+        $temp = mb_strpos($dataArr[1],' ') + 1;
         $result['nowShowTime'] = mb_substr($dataArr[1],$temp,mb_strripos($dataArr[1],':') - $temp);
         $result['lastShowTime'] = mb_substr($dataArr[2],$temp,mb_strripos($dataArr[2],':') - $temp);
         $result['lastIssue'] = mb_strlen($dataArr[3]) == 11 ? mb_substr($dataArr[3],8,3):$dataArr[3];
@@ -126,7 +126,7 @@ class Lottery
             if (count($itemArr) != 3){
                 return;
             }
-            $temp = mb_strpos($itemArr[0],' ');
+            $temp = mb_strpos($itemArr[0],' ') + 1;
             $tempArr['time'] = $itemArr[0];
             $tempArr['showTime'] =  mb_substr($itemArr[0],$temp,mb_strripos($itemArr[0],':') - $temp);
             $tempArr['issue'] = $itemArr[1];

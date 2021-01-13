@@ -4,6 +4,7 @@
 namespace app\user\model\service;
 
 
+use app\agent\model\service\QuantityLogService;
 use app\agent\model\service\RoomService;
 use app\traits\Lottery;
 use art\context\Context;
@@ -26,6 +27,7 @@ class WsService
     const WS_HANDEL = 1003;
     const WS_PAY = 2003;
     const WS_REBACK = 3003;
+    const WS_SYN_QUANTITY_LOG = 4003;
     const ORDER_REST_INC = 'ORDER_REST_INC';
     protected Response $ws;//$artWsId
     protected $userInfo = null;
@@ -314,6 +316,7 @@ class WsService
             return false;
         }
         $resMsg.= '退单请发送:退'.$orderData['reset_code'];
+        QuantityLogService::push($userInfo['id'],$userInfo['agent_id'],$orderData['quantity'],$orderData['after_quantity'],'下单扣减');
         return true;
     }
 
@@ -375,7 +378,7 @@ class WsService
         $medoo->beginTransaction();
         try {
             $pdoDoc = $medoo->update('user_quantity',[
-                'quantity[-]'=>$orderInfo['quantity']
+                'quantity[+]'=>$orderInfo['quantity']
             ],[
                 'quantity'=>$userInfo['quantity'],
                 'user_id'=>$userInfo['id'],
@@ -397,6 +400,7 @@ class WsService
         $msg  =$userInfo['nickname'].' 退单成功'.PHP_EOL;
         $msg.= '退'.$orderInfo['quantity'].'余'.($userInfo['quantity'] + $orderInfo['quantity']);
         art_assign_ws(200,$msg,[],$userInfo['agent_id']);
+        QuantityLogService::push($userInfo['id'],$userInfo['agent_id'],$orderInfo['quantity'],$userInfo['quantity'] + $orderInfo['quantity'],'退单增额 订单ID'.$orderInfo['id']);
         return true;
     }
 
