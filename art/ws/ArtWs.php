@@ -57,7 +57,7 @@ class ArtWs
         self::$wsAtomic = new Atomic();
 
         self::$wsMsgTable = new Table(1024 * 10);
-        self::$wsMsgTable->column('msg', Table::TYPE_STRING, 1024 * 2);
+        self::$wsMsgTable->column('msg', Table::TYPE_STRING, 1024 * 4);
         self::$wsMsgTable->column('sender', Table::TYPE_INT);
         self::$wsMsgTable->column('recver', Table::TYPE_INT);
         self::$wsMsgTable->column('group', Table::TYPE_STRING, 40);
