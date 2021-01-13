@@ -248,7 +248,7 @@ class WsService
         if (empty($roomRule)) {
             return false;
         }
-        $resMsg = $userInfo['nickname']." {$showNowLottery['nowIssue']}期".PHP_EOL.$expMsg[2].'-'.$expMsg[3].PHP_EOL;
+        $resMsg = $userInfo['nickname']." {$showNowLottery['nowIssue']}期".PHP_EOL.str_ireplace('|',PHP_EOL,$expMsg[8]).PHP_EOL;
         $resMsg.= '组'.$expMsg[5].'扣'.$expMsg[7].'余'.((float)$userInfo['quantity']-(float)$expMsg[7]).PHP_EOL;
         if ($roomRule['status'] != 1){
             $resMsg.='暂不接收该玩法';
