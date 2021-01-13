@@ -129,8 +129,10 @@ class Lottery
             $temp = mb_strpos($itemArr[0],' ');
             $tempArr['time'] = $itemArr[0];
             $tempArr['showTime'] =  mb_substr($itemArr[0],$temp,mb_strripos($itemArr[0],':') - $temp);
-            $tempArr['issue'] = mb_strlen($itemArr[1]) == 11 ? mb_substr($itemArr[1],8,3):$itemArr[1];
-            $tempArr['code'] = mb_str_split($itemArr[2],1);
+            $tempArr['issue'] = $itemArr[1];
+            $tempArr['showIssue'] = mb_strlen($itemArr[1]) == 11 ? mb_substr($itemArr[1],8,3):$itemArr[1];
+            $tempArr['arrCode'] = mb_str_split($itemArr[2],1);
+            $tempArr['code'] = $itemArr[2];
             $result[] = $tempArr;
         });
         return $result;
