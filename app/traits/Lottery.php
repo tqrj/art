@@ -32,7 +32,7 @@ class Lottery
             echo "connect failed. Error: {$client->errCode}\n";
             return false;
         }
-        $len  = pack('i',mb_strlen($str)+4);
+        $len  = pack('i',strlen($str)+4);
         $client->send($len.$str);
         $data = $client->recv();
         $client->close();
@@ -80,7 +80,7 @@ class Lottery
         }elseif ($type == self::LOTTERY_TYPE_check){
             $str = self::LOTTERY_TYPE_check.'|'.$code;
         }
-        $len  = pack('i',mb_strlen($str)+4);
+        $len  = pack('i',strlen($str)+4);
         $client->send($len.$str);
         $result = $client->recv();
         $client->close();

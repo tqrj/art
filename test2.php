@@ -1,9 +1,11 @@
 <?php
 
-$str = '2021-01-13 11:35:00';
-$temp = strpos($str,' ')+1;
+$str = '2021-01-13 11:35:00我';
+echo strlen($str).PHP_EOL;
+echo mb_strlen( $str , 'gbk');
+//$temp = strpos($str,' ')+1;
 
-echo substr($str,$temp,strripos($str,':')- $temp);
+//echo substr($str,$temp,strripos($str,':')- $temp);
 //$matches = [];
 //preg_match('#追码|追(\d{1,})期(\S+)#','追1期12345678-12345678-123659取二数合38',$matches);
 //preg_match('#(取消追码|取消)(\S+)#','取消追码12345678-12345678-123659取二数合38',$matches);

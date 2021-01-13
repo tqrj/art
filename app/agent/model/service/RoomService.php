@@ -93,6 +93,7 @@ class RoomService
                 $redis->set(self::ROOM_ISSUE . $agent_info['id'], $nowLottery[0], $diff + mt_rand(10, 20));
                 $issue = $nowLottery[0];
             }
+            $showIssue = mb_strlen($issue) == 11 ? mb_substr($issue,8,3):$issue;
             //封盘处理
             if ((int)$diff <= (int)$roomInfo['closeTime']) {
 
@@ -117,7 +118,7 @@ class RoomService
             //有期号 且是上一期那么就结算 并设置为当前期
             if (!empty($issue) and $issue === $nowLottery[3]) {
                 //echo '进入结算成功'.$issue.PHP_EOL;
-                art_assign_ws(200, $issue . '期，开' . $nowLottery[4], [], $agent_info['id']);
+                art_assign_ws(200, $showIssue . '期，开' . $nowLottery[4], [], $agent_info['id']);
                 self::settleOrder($agent_info['id'], $issue, $nowLottery[4]);//结算订单
                 $redis->set(self::ROOM_ISSUE . $agent_info['id'], $nowLottery[0], $diff + mt_rand(10, 20));
                 \art\db\Redis::getInstance()->close($redis);
