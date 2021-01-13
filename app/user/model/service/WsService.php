@@ -292,7 +292,7 @@ class WsService
         $orderData['create_time'] = art_d();
         $orderData['update_time'] = $orderData['create_time'];
         $orderData['began_quantity'] = $userInfo['quantity'];
-        $orderData['after_quantity'] = bcsub($userInfo['quantity'],$orderData['quantity'],4);
+        $orderData['after_quantity'] = bcsub($userInfo['quantity'],$orderData['quantity'],2);
         $medoo->beginTransaction();
         try {
             $pdoDoc = $medoo->update('user_quantity',[

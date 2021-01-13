@@ -240,8 +240,8 @@ class RoomService
             }
             $medoo->beginTransaction();
             try {
-                $orderData['profit'] = bcsub($orderInfo['quantity'], $whetherScore[1], 4);
-                $orderData['loc_quantity_ret'] = bcmul(bcdiv($whetherScore[1], $orderInfo['quantity'], 4), $orderInfo['loc_quantity'], 4);
+                $orderData['profit'] = bcsub($orderInfo['quantity'], $whetherScore[1], 2);
+                $orderData['loc_quantity_ret'] = bcmul(bcdiv($whetherScore[1], $orderInfo['quantity'], 2), $orderInfo['loc_quantity'], 2);
                 $orderData['whether_hit'] = 1;
                 $orderData['status'] = 1;
                 $pdoDoc = $medoo->update('order', $orderData, ['id' => $orderInfo['id']]);
@@ -339,9 +339,9 @@ class RoomService
             $medoo->beginTransaction();
             try {
 
-                $orderData['profit'] = bcsub($orderInfo['quantity'], $whetherScore[1], 4);
+                $orderData['profit'] = bcsub($orderInfo['quantity'], $whetherScore[1], 2);
 //                $orderData['loc_quantity_ret'] = $whetherScore[1] / $orderInfo['quantity'] * $orderInfo['loc_quantity'];
-                $orderData['loc_quantity_ret'] = bcmul(bcdiv($whetherScore[1], $orderInfo['quantity'], 4), $orderInfo['loc_quantity'], 4);
+                $orderData['loc_quantity_ret'] = bcmul(bcdiv($whetherScore[1], $orderInfo['quantity'], 2), $orderInfo['loc_quantity'], 2);
                 $orderData['whether_hit'] = 1;
                 $orderData['status'] = 1;
                 $orderData['lottery_code'] = $lotteryCode;
@@ -418,7 +418,7 @@ class RoomService
         }
 //        echo '中了'.PHP_EOL;
         $result[0] = true;
-        $result[1] = bcmul($singleQuantity, (float)$line, 4);
+        $result[1] = bcmul($singleQuantity, (float)$line, 2);
         return $result;
     }
 

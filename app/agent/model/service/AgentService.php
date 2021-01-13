@@ -11,7 +11,6 @@ use mysql_xdevapi\Exception;
 class AgentService
 {
 
-
     public static function login($params)
     {
         $medoo = new Medoo();
@@ -34,7 +33,7 @@ class AgentService
         if (strtotime($userInfo['expire_time']) < time()){
             art_assign(202,'账号已过期');
         }
-        if ($userInfo['status'] ==0){
+        if ($userInfo['status'] == 0){
             art_assign(202,'账号已禁用');
         }
         unset($userInfo['salt'],$userInfo['pass']);
