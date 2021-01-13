@@ -36,8 +36,8 @@ class QuantityLogService
         if (!$pdoDoc->rowCount()){
             art_assign(202,'积分变动记录生成错误');
         }
-        $wsId = ArtWs::uidToWsId($userId);
-        if (!$wsId) {
+        $wsId = ArtWs::uidToWsId((int)$userId);
+        if ($wsId !== false) {
             art_assign_ws(WsService::WS_SYN_QUANTITY_LOG,[],$data,0,$wsId);
         }
         return true;
