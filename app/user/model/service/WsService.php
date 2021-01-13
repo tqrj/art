@@ -165,7 +165,7 @@ class WsService
         }
         $expMsg = Lottery::parseExp($message);
         if (count($expMsg) == 0) {
-            echo '没有识别成功'.$message.PHP_EOL;
+            //echo '没有识别成功'.$message.PHP_EOL;
             return false;
         }
         $nowLottery = Lottery::getCode(Lottery::LOTTERY_TYPE_now);

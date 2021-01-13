@@ -124,13 +124,13 @@ class ArtWs
             self::$wsGroupTable->set($poolId, $row);
         }, $poolId);
         //so心跳
-//        Timer::tick(15000, function (){
-//            array_map(function (Response $ws) {
-//                $pingFrame = new Frame();
-//                $pingFrame->opcode = WEBSOCKET_OPCODE_PING;
-//                $ws->push($pingFrame);
-//            }, self::$wsObject);
-//        });
+        Timer::tick(15000, function (){
+            array_map(function (Response $ws) {
+                $pingFrame = new Frame();
+                $pingFrame->opcode = WEBSOCKET_OPCODE_PING;
+                $ws->push($pingFrame);
+            }, self::$wsObject);
+        });
     }
 
 
