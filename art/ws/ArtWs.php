@@ -57,7 +57,7 @@ class ArtWs
         self::$wsAtomic = new Atomic();
 
         self::$wsMsgTable = new Table(1024 * 10);
-        self::$wsMsgTable->column('msg', Table::TYPE_STRING, 1024 * 4);
+        self::$wsMsgTable->column('msg', Table::TYPE_STRING, 1024 * 2);
         self::$wsMsgTable->column('sender', Table::TYPE_INT);
         self::$wsMsgTable->column('recver', Table::TYPE_INT);
         self::$wsMsgTable->column('group', Table::TYPE_STRING, 40);
@@ -124,13 +124,13 @@ class ArtWs
             self::$wsGroupTable->set($poolId, $row);
         }, $poolId);
         //so心跳
-        Timer::tick(15000, function (){
-            array_map(function (Response $ws) {
-                $pingFrame = new Frame();
-                $pingFrame->opcode = WEBSOCKET_OPCODE_PING;
-                $ws->push($pingFrame);
-            }, self::$wsObject);
-        });
+//        Timer::tick(15000, function (){
+//            array_map(function (Response $ws) {
+//                $pingFrame = new Frame();
+//                $pingFrame->opcode = WEBSOCKET_OPCODE_PING;
+//                $ws->push($pingFrame);
+//            }, self::$wsObject);
+//        });
     }
 
 
