@@ -206,9 +206,10 @@ class ProfitService
         } while ($minCar->lt($maxCar));
         array_walk($betArt, function ($item, $key, Medoo $medoo) use (&$result, $agentInfo,$map) {
             $map['create_time[<>]'] = [$item[0], $item[1]];
-            $result[$key]['orderCount'] = $medoo->count('order', 'id', $map);
             $map['status'] = 1;
+//            $result[$key]['orderCount'] = $medoo->count('order', 'id', $map);
             $result[$key] = $medoo->get('order',[
+                'orderCount'=>Medoo::raw('COUNT(id)'),
                 'playCodeCount'=>Medoo::raw('SUM(play_code_count)'),
                 'quantityCount'=>Medoo::raw('SUM(quantity)'),
                 'flyQuantityRetCount'=>Medoo::raw('SUM(fly_quantity_ret)'),
@@ -257,9 +258,10 @@ class ProfitService
         }
         array_walk($betArt, function ($item, $key, Medoo $medoo) use (&$result, $agentInfo,$map) {
             $map['create_time[<>]'] =[$item[0], $item[1]];
-            $result[$key]['orderCount'] = $medoo->count('order', 'id',$map);
             $map['status'] = 1;
+//            $result[$key]['orderCount'] = $medoo->count('order', 'id',$map);
             $result[$key] = $medoo->get('order',[
+                'orderCount'=>Medoo::raw('COUNT(id)'),
                 'playCodeCount'=>Medoo::raw('SUM(play_code_count)'),
                 'quantityCount'=>Medoo::raw('SUM(quantity)'),
                 'flyQuantityRetCount'=>Medoo::raw('SUM(fly_quantity_ret)'),
