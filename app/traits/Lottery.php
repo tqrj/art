@@ -40,7 +40,7 @@ class Lottery
             echo $client->errMsg;
             return [];
         }
-        $data = iconv("gb2312//IGNORE","utf-8",mb_substr($data,4));
+        $data = iconv("gb2312//IGNORE","utf-8",substr($data,4));
         echo '识别结果:'.$data;
         $temps = explode('rn',(string)$data);
         array_walk($temps,function ($item) use(&$result){
@@ -89,7 +89,7 @@ class Lottery
             echo $client->errMsg;
             return [];
         }
-        $result = iconv("gb2312//IGNORE","utf-8",mb_substr($result,4));
+        $result = iconv("gb2312//IGNORE","utf-8",substr($result,4));
         if($result == '查询失败'){
             return [];
         }
