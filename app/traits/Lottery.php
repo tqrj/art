@@ -41,6 +41,7 @@ class Lottery
             return [];
         }
         $data = iconv("gb2312//IGNORE","utf-8",mb_substr($data,4));
+        echo '识别结果:'.$data;
         $temps = explode('rn',(string)$data);
         array_walk($temps,function ($item) use(&$result){
             $temp = explode('<-->',$item);

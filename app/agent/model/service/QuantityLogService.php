@@ -15,6 +15,7 @@ use art\ws\ArtWs;
 class QuantityLogService
 {
     /**
+     * 积分变动记录
      * @param $userId
      * @param $agentId
      * @param $quantity
