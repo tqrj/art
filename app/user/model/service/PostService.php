@@ -16,7 +16,7 @@ class PostService
         $result = $medoo->select('order',
             [
                 'game',
-                'issue'=>Medoo::raw("LEFT(issue,8)"),
+                'issue'=>Medoo::raw("RIGHT(issue,3)"),
                 'orderNo',
                 'reset_code',
                 'play_method',
