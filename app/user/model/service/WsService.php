@@ -151,7 +151,10 @@ class WsService
             echo 'Ws:退分'.$params['quantity'];
             UserService::reBack($params);
             art_assign_ws(200, '[' . $this->userInfo['nickname'] . '] 下分受理中', [], $this->userInfo['agent_id']);
-            art_assign_ws(self::WS_REBACK, '[' . $this->userInfo['nickname'] . '] 请求下分 '.$params['quantity'], [], 0,ArtWs::uidToWsId('agent'.$this->userInfo['agent_id']));
+            $agentWsId = ArtWs::uidToWsId('agent'.$this->userInfo['agent_id']);
+            if ($agentWsId !== false){
+                art_assign_ws(self::WS_REBACK, '[' . $this->userInfo['nickname'] . '] 请求下分 '.$params['quantity'], [], 0,);
+            }
         } catch (HttpException $e) {
             art_assign_ws($e->getStatusCode(), $e->getMessage(), [], $this->userInfo['agent_id']);
         }
