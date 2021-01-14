@@ -264,4 +264,18 @@ class ProfitService
         }, $medoo);
         return $result;
     }
+
+    /**
+     *
+     */
+    public static function delAll()
+    {
+        $medoo = new Medoo();
+        $agentInfo = Context::get('authInfo');
+        $pdoDoc = $medoo->delete('points',['agent_id'=>$agentInfo['id']]);
+        if (!$pdoDoc->rowCount()){
+            art_assign(202,'清空失败');
+        }
+        return [];
+    }
 }

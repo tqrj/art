@@ -63,5 +63,11 @@ class Profit
         art_assign(200,'success',$result);
     }
 
+    public function delAll()
+    {
+        $result = ProfitService::delAll();
+        art_assign(200,'清空成功',$result);
+    }
+
 
 }

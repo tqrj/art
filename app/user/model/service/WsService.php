@@ -148,7 +148,6 @@ class WsService
         }
         try {
             $params['quantity'] = (int)$matches[2];
-            echo 'Ws:退分'.$params['quantity'];
             UserService::reBack($params);
             art_assign_ws(200, '[' . $this->userInfo['nickname'] . '] 下分受理中', [], $this->userInfo['agent_id']);
             $agentWsId = ArtWs::uidToWsId('agent'.$this->userInfo['agent_id']);
