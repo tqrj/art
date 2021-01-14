@@ -1,8 +1,13 @@
 <?php
 
-$str = '2021-01-13 11:35:00我';
-echo strlen($str).PHP_EOL;
-echo mb_strlen( $str , 'gbk');
+
+//echo decbin($num).PHP_EOL;
+//echo  decbin(10 << 2);;
+//echo decbin($num);
+
+//$str = '2021-01-13 11:35:00我';
+//echo strlen($str).PHP_EOL;
+//echo mb_strlen( $str , 'gbk');
 //$temp = strpos($str,' ')+1;
 
 //echo substr($str,$temp,strripos($str,':')- $temp);
@@ -152,7 +157,6 @@ echo $diff;*/
 //    }
 //    return false;
 //}
-
 
 
 //function test($data)

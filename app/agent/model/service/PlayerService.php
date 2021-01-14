@@ -20,16 +20,21 @@ class PlayerService
         if (!empty($params['keyWord'])) {
             $map['u.nickname[~]'] = $params['keyWord'] . '%';
         }
-        $map['LIMIT'] = [$params['page'], $params['limit']];
-        $map['ORDER'] = ['q.id' => 'DESC'];
         $map['u.status'] = [1, 0];
         $map['q.status'] = [1, 0];
         $map['q.agent_id'] = $agentInfo['id'];
         $medoo = new Medoo();
-        return $medoo->select('user(u)',
+        $result['userAllQuantity'] = $medoo->sum('user(u)',
+            ['[><]user_quantity(q)' => ['u.id' => 'user_id']],
+            'q.quantity',
+            $map);
+        $map['LIMIT'] = [$params['page'], $params['limit']];
+        $map['ORDER'] = ['q.id' => 'DESC'];
+        $result['userList'] = $medoo->select('user(u)',
             ['[><]user_quantity(q)' => ['u.id' => 'user_id']],
             ['u.id', 'u.nickname','u.token', 'q.quantity', 'u.group_id','u.headimgurl', 'u.status', 'q.create_time'],
             $map);
+        return $result;
     }
 
     public static function info($params)

@@ -14,7 +14,6 @@ use Swoole\WebSocket\Frame;
 
 require 'vendor/autoload.php';
 
-
 ArtWs::init();
 //多进程管理模块
 $pidPool = new Pool(swoole_cpu_num() * 2 + 2);

@@ -32,6 +32,7 @@ class Lottery
             echo "connect failed. Error: {$client->errCode}\n";
             return false;
         }
+        //涉及中文 不要随意改用 mb
         $len  = pack('i',strlen($str)+4);
         $client->send($len.$str);
         $data = $client->recv();
@@ -40,6 +41,7 @@ class Lottery
             echo $client->errMsg;
             return [];
         }
+        //涉及中文 不要随意改用 mb
         $data = iconv("gb2312//IGNORE","utf-8",substr($data,4));
         $temps = explode('rn',(string)$data);
         array_walk($temps,function ($item) use(&$result){
@@ -80,6 +82,7 @@ class Lottery
         }elseif ($type == self::LOTTERY_TYPE_check){
             $str = self::LOTTERY_TYPE_check.'|'.$code;
         }
+        //涉及中文 不要随意改用 mb
         $len  = pack('i',strlen($str)+4);
         $client->send($len.$str);
         $result = $client->recv();
@@ -88,6 +91,7 @@ class Lottery
             echo $client->errMsg;
             return [];
         }
+        //涉及中文 不要随意改用 mb
         $result = iconv("gb2312//IGNORE","utf-8",substr($result,4));
         if($result == '查询失败'){
             return [];

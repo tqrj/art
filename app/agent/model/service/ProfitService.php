@@ -208,11 +208,18 @@ class ProfitService
             $map['create_time[<>]'] = [$item[0], $item[1]];
             $result[$key]['orderCount'] = $medoo->count('order', 'id', $map);
             $map['status'] = 1;
-            $result[$key]['playCodeCount'] = $medoo->sum('order', 'play_code_count', $map);
-            $result[$key]['quantityCount'] = $medoo->sum('order', 'quantity', $map);
-            $result[$key]['flyQuantityRetCount'] = $medoo->sum('order', 'fly_quantity_ret', $map);
-            $result[$key]['locQuantityRetCount'] = $medoo->sum('order', 'loc_quantity_ret', $map);
-            $result[$key]['profitCount'] = $medoo->sum('order', 'profit', $map);
+            $result[$key] = $medoo->get('order',[
+                'playCodeCount'=>Medoo::raw('SUM(play_code_count)'),
+                'quantityCount'=>Medoo::raw('SUM(quantity)'),
+                'flyQuantityRetCount'=>Medoo::raw('SUM(fly_quantity_ret)'),
+                'locQuantityRetCount'=>Medoo::raw('SUM(loc_quantity_ret)'),
+                'profitCount'=>Medoo::raw('SUM(profit)'),
+            ],$map);
+//            $result[$key]['playCodeCount'] = $medoo->sum('order', 'play_code_count', $map);
+//            $result[$key]['quantityCount'] = $medoo->sum('order', 'quantity', $map);
+//            $result[$key]['flyQuantityRetCount'] = $medoo->sum('order', 'fly_quantity_ret', $map);
+//            $result[$key]['locQuantityRetCount'] = $medoo->sum('order', 'loc_quantity_ret', $map);
+//            $result[$key]['profitCount'] = $medoo->sum('order', 'profit', $map);
             $result[$key]['timeStartShow'] = date('n-j', strtotime($item[0]));
             $result[$key]['timeStart'] =  date('Y-m-d', strtotime($item[0]));
             $result[$key]['timeEndShow'] = date('n-j', strtotime($item[1]));
