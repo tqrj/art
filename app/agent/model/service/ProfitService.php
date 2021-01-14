@@ -97,13 +97,16 @@ class ProfitService
         $applyInfo['quantity'] = $applyInfo['type'] == 1 ? abs($applyInfo['quantity']) : -$applyInfo['quantity'];
         $medoo->beginTransaction();
         try {
-            $pdoDoc = $medoo->update('user_quantity', ['quantity[+]' => $applyInfo['quantity']], [
-                'user_id' => $applyInfo['user_id'],
-                'agent_id' => $agentInfo['id'],
-            ]);
-            if (!$pdoDoc->rowCount()) {
-                throw new \Exception($pdoDoc->errorInfo());
+            if($applyInfo['type'] == 1){
+                $pdoDoc = $medoo->update('user_quantity', ['quantity[+]' => $applyInfo['quantity']], [
+                    'user_id' => $applyInfo['user_id'],
+                    'agent_id' => $agentInfo['id'],
+                ]);
+                if (!$pdoDoc->rowCount()) {
+                    throw new \Exception($pdoDoc->errorInfo());
+                }
             }
+
             $pdoDoc = $medoo->update('points', ['status' => 1], [
                 'id' => $params['id'],
                 'agent_id' => $agentInfo['id'],
