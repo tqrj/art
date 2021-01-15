@@ -1,29 +1,29 @@
 {
-    "name": "porty/art",
-    "type": "project",
-    "require": {
-        "php": ">=7.4",
-        "swoole/ide-helper": "@dev",
-        "nesbot/carbon": "^2.42",
-      "ext-redis": "*",
-      "ext-bcmath": "*",
-        "yi-tin/redis": "^1.0"
-    },
-    "authors": [
-        {
-            "name": "porty",
-            "email": "2816869721@qq.com"
-        }
-    ],
-    "autoload": {
-        "psr-4": {
-            "app\\": "app",
-            "art\\": "art",
-            "config\\": "config"
-        },
-
-        "files": [
-            "app/functions.php"
-        ]
+  "name": "porty/art",
+  "type": "project",
+  "require": {
+    "php": ">=7.4",
+    "swoole/ide-helper": "@dev",
+    "nesbot/carbon": "^2.42",
+    "ext-redis": "*",
+    "ext-bcmath": "*",
+    "yi-tin/redis": "^1.0",
+    "ext-json": "*"
+  },
+  "authors": [
+    {
+      "name": "porty",
+      "email": "2816869721@qq.com"
     }
+  ],
+  "autoload": {
+    "psr-4": {
+      "app\\": "app",
+      "art\\": "art",
+      "config\\": "config"
+    },
+    "files": [
+      "app/functions.php"
+    ]
+  }
 }

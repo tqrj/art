@@ -29,6 +29,7 @@ class WsService
     const WS_REBACK = 3003;
     const WS_SYN_QUANTITY_LOG = 4003;
     const ORDER_REST_INC = 'ORDER_REST_INC';
+    const ORDER_AFTER_REST_INC = 'ORDER_AFTER_REST_INC';
     protected Response $ws;//$artWsId
     protected $userInfo = null;
     protected Medoo $medoo;
@@ -75,6 +76,10 @@ class WsService
         } elseif ($this->checkReOrder($params['message'])) { //退单
             return;
         } elseif ($this->checkOrderEx($params['message'])) { //下单
+            return;
+        }  elseif ($this->afterCode($params['message'])) { //追码
+            return;
+        } elseif ($this->afterCodeRe($params['message'])) { //取消追码
             return;
         };
         //if ($params)
@@ -467,45 +472,70 @@ class WsService
 
     /**
      * 追码
+     * 积分 + 积分 * 次数 *倍率
      * @param $message
      * @return bool
      */
-/*    private function afterCode($message)
+    private function afterCode($message)
     {
-        $matches = [];
-        $bool = preg_match("#追码|追(\d{1,})期(\S+)#", $message, $matches);
-        if (!$bool) {
+        if (!$this->roomInfo['status'] or !$this->roomInfo['whether_track']){
             return false;
         }
-        if (!$this->roomInfo['status'] or !$this->roomInfo['whether_track']){
+        $matches = [];
+        $bool = preg_match("#追码|追(\d{1,})期(\S+)#", $message, $matches);
+        if (!$bool or count($matches) != 3) {
+            return false;
+        }
+        $expMsg = Lottery::parseExp($message);
+        if (count($expMsg) == 0) {
+            //echo '没有识别成功'.$message.PHP_EOL;
             return false;
         }
         $medoo = new Medoo();
         $data['user_id'] = $this->userInfo['id'];
         $data['agent_id'] = $this->userInfo['agent_id'];
         $data['message'] = $matches[2];
+        $data['exp_msg'] = json_encode($expMsg);
         $data['count'] = $matches[1];
         $data['status'] = 1;
         $data['create_time'] = art_d();
+        $redis = \art\db\Redis::getInstance()->getConnection();
+        $redis->setnx(self::ORDER_AFTER_REST_INC . $this->userInfo['id'],0);
+        $data['reset_code'] = $redis->incr(self::ORDER_AFTER_REST_INC . $this->userInfo['id']);
+        $redis->expire(self::ORDER_AFTER_REST_INC . $this->userInfo['id'],86400);
+        Redis::getInstance()->close($redis);
+        $bool = preg_match("#(输倍投|中倍投)(\d{1,2})#", $message, $matches);
+        if ($bool && count($matches) == 3) {
+            $data['rate_type'] = $matches[1] == '中倍投' ? 1 : 2;
+            $data['rate'] = $matches[2];
+        }
+        $bool = preg_match("#(止赢)(\d{1,5})?#", $message, $matches);
+        if ($bool && count($matches) == 3) {
+            $data['halt_profit'] = $matches[2];
+        }
+        $bool = preg_match("#(止损)(\d{1,5})?#", $message, $matches);
+        if ($bool && count($matches) == 3) {
+            $data['halt_loss'] = $matches[2];
+        }
         $pdoDoc = $medoo->insert('after',$data);
         if (!$pdoDoc->rowCount()){
             art_assign_ws(200,'追码失败',[],$this->userInfo['agent_id']);
             return false;
         }
-        art_assign_ws(200,'追码成功',[],$this->userInfo['agent_id']);
+        art_assign_ws(200,'追码成功 快捷取消:'.$data['reset_code'],[],0,ArtWs::uidToWsId($this->userInfo['id']));
         return true;
     }
 
     private function afterCodeRe($message)
     {
         $matches = [];
-        $bool = preg_match("#(取消追码|取消)(\S+)#", $message, $matches);
+        $bool = preg_match("#(取消追码|取消)(\d+)#", $message, $matches);
         if (!$bool) {
             return false;
         }
         $map = [];
         if (count($matches) == 3){
-            $map['message'] = $matches[2];
+            $map['reset_code'] = $matches[2];
         }
         $map['user_id'] = $this->userInfo['id'];
         $map['agent_id'] = $this->userInfo['agent_id'];
@@ -516,8 +546,8 @@ class WsService
             art_assign_ws(200,'取消失败',[],$this->userInfo['agent_id']);
             return false;
         }
-        $mark = count($matches) == 3 ? '取消成功:'.$matches[2]:'全部取消成功';
-        art_assign_ws(200,$mark,[],$this->userInfo['agent_id']);
+        $mark = count($matches) == 3 ? '取消成功':'全部取消成功';
+        art_assign_ws(200,$mark,[],0,ArtWs::uidToWsId($this->userInfo['id']));
         return true;
-    }*/
+    }
 }
