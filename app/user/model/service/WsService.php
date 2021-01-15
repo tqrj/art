@@ -486,7 +486,7 @@ class WsService
         if (!$bool or count($matches) != 3) {
             return false;
         }
-        $expMsg = Lottery::parseExp($message);
+        $expMsg = Lottery::parseExp($matches[2]);
         if (count($expMsg) == 0) {
             //echo '没有识别成功'.$message.PHP_EOL;
             return false;
