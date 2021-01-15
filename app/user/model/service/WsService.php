@@ -482,7 +482,7 @@ class WsService
             return false;
         }
         $matches = [];
-        $bool = preg_match("#追码|追(\d{1,})期(\S+)#", $message, $matches);
+        $bool = preg_match("#追码|追(\d{1,})期(\S+)(?:输|中)#", $message, $matches);
         if (!$bool or count($matches) != 3) {
             return false;
         }
@@ -522,7 +522,7 @@ class WsService
             art_assign_ws(200,'追码失败',[],$this->userInfo['agent_id']);
             return false;
         }
-        art_assign_ws(200,'追码成功 快捷取消:'.$data['reset_code'],[],0,ArtWs::uidToWsId($this->userInfo['id']));
+        art_assign_ws(200,'追码成功'.PHP_EOL.'取消请发送:取消追码'.$data['reset_code'],[],0,ArtWs::uidToWsId($this->userInfo['id']));
         return true;
     }
 
