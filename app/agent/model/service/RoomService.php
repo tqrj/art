@@ -694,7 +694,7 @@ class RoomService
                 }
 
             }
-
+            echo '所有订单'.var_dump($after['order_ids']).PHP_EOL;
             $after['last_order_ids'] = [];
             $resMsg = '';
             array_walk($exp_msg, function ($item) use ($userInfo,$roomInfo,&$after, &$resMsg) {
