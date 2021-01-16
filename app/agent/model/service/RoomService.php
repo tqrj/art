@@ -98,11 +98,11 @@ class RoomService
             $showIssue = mb_strlen($issue) == 11 ? mb_substr($issue,8,3):$issue;
 
             //追码处理
-            $bool = $redis->set(self::ROOM_AFTER_FLAG . $agent_info['id'] . $nowLottery[0], '1', ['nx', 'ex' => $diff + mt_rand(10, 20)],);
-            if ($bool){
-                echo '进入自动追码成功';
-                self::afterPay($roomInfo,$agent_info);
-            }
+//            $bool = $redis->set(self::ROOM_AFTER_FLAG . $agent_info['id'] . $nowLottery[0], '1', ['nx', 'ex' => $diff + mt_rand(10, 20)],);
+//            if ($bool){
+//                echo '进入自动追码成功';
+//                self::afterPay($roomInfo,$agent_info);
+//            }
             //封盘处理
             if ((int)$diff <= (int)$roomInfo['closeTime']) {
 
