@@ -95,14 +95,9 @@ class RoomService
                 $redis->set(self::ROOM_ISSUE . $agent_info['id'], $nowLottery[0], $diff + mt_rand(10, 20));
                 $issue = $nowLottery[0];
             }
-            $showIssue = mb_strlen($issue) == 11 ? mb_substr($issue,8,3):$issue;
+            $showIssue = mb_strlen($issue) == 11 ? mb_substr($issue, 8, 3) : $issue;
 
-            //追码处理
-//            $bool = $redis->set(self::ROOM_AFTER_FLAG . $agent_info['id'] . $nowLottery[0], '1', ['nx', 'ex' => $diff + mt_rand(10, 20)],);
-//            if ($bool){
-//                echo '进入自动追码成功';
-//                self::afterPay($roomInfo,$agent_info);
-//            }
+
             //封盘处理
             if ((int)$diff <= (int)$roomInfo['closeTime']) {
 
@@ -119,13 +114,19 @@ class RoomService
             //有期号 且是当前期那么一样返回
             if (!empty($issue) and $issue === $nowLottery[0]) {
                 //echo '有期号且是当前期'.$issue.PHP_EOL;
+                //追码处理
+                $bool = $redis->set(self::ROOM_AFTER_FLAG . $agent_info['id'] . $nowLottery[0], '1', ['nx', 'ex' => $diff + mt_rand(10, 20)],);
+                if ($bool) {
+                    echo '进入自动追码成功';
+                    self::afterPay($roomInfo, $agent_info);
+                }
                 \art\db\Redis::getInstance()->close($redis);
                 return;
             }
             //有期号 且是上一期那么就结算 并设置为当前期
             //结算
             if (!empty($issue) and $issue === $nowLottery[3]) {
-                echo '进入结算成功'.$issue.PHP_EOL;
+                echo '进入结算成功' . $issue . PHP_EOL;
                 art_assign_ws(200, $showIssue . '期 开' . $nowLottery[4], [], $agent_info['id']);
                 self::settleOrder($agent_info['id'], $issue, $nowLottery[4]);//结算订单
                 $redis->set(self::ROOM_ISSUE . $agent_info['id'], $nowLottery[0], $diff + mt_rand(10, 20));
@@ -137,6 +138,7 @@ class RoomService
         }, $agentInfo, $medoo);
         return [];
     }
+
     /**
      * 封盘通知
      * @param $agentId
@@ -187,7 +189,7 @@ class RoomService
                 ]);
 
             $orderResultData = [];
-            $orderResultData['issue'] = mb_strlen($issue) == 11 ? mb_substr($issue,8,3):$issue;
+            $orderResultData['issue'] = mb_strlen($issue) == 11 ? mb_substr($issue, 8, 3) : $issue;
             $orderResultData['nickname'] = $userInfo['nickname'];
             $orderResultData['user_id'] = $userInfo['id'];
             $orderSumQuantity = 0;
@@ -236,7 +238,7 @@ class RoomService
                 //没中奖直接滚蛋
                 $medoo->update('order',
                     [
-                        'profit'=>$orderInfo['quantity'],
+                        'profit' => $orderInfo['quantity'],
                         'lottery_code' => $lotteryCode,
                         'whether_hit' => -1,
                         'status' => 1,
@@ -334,7 +336,7 @@ class RoomService
                 //没中奖直接滚蛋
                 $medoo->update('order',
                     [
-                        'profit'=>$orderInfo['quantity'],
+                        'profit' => $orderInfo['quantity'],
                         'lottery_code' => $lotteryCode,
                         'whether_hit' => -1,
                         'status' => 1,
@@ -380,8 +382,8 @@ class RoomService
             $playerTempData['whether_hit'] = $whetherScore[1];
             $userOrderList[$orderInfo['user_id']][] = $playerTempData;
         });
-        $showIssue =  mb_strlen($issue) == 11 ? mb_substr($issue,8,3):$issue;
-        array_walk($userOrderList, function ($item) use ($issue,$showIssue, $lotteryCode, $agentId, $roomInfo, $medoo) {
+        $showIssue = mb_strlen($issue) == 11 ? mb_substr($issue, 8, 3) : $issue;
+        array_walk($userOrderList, function ($item) use ($issue, $showIssue, $lotteryCode, $agentId, $roomInfo, $medoo) {
             $item['issue'] = $showIssue;
             $item['lottery'] = $lotteryCode;
             if ($roomInfo['whether_water'] == 1) {
@@ -584,10 +586,10 @@ class RoomService
      * @param $roomInfo
      * @param $agentInfo
      */
-    private static function afterPay($roomInfo,$agentInfo)
+    private static function afterPay($roomInfo, $agentInfo)
     {
         $medoo = new Medoo();
-        $afterList = $medoo->select('after',[
+        $afterList = $medoo->select('after', [
             'id',
             'user_id',
             'agent_id',
@@ -603,18 +605,18 @@ class RoomService
             'order_ids',
             'last_order_ids',
             'profit'
-        ],[
-            'agent_id'=>$agentInfo['id'],
-            'status'=>1
+        ], [
+            'agent_id' => $agentInfo['id'],
+            'status' => 1
         ]);
-        array_walk($afterList,function (&$after)use ($roomInfo){
-            $exp_msg = json_decode($after['exp_msg'],true);
-            if ($after['count'] <= $after['executeds']){
+        array_walk($afterList, function (&$after) use ($roomInfo) {
+            $exp_msg = json_decode($after['exp_msg'], true);
+            if ($after['count'] <= $after['executeds']) {
                 $after['status'] = 0;
                 return;
             }
 
-            $after['executeds'] ++;
+            $after['executeds']++;
             $medoo = new Medoo();
 
             $map['u.id'] = $after['user_id'];
@@ -623,8 +625,8 @@ class RoomService
             $map['q.status'] = [1];
             $userInfo = $medoo->get('user(u)',
                 [
-                    '[><]user_quantity(q)'=>['u.id'=>'user_id'],
-                    '[><]agent(a)'=>['q.agent_id'=>'id'],
+                    '[><]user_quantity(q)' => ['u.id' => 'user_id'],
+                    '[><]agent(a)' => ['q.agent_id' => 'id'],
                 ],
                 [
                     'u.id',
@@ -636,71 +638,70 @@ class RoomService
                 ],
                 $map
             );
-            $after['order_ids'] = json_decode($after['order_ids'],true);
-            $after['last_order_ids'] = json_decode($after['last_order_ids'],true);
+            $after['order_ids'] = json_decode($after['order_ids'], true);
+            $after['last_order_ids'] = json_decode($after['last_order_ids'], true);
 
             //如果有上期订单ID 需要判断上期的结果 来处理倍投
             //如果有上期订单ID 需要算进利润 来处理 止损 止亏
-            if($after['last_order_ids'] != []){
+            if ($after['last_order_ids'] != []) {
                 //这个利润是所有订单的哦
                 $orderSlimInfo['profit'] = $medoo->get('order',
                     [
-                        'profit'=>Medoo::raw('SUM(profit)')
+                        'profit' => Medoo::raw('SUM(profit)')
                     ],
                     [
-                        'id'=>$after['order_ids'],
-                        'status'=>1
+                        'id' => $after['order_ids'],
+                        'status' => 1
                     ])['profit'];
                 //这个只是上期的是否中奖
                 $orderSlimInfo['whether_hit'] = $medoo->get('order',
                     [
-                        'whether_hit'=>Medoo::raw('SUM(whether_hit)')
+                        'whether_hit' => Medoo::raw('SUM(whether_hit)')
                     ],
                     [
-                        'id'=>$after['last_order_ids'],
-                        'status'=>1
+                        'id' => $after['last_order_ids'],
+                        'status' => 1
                     ])['whether_hit'];
-                if ($orderSlimInfo['whether_hit'] > -count($after['last_order_ids'])){
+                if ($orderSlimInfo['whether_hit'] > -count($after['last_order_ids'])) {
                     $orderSlimInfo['whether_hit'] = 1;
-                }else{
+                } else {
                     $orderSlimInfo['whether_hit'] = -1;
                 }
 
                 //止亏 止赢
                 //因为之前的盈利 是以代理端的角色来计算的 ，与用户是相反的 所以这里是 -=
                 $after['profit'] -= $orderSlimInfo['profit'];
-                if ($after['halt_profit'] != 0 and $after['profit'] >= $after['halt_profit']){
+                if ($after['halt_profit'] != 0 and $after['profit'] >= $after['halt_profit']) {
                     $after['status'] = 0;
                     return;
                 }
-                if ($after['halt_loss'] != 0 and $after['profit'] <= -$after['halt_loss']){
+                if ($after['halt_loss'] != 0 and $after['profit'] <= -$after['halt_loss']) {
                     $after['status'] = 0;
                     return;
                 };
                 //倍投处理
-                if ($after['rate_type'] != 0){
+                if ($after['rate_type'] != 0) {
 
-                    if ($after['rate_type'] == 1 and $orderSlimInfo['whether_hit'] == 1){
+                    if ($after['rate_type'] == 1 and $orderSlimInfo['whether_hit'] == 1) {
 
-                        $after['rate_count'] ++;
-                        $exp_msg = self::rate($exp_msg,$after['rate'],$after['rate_count']);
+                        $after['rate_count']++;
+                        $exp_msg = self::rate($exp_msg, $after['rate'], $after['rate_count']);
 
-                    }elseif ($after['rate_type'] == 2 and $orderSlimInfo['whether_hit'] == -1){
+                    } elseif ($after['rate_type'] == 2 and $orderSlimInfo['whether_hit'] == -1) {
 
-                        $after['rate_count'] ++;
-                        $exp_msg = self::rate($exp_msg,$after['rate'],$after['rate_count']);
+                        $after['rate_count']++;
+                        $exp_msg = self::rate($exp_msg, $after['rate'], $after['rate_count']);
 
                     }
                 }
 
             }
-            echo '所有订单'.var_dump($after['order_ids']).PHP_EOL;
             $after['last_order_ids'] = [];
             $resMsg = '';
-            array_walk($exp_msg, function ($item) use ($userInfo,$roomInfo,&$after, &$resMsg) {
+            array_walk($exp_msg, function ($item) use ($userInfo, $roomInfo, &$after, &$resMsg) {
                 $temp = '';
-                $orderId =  WsService::payOrder($roomInfo,$userInfo,$item, $after['message'], $temp,$after['id']);
-                if ($orderId != false){
+                $orderId = WsService::payOrder($roomInfo, $userInfo, $item, $after['message'], $temp, $after['id']);
+                if ($orderId != false) {
                     $after['last_order_ids'][] = $orderId;
                     $after['order_ids'][] = $orderId;
                 }
@@ -708,16 +709,16 @@ class RoomService
             });
             $resMsg = substr($resMsg, 0, strripos($resMsg, '----------------'));
             $wsId = ArtWs::uidToWsId($after['user_id']);
-            if ($wsId !== false && !empty($resMsg)){
-                $resMsg = '------自动追码注单------'.PHP_EOL.$resMsg;
-                art_assign_ws(200, $resMsg, [],0,$wsId);
+            if ($wsId !== false && !empty($resMsg)) {
+                $resMsg = '------自动追码注单------' . PHP_EOL . $resMsg;
+                art_assign_ws(200, $resMsg, [], 0, $wsId);
             }
         });
 
-        array_walk($afterList,function ($item) use ($medoo){
+        array_walk($afterList, function ($item) use ($medoo) {
             $item['last_order_ids'] = json_encode($item['last_order_ids']);
             $item['order_ids'] = json_encode($item['order_ids']);
-           $medoo->update('after',$item,['id'=>$item['id']]);
+            $medoo->update('after', $item, ['id' => $item['id']]);
         });
     }
 
@@ -728,10 +729,10 @@ class RoomService
      * @param $count
      * @return array
      */
-    private static function rate(array $expMsg,$rate,$count)
+    private static function rate(array $expMsg, $rate, $count)
     {
-        array_walk($expMsg,function (&$item)use ($rate,$count){
-            if (count($item) < 7){
+        array_walk($expMsg, function (&$item) use ($rate, $count) {
+            if (count($item) < 7) {
                 return;
             }
             $item[6] = $item[6] + $item[6] * $rate * $count;
