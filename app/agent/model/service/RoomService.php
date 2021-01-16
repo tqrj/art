@@ -613,6 +613,7 @@ class RoomService
             $exp_msg = json_decode($after['exp_msg'], true);
             if ($after['count'] <= $after['executeds']) {
                 $after['status'] = 0;
+                $after['reset_code'] = 0;
                 return;
             }
 
@@ -672,11 +673,13 @@ class RoomService
                 //因为之前的盈利 是以代理端的角色来计算的 ，与用户是相反的 所以这里是 -=
                 $after['profit'] -= $orderSlimInfo['profit'];
                 if ($after['halt_profit'] != 0 and $after['profit'] >= $after['halt_profit']) {
+                    $after['reset_code'] = 0;
                     $after['status'] = 0;
                     return;
                 }
                 if ($after['halt_loss'] != 0 and $after['profit'] <= -$after['halt_loss']) {
                     $after['status'] = 0;
+                    $after['reset_code'] = 0;
                     return;
                 };
                 //倍投处理
@@ -705,12 +708,12 @@ class RoomService
                     $after['last_order_ids'][] = $orderId;
                     $after['order_ids'][] = $orderId;
                 }
-                $resMsg .= ($temp . PHP_EOL . '----------------' . PHP_EOL);
+                $resMsg .= ($temp . PHP_EOL . '----------------------' . PHP_EOL);
             });
-            $resMsg = substr($resMsg, 0, strripos($resMsg, '----------------'));
             $wsId = ArtWs::uidToWsId($after['user_id']);
             if ($wsId !== false && !empty($resMsg)) {
-                $resMsg = '------自动追码注单------' . PHP_EOL . $resMsg;
+                $resMsg = substr($resMsg, 0, strripos($resMsg, '----------------------'));
+                $resMsg = '------自动追码计划注单------' . PHP_EOL . $resMsg;
                 art_assign_ws(200, $resMsg, [], 0, $wsId);
             }
         });

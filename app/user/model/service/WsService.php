@@ -202,9 +202,9 @@ class WsService
         array_walk($expMsg, function ($item) use ($message, &$resMsg) {
             $temp = '';
             self::payOrder($this->roomInfo,$this->userInfo,$item, $message, $temp);
-            $resMsg .= ($temp . PHP_EOL . '----------------' . PHP_EOL);
+            $resMsg .= ($temp . PHP_EOL . '----------------------' . PHP_EOL);
         });
-        $resMsg = substr($resMsg, 0, strripos($resMsg, '----------------'));
+        $resMsg = substr($resMsg, 0, strripos($resMsg, '----------------------'));
         art_assign_ws(200, $resMsg, [], $this->userInfo['agent_id']);
     }
 
@@ -497,12 +497,12 @@ class WsService
         }
 
         $matches = [];
-        $bool = preg_match("#追码|追(\d{1,})期(\S+)(?:输|中/止)?#", $message, $matches);
-        if (!$bool or count($matches) != 3) {
+        $bool = preg_match("#(追码|追)(\d{1,})期(\S+)(?:输|中/止)?#", $message, $matches);
+        if (!$bool or count($matches) != 4) {
             return false;
         }
 
-        $expMsg = Lottery::parseExp($matches[2]);
+        $expMsg = Lottery::parseExp($matches[3]);
         if (count($expMsg) == 0) {
             //echo '没有识别成功'.$message.PHP_EOL;
             return false;
@@ -511,9 +511,9 @@ class WsService
         $medoo = new Medoo();
         $data['user_id'] = $this->userInfo['id'];
         $data['agent_id'] = $this->userInfo['agent_id'];
-        $data['message'] = $matches[2];
+        $data['message'] = $matches[3];
         $data['exp_msg'] = json_encode($expMsg);
-        $data['count'] = $matches[1];
+        $data['count'] = $matches[2];
         $data['status'] = 1;
         $data['create_time'] = art_d();
 
