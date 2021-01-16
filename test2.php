@@ -1,6 +1,7 @@
 <?php
-
-
+$a =1;
+$a++;
+echo $a;
 //echo decbin($num).PHP_EOL;
 //echo  decbin(10 << 2);;
 //echo decbin($num);
@@ -12,8 +13,8 @@
 
 //echo substr($str,$temp,strripos($str,':')- $temp);
 //$matches = [];
-preg_match('#追码|追(\d{1,})期(\S+)(?:输|中)#','追1期12345678-12345678-123659取二数合38中倍投3止赢1000止损3333',$matches);
-var_dump($matches);
+//preg_match('#追码|追(\d{1,})期(\S+)(?:输|中)?#','追1期123定10',$matches);
+//var_dump($matches);
 //preg_match('#(输倍投|中倍投)(\d{1,2})#','追1期12345678-12345678-123659取二数合38中倍投3止赢1000止损3333',$matches);
 //var_dump($matches);
 //preg_match('#(止赢)(\d{1,5})#','追1期12345678-12345678-123659取二数合38中倍投3止损3333止赢1000',$matches);

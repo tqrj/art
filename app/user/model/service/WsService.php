@@ -49,12 +49,12 @@ class WsService
      */
     public function joinGroup()
     {
-        ArtWs::bindUid($this->ws->artWsId,$this->userInfo['id']);
+        ArtWs::bindUid($this->ws->artWsId, $this->userInfo['id']);
         ArtWs::joinGroup($this->ws->artWsId, $this->userInfo['agent_id']);
         $data['authInfo'] = Context::get('authInfo');
         unset($data['authInfo']['openid']);
         $data['groupSize'] = ArtWs::groupSize($this->userInfo['agent_id']);
-        art_assign_ws(self::WS_HANDEL, '', $data,0,$this->ws->artWsId);
+        art_assign_ws(self::WS_HANDEL, '', $data, 0, $this->ws->artWsId);
     }
 
     /**
@@ -66,7 +66,7 @@ class WsService
 
         $data['authInfo'] = Context::get('authInfo');
         unset($data['authInfo']['openid']);
-        art_assign_ws(200, htmlspecialchars($params['message']), $data, $this->userInfo['agent_id'],0,$this->ws->artWsId,);
+        art_assign_ws(200, htmlspecialchars($params['message']), $data, $this->userInfo['agent_id'], 0, $this->ws->artWsId,);
         if ($this->checkScore($params['message'])) { //查分
             return;
         } elseif ($this->checkPay($params['message'])) { //上分
@@ -77,7 +77,7 @@ class WsService
             return;
         } elseif ($this->checkOrderEx($params['message'])) { //下单
             return;
-        }  elseif ($this->afterCode($params['message'])) { //追码
+        } elseif ($this->afterCode($params['message'])) { //追码
             return;
         } elseif ($this->afterCodeRe($params['message'])) { //取消追码
             return;
@@ -98,7 +98,7 @@ class WsService
         }
         $exp = '查流水';
         if ($this->_codeExp($exp, $message) != false) {
-            $message = "[" . $this->userInfo['nickname'] . "] 您当前流水:" . $this->medoo->sum('order', 'quantity',[
+            $message = "[" . $this->userInfo['nickname'] . "] 您当前流水:" . $this->medoo->sum('order', 'quantity', [
                     'user_id' => $this->userInfo['id'],
                     'agent_id' => $this->userInfo['agent_id'],
                     'status' => 1
@@ -133,7 +133,7 @@ class WsService
             $params['quantity'] = (float)$matches[2];
             UserService::pay($params);
             art_assign_ws(200, '[' . $this->userInfo['nickname'] . '] 上分受理中', [], $this->userInfo['agent_id']);
-            art_assign_ws(self::WS_PAY, '[' . $this->userInfo['nickname'] . '] 请求上分 '.$params['quantity'], [], 0,ArtWs::uidToWsId('agent'.$this->userInfo['agent_id']));
+            art_assign_ws(self::WS_PAY, '[' . $this->userInfo['nickname'] . '] 请求上分 ' . $params['quantity'], [], 0, ArtWs::uidToWsId('agent' . $this->userInfo['agent_id']));
         } catch (HttpException $e) {
             art_assign_ws($e->getStatusCode(), $e->getMessage(), [], $this->userInfo['agent_id']);
         }
@@ -155,9 +155,9 @@ class WsService
             $params['quantity'] = (int)$matches[2];
             UserService::reBack($params);
             art_assign_ws(200, '[' . $this->userInfo['nickname'] . '] 下分受理中', [], $this->userInfo['agent_id']);
-            $agentWsId = ArtWs::uidToWsId('agent'.$this->userInfo['agent_id']);
-            if ($agentWsId !== false){
-                art_assign_ws(self::WS_REBACK, '[' . $this->userInfo['nickname'] . '] 请求下分 '.$params['quantity'], [], 0,$agentWsId);
+            $agentWsId = ArtWs::uidToWsId('agent' . $this->userInfo['agent_id']);
+            if ($agentWsId !== false) {
+                art_assign_ws(self::WS_REBACK, '[' . $this->userInfo['nickname'] . '] 请求下分 ' . $params['quantity'], [], 0, $agentWsId);
             }
         } catch (HttpException $e) {
             art_assign_ws($e->getStatusCode(), $e->getMessage(), [], $this->userInfo['agent_id']);
@@ -192,25 +192,25 @@ class WsService
         $CarbonIssue = Carbon::parse(art_d(), 'Asia/Shanghai');
         $diff = $CarbonIssue->diffInRealSeconds($nowLottery[1]);
         if ((int)$diff <= (int)$this->roomInfo['closeTime']) {
-            art_assign_ws(200,$this->userInfo['nickname'].': 当前已经封盘',[],$this->userInfo['agent_id']);
+            art_assign_ws(200, $this->userInfo['nickname'] . ': 当前已经封盘', [], $this->userInfo['agent_id']);
             return false;
         }
         $resMsg = '';
-        array_walk($expMsg,function ($item)use ($message,&$resMsg){
-            $temp ='';
-            $this->payOrder($item,$message,$temp);
-            $resMsg.=($temp.PHP_EOL.'----------------'.PHP_EOL);
+        array_walk($expMsg, function ($item) use ($message, &$resMsg) {
+            $temp = '';
+            $this->payOrder($item, $message, $temp);
+            $resMsg .= ($temp . PHP_EOL . '----------------' . PHP_EOL);
         });
-        $resMsg = substr($resMsg,0,strripos($resMsg,'----------------'));
-        art_assign_ws(200,$resMsg,[],$this->userInfo['agent_id']);
+        $resMsg = substr($resMsg, 0, strripos($resMsg, '----------------'));
+        art_assign_ws(200, $resMsg, [], $this->userInfo['agent_id']);
     }
 
 
-    private function payOrder(array $expMsg, $message,&$resMsg)
+    public function payOrder(array $expMsg, $message, &$resMsg,$whether_after = 0)
     {
         $medoo = $this->medoo;
         $userInfo = $this->userInfo;
-        $userInfo['quantity'] = (float)$medoo->get('user_quantity','quantity',['user_id'=>$userInfo['id'],'agent_id'=>$userInfo['agent_id']]);
+        $userInfo['quantity'] = (float)$medoo->get('user_quantity', 'quantity', ['user_id' => $userInfo['id'], 'agent_id' => $userInfo['agent_id']]);
         $class = '';
         switch ($expMsg[2]) {
             case '一定':
@@ -229,16 +229,20 @@ class WsService
                 $class = 5;
                 break;
         }
+
         if (empty($class)) {
             return false;
         }
+
         $nowLottery = Lottery::getCode(Lottery::LOTTERY_TYPE_now);
         if (count($nowLottery) != 6) {
             echo 'Ws:开奖信息错误' . PHP_EOL;
             return false;
         }
+
         $showNowLottery = $nowLottery;
         $nowLottery = $nowLottery['raw'];
+
         $redis = \art\db\Redis::getInstance()->getConnection();
         $issue = $redis->get(RoomService::ROOM_ISSUE . $userInfo['agent_id']);
         Redis::getInstance()->close($redis);
@@ -246,38 +250,43 @@ class WsService
             echo 'ws:当前期数错误' . PHP_EOL;
             return false;
         }
+
         $CarbonIssue = Carbon::parse(art_d(), 'Asia/Shanghai');
         $diff = $CarbonIssue->diffInRealSeconds($nowLottery[1]);
         if ((int)$diff <= (int)$this->roomInfo['closeTime']) {
-            art_assign_ws(200,$userInfo['nickname'].': 当前已经封盘',[],$userInfo['agent_id']);
+            art_assign_ws(200, $userInfo['nickname'] . ': 当前已经封盘', [], $userInfo['agent_id']);
             return false;
         }
+
         $roomRule = $medoo->get('room_rule', '*', ['agent_id' => $userInfo['agent_id'], 'class' => $class]);
         if (empty($roomRule)) {
             return false;
         }
-        $resMsg = $userInfo['nickname']." {$showNowLottery['nowIssue']}期".PHP_EOL.str_ireplace('|',PHP_EOL,$expMsg[8]).PHP_EOL;
-        $resMsg.= '组'.$expMsg[5].'扣'.$expMsg[7].'余'.((float)$userInfo['quantity']-(float)$expMsg[7]).PHP_EOL;
-        if ($roomRule['status'] != 1){
-            $resMsg.='暂不接收该玩法';
+
+        $resMsg = $userInfo['nickname'] . " {$showNowLottery['nowIssue']}期" . PHP_EOL . str_ireplace('|', PHP_EOL, $expMsg[8]) . PHP_EOL;
+        $resMsg .= '组' . $expMsg[5] . '扣' . $expMsg[7] . '余' . ((float)$userInfo['quantity'] - (float)$expMsg[7]) . PHP_EOL;
+        if ($roomRule['status'] != 1) {
+            $resMsg .= '暂不接收该玩法';
             return false;
         }
-        if ($roomRule['max'] < $expMsg[6]){
-            $resMsg.='金额无效 单注金额超出'.$roomRule['max'];
+        if ($roomRule['max'] < $expMsg[6]) {
+            $resMsg .= '金额无效 单注金额超出' . $roomRule['max'];
             return false;
         }
-        if (!$this->asDecimal($expMsg[6],$roomRule['decimal'])){
-            $resMsg.='金额无效';
+        if (!$this->asDecimal($expMsg[6], $roomRule['decimal'])) {
+            $resMsg .= '金额无效';
             return false;
         }
 
-        if ($userInfo['quantity'] < (float)$expMsg[7]){
-            $resMsg.='账户积分不足:'.$userInfo['quantity'];
+        if ($userInfo['quantity'] < (float)$expMsg[7]) {
+            $resMsg .= '账户积分不足:' . $userInfo['quantity'];
             return false;
         }
+
         $temp = 5 + strlen($userInfo['agent_id']);
-        $orderData['orderNo'] = $issue . substr(time(), $temp) . $userInfo['agent_id'].mt_rand(100,999);
+        $orderData['orderNo'] = $issue . substr(time(), $temp) . $userInfo['agent_id'] . mt_rand(100, 999);
         $orderData['game'] = 'hn5f';
+        $orderData['whether_after'] = $whether_after;
         $orderData['user_id'] = $userInfo['id'];
         $orderData['agent_id'] = $userInfo['agent_id'];
         $orderData['issue'] = $issue;
@@ -300,32 +309,34 @@ class WsService
         $orderData['create_time'] = art_d();
         $orderData['update_time'] = $orderData['create_time'];
         $orderData['began_quantity'] = $userInfo['quantity'];
-        $orderData['after_quantity'] = bcsub($userInfo['quantity'],$orderData['quantity'],2);
+        $orderData['after_quantity'] = bcsub($userInfo['quantity'], $orderData['quantity'], 2);
+
         $medoo->beginTransaction();
         try {
-            $pdoDoc = $medoo->update('user_quantity',[
-                'quantity[-]'=>$orderData['quantity']
-            ],[
-                'quantity'=>$userInfo['quantity'],
-                'user_id'=>$userInfo['id'],
-                'agent_id'=>$userInfo['agent_id']
+            $pdoDoc = $medoo->update('user_quantity', [
+                'quantity[-]' => $orderData['quantity']
+            ], [
+                'quantity' => $userInfo['quantity'],
+                'user_id' => $userInfo['id'],
+                'agent_id' => $userInfo['agent_id']
             ]);
-            if(!$pdoDoc->rowCount()){
+            if (!$pdoDoc->rowCount()) {
                 throw new \Exception('下单失败');
             }
-            $pdoDoc = $medoo->insert('order',$orderData);
-            if (!$pdoDoc->rowCount()){
+            $pdoDoc = $medoo->insert('order', $orderData);
+            if (!$pdoDoc->rowCount()) {
                 throw new \Exception('下单失败.');
             }
+            $orderId = $medoo->id();
             $medoo->commit();
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             $medoo->rollBack();
-            $resMsg.= '【下单失败】';
+            $resMsg .= '【下单失败】';
             return false;
         }
-        $resMsg.= '退单请发送:退'.$orderData['reset_code'];
-        QuantityLogService::push($userInfo['id'],$userInfo['agent_id'],$orderData['quantity'],$orderData['after_quantity'],'下单扣减');
-        return true;
+        $resMsg .= '退单请发送:退' . $orderData['reset_code'];
+        QuantityLogService::push($userInfo['id'], $userInfo['agent_id'], $orderData['quantity'], $orderData['after_quantity'], '下单扣减');
+        return $orderId;
     }
 
     /**
@@ -346,8 +357,8 @@ class WsService
         }
         $nowLottery = $nowLottery['raw'];
         $medoo = $this->medoo;
-        $userInfo =$this->userInfo;
-        $userInfo['quantity'] = (float)$medoo->get('user_quantity','quantity',['user_id'=>$userInfo['id'],'agent_id'=>$userInfo['agent_id']]);
+        $userInfo = $this->userInfo;
+        $userInfo['quantity'] = (float)$medoo->get('user_quantity', 'quantity', ['user_id' => $userInfo['id'], 'agent_id' => $userInfo['agent_id']]);
 //        $roomInfo = $medoo->get('room', '*', ['agent_id' => $userInfo['agent_id']]);
         $reCode = (int)$matches[1];
         $redis = \art\db\Redis::getInstance()->getConnection();
@@ -361,54 +372,54 @@ class WsService
         $diff = $CarbonIssue->diffInRealSeconds($nowLottery[1]);
         if ((int)$diff <= (int)$this->roomInfo['closeTime']) {
             //echo '退单:已封盘' . PHP_EOL;
-            art_assign_ws(200,$userInfo['nickname'].' 退单失败:当前已封盘','',$userInfo['agent_id']);
+            art_assign_ws(200, $userInfo['nickname'] . ' 退单失败:当前已封盘', '', $userInfo['agent_id']);
             return false;
         }
-        $orderInfo = $medoo->get('order',['id','quantity','create_time'],
+        $orderInfo = $medoo->get('order', ['id', 'quantity', 'create_time'],
             [
-                'agent_id'=>$userInfo['agent_id'],
-                'user_id'=>$userInfo['id'],
-                'reset_code'=>$reCode,
-                'issue'=>$issue
+                'agent_id' => $userInfo['agent_id'],
+                'user_id' => $userInfo['id'],
+                'reset_code' => $reCode,
+                'issue' => $issue
             ]);
         $diff = $CarbonIssue->diffInRealSeconds($orderInfo['create_time']);
         if ((int)$diff >= (int)$this->roomInfo['reTime']) {
             echo '退单:已超时' . PHP_EOL;
-            art_assign_ws(200,$userInfo['nickname'].' 退单失败:已经超过退单时间','',$userInfo['agent_id']);
+            art_assign_ws(200, $userInfo['nickname'] . ' 退单失败:已经超过退单时间', '', $userInfo['agent_id']);
             return false;
         }
 
 
-        if (empty($orderInfo)){
-            art_assign_ws(200,$userInfo['nickname'].' 退单失败:没有查找到订单','',$userInfo['agent_id']);
+        if (empty($orderInfo)) {
+            art_assign_ws(200, $userInfo['nickname'] . ' 退单失败:没有查找到订单', '', $userInfo['agent_id']);
             return false;
         }
         $medoo->beginTransaction();
         try {
-            $pdoDoc = $medoo->update('user_quantity',[
-                'quantity[+]'=>$orderInfo['quantity']
-            ],[
-                'quantity'=>$userInfo['quantity'],
-                'user_id'=>$userInfo['id'],
-                'agent_id'=>$userInfo['agent_id']
+            $pdoDoc = $medoo->update('user_quantity', [
+                'quantity[+]' => $orderInfo['quantity']
+            ], [
+                'quantity' => $userInfo['quantity'],
+                'user_id' => $userInfo['id'],
+                'agent_id' => $userInfo['agent_id']
             ]);
-            if(!$pdoDoc->rowCount()){
+            if (!$pdoDoc->rowCount()) {
                 throw new \Exception('退单失败');
             }
-            $pdoDoc = $medoo->update('order',['status'=>-1],['id'=>$orderInfo['id']]);
-            if (!$pdoDoc->rowCount()){
+            $pdoDoc = $medoo->update('order', ['status' => -1], ['id' => $orderInfo['id']]);
+            if (!$pdoDoc->rowCount()) {
                 throw new \Exception('退单失败.');
             }
             $medoo->commit();
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             $medoo->rollBack();
-            art_assign_ws(200,$userInfo['nickname'].' 退单失败','',$userInfo['agent_id']);
+            art_assign_ws(200, $userInfo['nickname'] . ' 退单失败', '', $userInfo['agent_id']);
             return false;
         }
-        $msg  =$userInfo['nickname'].' 退单成功'.PHP_EOL;
-        $msg.= '退'.$orderInfo['quantity'].'余'.($userInfo['quantity'] + $orderInfo['quantity']);
-        art_assign_ws(200,$msg,[],$userInfo['agent_id']);
-        QuantityLogService::push($userInfo['id'],$userInfo['agent_id'],$orderInfo['quantity'],$userInfo['quantity'] + $orderInfo['quantity'],'退单增额 订单ID'.$orderInfo['id']);
+        $msg = $userInfo['nickname'] . ' 退单成功' . PHP_EOL;
+        $msg .= '退' . $orderInfo['quantity'] . '余' . ($userInfo['quantity'] + $orderInfo['quantity']);
+        art_assign_ws(200, $msg, [], $userInfo['agent_id']);
+        QuantityLogService::push($userInfo['id'], $userInfo['agent_id'], $orderInfo['quantity'], $userInfo['quantity'] + $orderInfo['quantity'], '退单增额 订单ID' . $orderInfo['id']);
         return true;
     }
 
@@ -429,9 +440,9 @@ class WsService
      * @param $decimal
      * @return bool
      */
-    private function asDecimal($quantity,$decimal):bool
+    private function asDecimal($quantity, $decimal): bool
     {
-        switch ($decimal){
+        switch ($decimal) {
             case 0:
                 $decimal = 0;
                 break;
@@ -445,11 +456,11 @@ class WsService
                 $decimal = 0.001;
                 break;
         }
-        if ($decimal == 0 && $quantity < 1){
+        if ($decimal == 0 && $quantity < 1) {
             return false;
-        }elseif ($decimal == 0 && $quantity >= 1 ){
+        } elseif ($decimal == 0 && $quantity >= 1) {
             return true;
-        }elseif ($quantity < $decimal or $this->getRemainder($quantity,$decimal) != 0){
+        } elseif ($quantity < $decimal or $this->getRemainder($quantity, $decimal) != 0) {
             return false;
         }
         return true;
@@ -460,14 +471,14 @@ class WsService
      * @param $divisor
      * @return float|int
      */
-    private function getRemainder($dividend,$divisor)
+    private function getRemainder($dividend, $divisor)
     {
         $result = $dividend / $divisor;
-        $result = explode('.',$result);
-        if (count($result) == 1 ){
+        $result = explode('.', $result);
+        if (count($result) == 1) {
             return 0;
         }
-        return (float)("0.".$result[1]);
+        return (float)("0." . $result[1]);
     }
 
     /**
@@ -478,19 +489,22 @@ class WsService
      */
     private function afterCode($message)
     {
-        if (!$this->roomInfo['status'] or !$this->roomInfo['whether_track']){
+        if (!$this->roomInfo['status'] or !$this->roomInfo['whether_track']) {
             return false;
         }
+
         $matches = [];
-        $bool = preg_match("#追码|追(\d{1,})期(\S+)(?:输|中)#", $message, $matches);
+        $bool = preg_match("#追码|追(\d{1,})期(\S+)(?:输|中/止)?#", $message, $matches);
         if (!$bool or count($matches) != 3) {
             return false;
         }
+
         $expMsg = Lottery::parseExp($matches[2]);
         if (count($expMsg) == 0) {
             //echo '没有识别成功'.$message.PHP_EOL;
             return false;
         }
+
         $medoo = new Medoo();
         $data['user_id'] = $this->userInfo['id'];
         $data['agent_id'] = $this->userInfo['agent_id'];
@@ -499,30 +513,35 @@ class WsService
         $data['count'] = $matches[1];
         $data['status'] = 1;
         $data['create_time'] = art_d();
+
         $redis = \art\db\Redis::getInstance()->getConnection();
-        $redis->setnx(self::ORDER_AFTER_REST_INC . $this->userInfo['id'],0);
+        $redis->setnx(self::ORDER_AFTER_REST_INC . $this->userInfo['id'], 0);
         $data['reset_code'] = $redis->incr(self::ORDER_AFTER_REST_INC . $this->userInfo['id']);
-        $redis->expire(self::ORDER_AFTER_REST_INC . $this->userInfo['id'],86400);
+        $redis->expire(self::ORDER_AFTER_REST_INC . $this->userInfo['id'], 86400);
         Redis::getInstance()->close($redis);
+
         $bool = preg_match("#(输倍投|中倍投)(\d{1,2})#", $message, $matches);
         if ($bool && count($matches) == 3) {
             $data['rate_type'] = $matches[1] == '中倍投' ? 1 : 2;
             $data['rate'] = $matches[2];
         }
+
         $bool = preg_match("#(止赢)(\d{1,5})?#", $message, $matches);
         if ($bool && count($matches) == 3) {
             $data['halt_profit'] = $matches[2];
         }
+
         $bool = preg_match("#(止损)(\d{1,5})?#", $message, $matches);
         if ($bool && count($matches) == 3) {
             $data['halt_loss'] = $matches[2];
         }
-        $pdoDoc = $medoo->insert('after',$data);
-        if (!$pdoDoc->rowCount()){
-            art_assign_ws(200,'追码失败',[],$this->userInfo['agent_id']);
+
+        $pdoDoc = $medoo->insert('after', $data);
+        if (!$pdoDoc->rowCount()) {
+            art_assign_ws(200, '追码失败', [], $this->userInfo['agent_id']);
             return false;
         }
-        art_assign_ws(200,'追码成功'.PHP_EOL.'取消请发送:取消追码'.$data['reset_code'],[],0,ArtWs::uidToWsId($this->userInfo['id']));
+        art_assign_ws(200, '追码成功' . PHP_EOL . '取消请发送:取消追码' . $data['reset_code'], [], 0, ArtWs::uidToWsId($this->userInfo['id']));
         return true;
     }
 
@@ -530,24 +549,29 @@ class WsService
     {
         $matches = [];
         $bool = preg_match("#(取消追码|取消)(\d+)#", $message, $matches);
-        if (!$bool) {
+        if (!$bool or count($matches) !== 3) {
             return false;
         }
+
         $map = [];
-        if (count($matches) == 3){
-            $map['reset_code'] = $matches[2];
-        }
+        $map['reset_code'] = $matches[2];
         $map['user_id'] = $this->userInfo['id'];
         $map['agent_id'] = $this->userInfo['agent_id'];
-        $map['status'] = 1;
+
         $medoo = new Medoo();
-        $pdoDoc = $medoo->update('after',['status'=>0],$map);
-        if (!$pdoDoc->rowCount()){
-            art_assign_ws(200,'取消失败',[],$this->userInfo['agent_id']);
+        $status = $medoo->get('after', 'status', $map);
+        if ($status == 0) {
+            art_assign_ws(200, '已被取消', [], $this->userInfo['agent_id']);
             return false;
         }
-        $mark = count($matches) == 3 ? '取消成功':'全部取消成功';
-        art_assign_ws(200,$mark,[],0,ArtWs::uidToWsId($this->userInfo['id']));
+
+        $pdoDoc = $medoo->update('after', ['status' => 0], $map);
+        if (!$pdoDoc->rowCount()) {
+            art_assign_ws(200, '取消失败', [], $this->userInfo['agent_id']);
+            return false;
+        }
+
+        art_assign_ws(200, '取消成功', [], 0, ArtWs::uidToWsId($this->userInfo['id']));
         return true;
     }
 }
