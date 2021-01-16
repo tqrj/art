@@ -1,7 +1,6 @@
 <?php
-$a =1;
-$a++;
-echo $a;
+$a = ['profit'=>121];
+var_dump($a);
 //echo decbin($num).PHP_EOL;
 //echo  decbin(10 << 2);;
 //echo decbin($num);

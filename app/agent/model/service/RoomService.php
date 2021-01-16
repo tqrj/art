@@ -601,7 +601,8 @@ class RoomService
             'halt_profit',
             'halt_loss',
             'order_ids',
-            'last_order_ids'
+            'last_order_ids',
+            'profit'
         ],[
             'agent_id'=>$agentInfo['id'],
             'status'=>1
@@ -698,9 +699,11 @@ class RoomService
             $resMsg = '';
             array_walk($exp_msg, function ($item) use ($userInfo,$roomInfo,&$after, &$resMsg) {
                 $temp = '';
-                $orderId =   WsService::payOrder($roomInfo,$userInfo,$item, $after['message'], $temp,$after['id']);
-                $after['last_order_ids'][] = $orderId;
-                $after['order_ids'][] = $orderId;
+                $orderId =  WsService::payOrder($roomInfo,$userInfo,$item, $after['message'], $temp,$after['id']);
+                if ($orderId != false){
+                    $after['last_order_ids'][] = $orderId;
+                    $after['order_ids'][] = $orderId;
+                }
                 $resMsg .= ($temp . PHP_EOL . '----------------' . PHP_EOL);
             });
             $resMsg = substr($resMsg, 0, strripos($resMsg, '----------------'));
