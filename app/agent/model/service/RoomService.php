@@ -600,7 +600,7 @@ class RoomService
         ]);
         array_walk($afterList,function (&$after)use ($roomInfo){
             $exp_msg = json_decode($after['exp_msg'],true);
-            if ($after['count'] >= $after['executeds']){
+            if ($after['count'] <= $after['executeds']){
                 $after['status'] = 0;
                 return;
             }
