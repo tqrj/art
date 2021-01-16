@@ -100,7 +100,8 @@ class RoomService
             //追码处理
             $bool = $redis->set(self::ROOM_AFTER_FLAG . $agent_info['id'] . $nowLottery[0], '1', ['nx', 'ex' => $diff + mt_rand(10, 20)],);
             if ($bool){
-                self::afterPay($roomInfo,$agent_info,$issue);
+                echo '进入自动追码成功';
+                self::afterPay($roomInfo,$agent_info);
             }
             //封盘处理
             if ((int)$diff <= (int)$roomInfo['closeTime']) {
@@ -124,7 +125,7 @@ class RoomService
             //有期号 且是上一期那么就结算 并设置为当前期
             //结算
             if (!empty($issue) and $issue === $nowLottery[3]) {
-                //echo '进入结算成功'.$issue.PHP_EOL;
+                echo '进入结算成功'.$issue.PHP_EOL;
                 art_assign_ws(200, $showIssue . '期 开' . $nowLottery[4], [], $agent_info['id']);
                 self::settleOrder($agent_info['id'], $issue, $nowLottery[4]);//结算订单
                 $redis->set(self::ROOM_ISSUE . $agent_info['id'], $nowLottery[0], $diff + mt_rand(10, 20));
@@ -582,9 +583,8 @@ class RoomService
      * 追码
      * @param $roomInfo
      * @param $agentInfo
-     * @param $issue
      */
-    private static function afterPay($roomInfo,$agentInfo,$issue)
+    private static function afterPay($roomInfo,$agentInfo)
     {
         $medoo = new Medoo();
         $afterList = $medoo->select('after',[
@@ -666,7 +666,7 @@ class RoomService
                     $after['status'] = 0;
                     return;
                 }
-                if ($after['halt_loss'] !=0 and $after['profit'] <= -$after['halt_loss']){
+                if ($after['halt_loss'] != 0 and $after['profit'] <= -$after['halt_loss']){
                     $after['status'] = 0;
                     return;
                 };
@@ -689,7 +689,7 @@ class RoomService
             }
 
             $after['last_order_ids'] = [];
-            $resMsg = '------自动追码注单------'.PHP_EOL;
+            $resMsg = '';
             array_walk($exp_msg, function ($item) use ($userInfo,$roomInfo,&$after, &$resMsg) {
                 $temp = '';
                 $orderId =   WsService::payOrder($roomInfo,$userInfo,$item, $after['message'], $temp,$after['id']);
@@ -699,13 +699,15 @@ class RoomService
             });
             $resMsg = substr($resMsg, 0, strripos($resMsg, '----------------'));
             $wsId = ArtWs::uidToWsId($after['user_id']);
-            if ($wsId !== false){
+            if ($wsId !== false && !empty($resMsg)){
+                $resMsg = '------自动追码注单------'.PHP_EOL.$resMsg;
                 art_assign_ws(200, $resMsg, [],0,$wsId);
             }
         });
 
-        array_walk($afterList,function ($item){
-           $medoo = new Medoo();
+        array_walk($afterList,function ($item) use ($medoo){
+            $item['last_order_ids'] = json_encode($item['last_order_ids']);
+            $item['order_ids'] = json_encode($item['order_ids']);
            $medoo->update('after',$item,['id'=>$item['id']]);
         });
     }
