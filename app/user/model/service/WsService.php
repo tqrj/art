@@ -201,7 +201,7 @@ class WsService
         $resMsg = '';
         array_walk($expMsg, function ($item) use ($message, &$resMsg) {
             $temp = '';
-            $this->payOrder($item, $message, $temp);
+            self::payOrder($this->roomInfo,$this->userInfo,$item, $message, $temp);
             $resMsg .= ($temp . PHP_EOL . '----------------' . PHP_EOL);
         });
         $resMsg = substr($resMsg, 0, strripos($resMsg, '----------------'));
@@ -209,11 +209,11 @@ class WsService
     }
 
 
-    public function payOrder(array $expMsg, $message, &$resMsg,$whether_after = 0)
+    public static function payOrder($roomInfo,$userInfo,array $expMsg, $message, &$resMsg,$whether_after = 0)
     {
-        $medoo = $this->medoo;
-        $userInfo = $this->userInfo;
+        $medoo = new Medoo();
         $userInfo['quantity'] = (float)$medoo->get('user_quantity', 'quantity', ['user_id' => $userInfo['id'], 'agent_id' => $userInfo['agent_id']]);
+//        $roomInfo = $medoo->get('room', '*', ['agent_id' => $userInfo['agent_id']]);
         $class = '';
         switch ($expMsg[2]) {
             case '一定':
@@ -256,7 +256,7 @@ class WsService
 
         $CarbonIssue = Carbon::parse(art_d(), 'Asia/Shanghai');
         $diff = $CarbonIssue->diffInRealSeconds($nowLottery[1]);
-        if ((int)$diff <= (int)$this->roomInfo['closeTime']) {
+        if ((int)$diff <= (int)$roomInfo['closeTime']) {
             art_assign_ws(200, $userInfo['nickname'] . ': 当前已经封盘', [], $userInfo['agent_id']);
             return false;
         }
@@ -276,7 +276,7 @@ class WsService
             $resMsg .= '金额无效 单注金额超出' . $roomRule['max'];
             return false;
         }
-        if (!$this->asDecimal($expMsg[6], $roomRule['decimal'])) {
+        if (!self::asDecimal($expMsg[6], $roomRule['decimal'])) {
             $resMsg .= '金额无效';
             return false;
         }
@@ -443,7 +443,7 @@ class WsService
      * @param $decimal
      * @return bool
      */
-    private function asDecimal($quantity, $decimal): bool
+    private static function asDecimal($quantity, $decimal): bool
     {
         switch ($decimal) {
             case 0:
@@ -463,7 +463,7 @@ class WsService
             return false;
         } elseif ($decimal == 0 && $quantity >= 1) {
             return true;
-        } elseif ($quantity < $decimal or $this->getRemainder($quantity, $decimal) != 0) {
+        } elseif ($quantity < $decimal or self::getRemainder($quantity, $decimal) != 0) {
             return false;
         }
         return true;
@@ -474,7 +474,7 @@ class WsService
      * @param $divisor
      * @return float|int
      */
-    private function getRemainder($dividend, $divisor)
+    private static function getRemainder($dividend, $divisor)
     {
         $result = $dividend / $divisor;
         $result = explode('.', $result);

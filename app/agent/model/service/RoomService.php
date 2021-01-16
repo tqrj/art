@@ -100,7 +100,7 @@ class RoomService
             //追码处理
             $bool = $redis->set(self::ROOM_AFTER_FLAG . $agent_info['id'] . $nowLottery[0], '1', ['nx', 'ex' => $diff + mt_rand(10, 20)],);
             if ($bool){
-                self::afterPay($agent_info,$issue);
+                self::afterPay($roomInfo,$agent_info,$issue);
             }
             //封盘处理
             if ((int)$diff <= (int)$roomInfo['closeTime']) {
@@ -578,7 +578,7 @@ class RoomService
         return $result;
     }
 
-    private static function afterPay($agentInfo,$issue)
+    private static function afterPay($roomInfo,$agentInfo,$issue)
     {
         $medoo = new Medoo();
         $afterList = $medoo->select('after',[
@@ -598,9 +598,7 @@ class RoomService
             'agent_id'=>$agentInfo['id'],
             'status'=>1
         ]);
-        $wsService = new WsService();
-        array_walk($afterList,function (&$after)use ($wsService){
-
+        array_walk($afterList,function (&$after)use ($roomInfo){
             $exp_msg = json_decode($after['exp_msg'],true);
             if ($after['count'] >= $after['executeds']){
                 $after['status'] = 0;
@@ -609,6 +607,26 @@ class RoomService
 
             $after['executeds'] ++;
             $medoo = new Medoo();
+
+            $map['u.id'] = $after['user_id'];
+            $map['agent_id'] = $after['agent_id'];
+            $map['u.status'] = [1];
+            $map['q.status'] = [1];
+            $userInfo = $medoo->get('user(u)',
+                [
+                    '[><]user_quantity(q)'=>['u.id'=>'user_id'],
+                    '[><]agent(a)'=>['q.agent_id'=>'id'],
+                ],
+                [
+                    'u.id',
+                    'u.nickname',
+                    'headimgurl',
+                    'refresh_token',
+                    'openid',
+                    'q.agent_id',
+                ],
+                $map
+            );
             $after['order_ids'] = json_decode($after['order_ids'],true);
             $after['last_order_ids'] = json_decode($after['last_order_ids'],true);
 
@@ -664,9 +682,9 @@ class RoomService
 
             $after['last_order_ids'] = [];
             $resMsg = '------自动追码注单------'.PHP_EOL;
-            array_walk($exp_msg, function ($item) use ($wsService,&$after, &$resMsg) {
+            array_walk($exp_msg, function ($item) use ($userInfo,$roomInfo,&$after, &$resMsg) {
                 $temp = '';
-                $orderId = $wsService->payOrder($item, $after['message'], $temp,$after['id']);
+                $orderId =   WsService::payOrder($roomInfo,$userInfo,$item, $after['message'], $temp,$after['id']);
                 $after['last_order_ids'][] = $orderId;
                 $after['order_ids'][] = $orderId;
                 $resMsg .= ($temp . PHP_EOL . '----------------' . PHP_EOL);
