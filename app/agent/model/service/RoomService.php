@@ -642,17 +642,23 @@ class RoomService
             //如果有上期订单ID 需要算进利润 来处理 止损 止亏
             if($after['last_order_ids'] != []){
                 //这个利润是所有订单的哦
-                $orderSlimInfo['profit'] = $medoo->get('order', Medoo::raw('SUM(profit)'),
+                $orderSlimInfo['profit'] = $medoo->get('order',
+                    [
+                        'profit'=>Medoo::raw('SUM(profit)')
+                    ],
                     [
                         'id'=>$after['order_ids'],
                         'status'=>1
-                    ]);
+                    ])['profit'];
                 //这个只是上期的是否中奖
-                $orderSlimInfo['whether_hit'] = $medoo->get('order', Medoo::raw('SUM(whether_hit)'),
+                $orderSlimInfo['whether_hit'] = $medoo->get('order',
+                    [
+                        'whether_hit'=>Medoo::raw('SUM(whether_hit)')
+                    ],
                     [
                         'id'=>$after['last_order_ids'],
                         'status'=>1
-                    ]);
+                    ])['whether_hit'];
                 if ($orderSlimInfo['whether_hit'] > -count($after['last_order_ids'])){
                     $orderSlimInfo['whether_hit'] = 1;
                 }else{
