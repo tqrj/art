@@ -578,11 +578,19 @@ class RoomService
         return $result;
     }
 
+    /**
+     * 追码
+     * @param $roomInfo
+     * @param $agentInfo
+     * @param $issue
+     */
     private static function afterPay($roomInfo,$agentInfo,$issue)
     {
         $medoo = new Medoo();
         $afterList = $medoo->select('after',[
             'id',
+            'user_id',
+            'agent_id',
             'message',
             'exp_msg',
             'count',
