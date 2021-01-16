@@ -30,7 +30,10 @@ class WsService
     const WS_SYN_QUANTITY_LOG = 4003;
     const ORDER_REST_INC = 'ORDER_REST_INC';
     const ORDER_AFTER_REST_INC = 'ORDER_AFTER_REST_INC';
-    protected Response $ws;//$artWsId
+    /**
+     * @var mixed|Response|null
+     */
+    protected $ws;//$artWsId
     protected $userInfo = null;
     protected Medoo $medoo;
     protected $roomInfo;
