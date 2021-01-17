@@ -735,7 +735,7 @@ class RoomService
      */
     private static function rate(array $expMsg, $rate)
     {
-        array_walk($expMsg, function (&$item) use ($rate, $count) {
+        array_walk($expMsg, function (&$item) use ($rate) {
             if (count($item) < 7) {
                 return;
             }
