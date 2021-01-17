@@ -92,7 +92,7 @@ class RoomService
             //如果redis没有获取到期号就是第一次 把当前期号设置进去
             if (empty($issue)) {
 
-                $redis->set(self::ROOM_ISSUE . $agent_info['id'], $nowLottery[0], $diff + mt_rand(10, 20));
+                $redis->set(self::ROOM_ISSUE . $agent_info['id'], $nowLottery[0], $diff + mt_rand(20,30));
                 $issue = $nowLottery[0];
             }
             $showIssue = mb_strlen($issue) == 11 ? mb_substr($issue, 8, 3) : $issue;
@@ -101,7 +101,7 @@ class RoomService
             //封盘处理
             if ((int)$diff <= (int)$roomInfo['closeTime']) {
 
-                $bool = $redis->set(self::ROOM_CLOSE_MSG_FLAG . $agent_info['id'] . $nowLottery[0], '1', ['nx', 'ex' => $diff + mt_rand(10, 20)],);
+                $bool = $redis->set(self::ROOM_CLOSE_MSG_FLAG . $agent_info['id'] . $nowLottery[0], '1', ['nx', 'ex' => $diff + mt_rand(20, 30)],);
                 if ($bool) {
                     //echo '成功封盘'.$issue.PHP_EOL;
                     art_assign_ws(200, $roomInfo['notice_close'], [], $agent_info['id']);
@@ -115,9 +115,9 @@ class RoomService
             if (!empty($issue) and $issue === $nowLottery[0]) {
                 //echo '有期号且是当前期'.$issue.PHP_EOL;
                 //追码处理
-                $bool = $redis->set(self::ROOM_AFTER_FLAG . $agent_info['id'] . $nowLottery[0], '1', ['nx', 'ex' => $diff + mt_rand(10, 20)],);
+                $bool = $redis->set(self::ROOM_AFTER_FLAG . $agent_info['id'] . $nowLottery[0], '1', ['nx', 'ex' => $diff + mt_rand(20, 30)],);
                 if ($bool) {
-                    echo '进入自动追码成功';
+                    echo '进入自动追码成功'. $issue . PHP_EOL;
                     self::afterPay($roomInfo, $agent_info);
                 }
                 \art\db\Redis::getInstance()->close($redis);
@@ -129,7 +129,7 @@ class RoomService
                 echo '进入结算成功' . $issue . PHP_EOL;
                 art_assign_ws(200, $showIssue . '期 开' . $nowLottery[4], [], $agent_info['id']);
                 self::settleOrder($agent_info['id'], $issue, $nowLottery[4]);//结算订单
-                $redis->set(self::ROOM_ISSUE . $agent_info['id'], $nowLottery[0], $diff + mt_rand(10, 20));
+                $redis->set(self::ROOM_ISSUE . $agent_info['id'], $nowLottery[0], $diff + mt_rand(20, 30));
                 \art\db\Redis::getInstance()->close($redis);
                 return;
             }
