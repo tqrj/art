@@ -209,6 +209,16 @@ class WsService
     }
 
 
+    /**
+     * 下单
+     * @param $roomInfo
+     * @param $userInfo
+     * @param array $expMsg
+     * @param $message
+     * @param $resMsg
+     * @param int $whether_after
+     * @return bool|int|mixed|string|null
+     */
     public static function payOrder($roomInfo,$userInfo,array $expMsg, $message, &$resMsg,$whether_after = 0)
     {
         $medoo = new Medoo();
@@ -497,7 +507,7 @@ class WsService
         }
 
         $matches = [];
-        $bool = preg_match("#(追码|追)(\d{1,})期(\S+)(?:输|中/止)?#", $message, $matches);
+        $bool = preg_match("#(追码|追)(\d{1,})期(\S+)(?:中|输|止)#", $message, $matches);
         if (!$bool or count($matches) != 4) {
             return false;
         }

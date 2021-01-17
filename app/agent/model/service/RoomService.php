@@ -639,6 +639,13 @@ class RoomService
                 ],
                 $map
             );
+            //用户被删除了就不再追码了
+            if (empty($userInfo)){
+                $after['status'] = 0;
+                $after['reset_code'] = 0;
+                return;
+            }
+
             $after['order_ids'] = json_decode($after['order_ids'], true);
             $after['last_order_ids'] = json_decode($after['last_order_ids'], true);
 
@@ -738,8 +745,8 @@ class RoomService
             if (count($item) < 7) {
                 return;
             }
-            $item[6] = $item[6] + $item[6] * $rate * $count;
-            $item[7] = $item[6] + $item[7] * $rate * $count;
+            $item[6] = $item[6] * $rate * $count;
+            $item[7] = $item[7] * $rate * $count;
         });
         return $expMsg;
     }
