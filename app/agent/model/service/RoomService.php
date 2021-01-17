@@ -670,6 +670,7 @@ class RoomService
                         'id' => $after['last_order_ids'],
                         'status' => 1
                     ])['whether_hit'];
+                echo '中奖判断:'.$orderSlimInfo['whether_hit'].PHP_EOL;
                 if ($orderSlimInfo['whether_hit'] > -count($after['last_order_ids'])) {
                     $orderSlimInfo['whether_hit'] = 1;
                 } else {
@@ -677,14 +678,14 @@ class RoomService
                 }
 
                 //止亏 止赢
-                //因为之前的盈利 是以代理端的角色来计算的 ，与用户是相反的 所以这里是 -=
-                $after['profit'] -= $orderSlimInfo['profit'];
-                if ($after['halt_profit'] != 0 and $after['profit'] >= $after['halt_profit']) {
+                //因为之前的盈利 是以代理端的角色来计算的 ，与用户是相反的 所以这里需要为相反数
+                $after['profit'] = $orderSlimInfo['profit'];
+                if ($after['halt_profit'] != 0 and -$after['profit'] >= $after['halt_profit']) {
                     $after['reset_code'] = 0;
                     $after['status'] = 0;
                     return;
                 }
-                if ($after['halt_loss'] != 0 and $after['profit'] <= -$after['halt_loss']) {
+                if ($after['halt_loss'] != 0 and -$after['profit'] <= -$after['halt_loss']) {
                     $after['status'] = 0;
                     $after['reset_code'] = 0;
                     return;
