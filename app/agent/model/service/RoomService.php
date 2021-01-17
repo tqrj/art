@@ -667,7 +667,7 @@ class RoomService
                         'id' => $after['last_order_ids'],
                         'whether_hit'=>1,
                         'status' => 1
-                    ])['whether_hit'];
+                    ]);
                 echo '中奖判断:'.$orderSlimInfo['whether_hit'].PHP_EOL;
                 var_dump($after['last_order_ids']);
                 echo PHP_EOL;
