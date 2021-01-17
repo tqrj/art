@@ -670,8 +670,6 @@ class RoomService
                     ]);
                 $orderSlimInfo['whether_hit'] = $orderSlimInfo['whether_hit'] == 1 ? 1:-1;
                 echo '中奖判断:'.$orderSlimInfo['whether_hit'].PHP_EOL;
-                var_dump($after['last_order_ids']);
-                echo PHP_EOL;
                 //止亏 止赢
                 //因为之前的盈利 是以代理端的角色来计算的 ，与用户是相反的 所以这里需要为相反数
                 $after['profit'] = $orderSlimInfo['profit'];
@@ -691,13 +689,14 @@ class RoomService
                     if ($after['rate_type'] == 1 and $orderSlimInfo['whether_hit'] == 1) {
 
                         $after['rate_count']++;
-                        $exp_msg = self::rate($exp_msg, $after['rate'], $after['rate_count']);
 
                     } elseif ($after['rate_type'] == 2 and $orderSlimInfo['whether_hit'] == -1) {
 
                         $after['rate_count']++;
-                        $exp_msg = self::rate($exp_msg, $after['rate'], $after['rate_count']);
+                    }
+                    if ($after['rate_count'] > 0){
 
+                        $exp_msg = self::rate($exp_msg, $after['rate'], $after['rate_count']);
                     }
                 }
 
@@ -741,8 +740,8 @@ class RoomService
             if (count($item) < 7) {
                 return;
             }
-            $item[6] = $item[6] * $rate * $count;
-            $item[7] = $item[7] * $rate * $count;
+            $item[6] = $item[6] * $rate ;
+            $item[7] = $item[7] * $rate ;
         });
         return $expMsg;
     }
