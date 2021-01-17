@@ -662,21 +662,15 @@ class RoomService
                         'status' => 1
                     ])['profit'];
                 //这个只是上期的是否中奖
-                $orderSlimInfo['whether_hit'] = $medoo->get('order',
-                    [
-                        'whether_hit' => Medoo::raw('SUM(whether_hit)')
-                    ],
+                $orderSlimInfo['whether_hit'] = $medoo->get('order','whether_hit',
                     [
                         'id' => $after['last_order_ids'],
+                        'whether_hit'=>1,
                         'status' => 1
                     ])['whether_hit'];
                 echo '中奖判断:'.$orderSlimInfo['whether_hit'].PHP_EOL;
-                if ($orderSlimInfo['whether_hit'] > -count($after['last_order_ids'])) {
-                    $orderSlimInfo['whether_hit'] = 1;
-                } else {
-                    $orderSlimInfo['whether_hit'] = -1;
-                }
-
+                var_dump($after['last_order_ids']);
+                echo PHP_EOL;
                 //止亏 止赢
                 //因为之前的盈利 是以代理端的角色来计算的 ，与用户是相反的 所以这里需要为相反数
                 $after['profit'] = $orderSlimInfo['profit'];
