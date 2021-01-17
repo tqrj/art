@@ -668,6 +668,7 @@ class RoomService
                         'whether_hit'=>1,
                         'status' => 1
                     ]);
+                $orderSlimInfo['whether_hit'] = $orderSlimInfo['whether_hit'] == 1 ? 1:-1;
                 echo '中奖判断:'.$orderSlimInfo['whether_hit'].PHP_EOL;
                 var_dump($after['last_order_ids']);
                 echo PHP_EOL;
