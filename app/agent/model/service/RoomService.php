@@ -696,7 +696,7 @@ class RoomService
                     }
                     if ($after['rate_count'] > 0){
 
-                        $exp_msg = self::rate($exp_msg, $after['rate'], $after['rate_count']);
+                        $exp_msg = self::rate($exp_msg, $after['rate']);
                     }
                 }
 
@@ -731,10 +731,9 @@ class RoomService
      * 计算倍率
      * @param array $expMsg
      * @param $rate
-     * @param $count
      * @return array
      */
-    private static function rate(array $expMsg, $rate, $count)
+    private static function rate(array $expMsg, $rate)
     {
         array_walk($expMsg, function (&$item) use ($rate, $count) {
             if (count($item) < 7) {

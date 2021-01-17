@@ -507,7 +507,7 @@ class WsService
         }
 
         $matches = [];
-        $bool = preg_match("#(追码|追)(\d{1,})期(\S+)(?:中|输|止)#", $message, $matches);
+        $bool = preg_match("#(追码|追)(\d{1,})期(\S+)(?:输|中|止)#", $message, $matches);
         if (!$bool or count($matches) != 4) {
             return false;
         }
@@ -544,7 +544,7 @@ class WsService
             $data['halt_profit'] = $matches[2];
         }
 
-        $bool = preg_match("#(止损)(\d{1,5})?#", $message, $matches);
+        $bool = preg_match("#(止损|止亏)(\d{1,5})?#", $message, $matches);
         if ($bool && count($matches) == 3) {
             $data['halt_loss'] = $matches[2];
         }
