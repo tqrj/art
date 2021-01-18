@@ -506,8 +506,28 @@ class WsService
             return false;
         }
 
+        $data = [];
         $matches = [];
-        $bool = preg_match("#(追码|追)(\d{1,})期(\S+)(?:输|中|止)#", $message, $matches);
+        $bool = preg_match("#(输倍投|中倍投)(\d{1,2})#", $message, $matches);
+        if ($bool && count($matches) == 3) {
+            $message = str_replace($matches[0],'',$message);
+            $data['rate_type'] = $matches[1] == '中倍投' ? 1 : 2;
+            $data['rate'] = $matches[2];
+        }
+
+        $bool = preg_match("#(止赢)(\d{1,5})?#", $message, $matches);
+        if ($bool && count($matches) == 3) {
+            $message = str_replace($matches[0],'',$message);
+            $data['halt_profit'] = $matches[2];
+        }
+
+        $bool = preg_match("#(止损|止亏)(\d{1,5})?#", $message, $matches);
+        if ($bool && count($matches) == 3) {
+            $message = str_replace($matches[0],'',$message);
+            $data['halt_loss'] = $matches[2];
+        }
+
+        $bool = preg_match("#(追码|追)(\d{1,})期(\S+)#", $message, $matches);
         if (!$bool or count($matches) != 4) {
             return false;
         }
@@ -533,21 +553,7 @@ class WsService
         $redis->expire(self::ORDER_AFTER_REST_INC . $this->userInfo['id'], 86400);
         Redis::getInstance()->close($redis);
 
-        $bool = preg_match("#(输倍投|中倍投)(\d{1,2})#", $message, $matches);
-        if ($bool && count($matches) == 3) {
-            $data['rate_type'] = $matches[1] == '中倍投' ? 1 : 2;
-            $data['rate'] = $matches[2];
-        }
 
-        $bool = preg_match("#(止赢)(\d{1,5})?#", $message, $matches);
-        if ($bool && count($matches) == 3) {
-            $data['halt_profit'] = $matches[2];
-        }
-
-        $bool = preg_match("#(止损|止亏)(\d{1,5})?#", $message, $matches);
-        if ($bool && count($matches) == 3) {
-            $data['halt_loss'] = $matches[2];
-        }
 
         $pdoDoc = $medoo->insert('after', $data);
         if (!$pdoDoc->rowCount()) {
