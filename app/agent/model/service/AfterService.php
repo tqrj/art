@@ -22,6 +22,8 @@ class AfterService
         }
         return $medoo->select('after(a)', ['[><]user(u)'=>['a.user_id'=>'id']],
             [
+                'u.id(user_id)',
+                'a.id(after_id)',
                 'u.nickname',
                 'u.headimgurl',
                 'a.message',
