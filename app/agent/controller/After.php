@@ -9,6 +9,8 @@ use app\agent\model\service\AfterService;
 
 class After
 {
+    private $isHttp = true;
+
     public function list()
     {
         $params = AfterLogic::list();
