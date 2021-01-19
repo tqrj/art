@@ -17,7 +17,7 @@ class AfterService
         $map['agent_id'] = $authInfo['agent_id'];
         $map['user_id'] = $authInfo['id'];
         $map['LIMIT'] = [$params['page'], $params['limit']];
-        $map['ORDER'] = ['a.id' => 'DESC'];
+        $map['ORDER'] = ['a.id' => 'DESC','a.status'=>'DESC'];
         return $medoo->select('after(a)', ['[><]user(u)'=>['a.user_id'=>'id']],
             [
                 'u.id(user_id)',
@@ -33,7 +33,7 @@ class AfterService
                 'a.halt_profit',
                 'a.halt_loss',
                 'a.reset_code',
-                'a.profit',
+                'profit'=>Medoo::raw('-a.profit'),
                 'a.status',
                 'a.create_time'
             ],$map);

@@ -16,7 +16,7 @@ class AfterService
         $agentInfo = Context::get('authInfo');
         $map['agent_id'] = $agentInfo['id'];
         $map['LIMIT'] = [$params['page'], $params['limit']];
-        $map['ORDER'] = ['a.id' => 'DESC'];
+        $map['ORDER'] = ['a.id' => 'DESC','a.status'=>'DESC'];
         if (!empty($params['userId'])){
             $map['user_id'] = $params['userId'];
         }
