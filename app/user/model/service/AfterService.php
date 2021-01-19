@@ -17,7 +17,7 @@ class AfterService
         $map['agent_id'] = $authInfo['agent_id'];
         $map['user_id'] = $authInfo['id'];
         $map['LIMIT'] = [$params['page'], $params['limit']];
-        $map['ORDER'] = ['a.status' => 'DESC'];
+        $map['ORDER'] = ['a.id' => 'DESC'];
         return $medoo->select('after(a)', ['[><]user(u)'=>['a.user_id'=>'id']],
             [
                 'u.id(user_id)',
