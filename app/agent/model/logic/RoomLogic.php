@@ -54,6 +54,7 @@ class RoomLogic
             'reTime',
             'closeTime',
             'notice',
+            'notice_help',
             'notice_close',
             'notice_top',
             'whether_water',
