@@ -12,11 +12,20 @@ class PostService
     public static function posts($params)
     {
         $userInfo = Context::get('authInfo');
+        $map = [
+            'agent_id' => $userInfo['agent_id'],
+            'user_id' => $userInfo['id'],
+            'LIMIT' => [$params['page'], $params['limit']],
+            'ORDER' => ['id' => 'DESC']
+        ];
+        if(!empty($params['afterId'])){
+            $map['whether_after'] = $params['afterId'];
+        }
         $medoo = new Medoo();
         $result = $medoo->select('order',
             [
                 'game',
-                'issue'=>Medoo::raw("RIGHT(issue,3)"),
+                'issue' => Medoo::raw("RIGHT(issue,3)"),
                 'orderNo',
                 'reset_code',
                 'play_method',
@@ -29,15 +38,9 @@ class PostService
                 'whether_hit',
                 'began_quantity',
                 'after_quantity',
-                'end_quantity'=>Medoo::raw('after_quantity+loc_quantity_ret+fly_quantity_ret'),
+                'end_quantity' => Medoo::raw('after_quantity+loc_quantity_ret+fly_quantity_ret'),
                 'status',
-            ],
-            [
-            'agent_id'=>$userInfo['agent_id'],
-            'user_id'=>$userInfo['id'],
-            'LIMIT'=>[$params['page'],$params['limit']],
-            'ORDER'=>['id'=>'DESC']
-        ]);
+            ],);
         return $result;
     }
 

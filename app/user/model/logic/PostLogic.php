@@ -13,6 +13,7 @@ class PostLogic
         $params = Request::only([
             'page'=>0,
             'limit'=>10,
+            'afterId'
         ]);
         art_validate($params,[
             'limit'=>'require|between:5,50',

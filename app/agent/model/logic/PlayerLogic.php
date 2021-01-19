@@ -34,11 +34,13 @@ class PlayerLogic
             'page'=>0,
             'limit'=>10,
             'playerId',
+            'afterId'
         ]);
         art_validate($params,[
             'limit'=>'require|between:5,50',
             'page'=>'require|between:0,999',
-            'playerId'=>'require|number'
+            'playerId'=>'require|number',
+            'afterId'=>'number'
         ]);
         $params['page'] *= $params['limit'];
         return $params;

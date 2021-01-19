@@ -77,6 +77,9 @@ class PlayerService
             'LIMIT'=> [$params['page'], $params['limit']],
             'ORDER'=>['id'=>'DESC']
         ];
+        if(!empty($params['afterId'])){
+            $map['whether_after'] = $params['afterId'];
+        }
         return $medoo->select('order',
         [
             'game',
