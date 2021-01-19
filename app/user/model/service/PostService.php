@@ -40,7 +40,7 @@ class PostService
                 'after_quantity',
                 'end_quantity' => Medoo::raw('after_quantity+loc_quantity_ret+fly_quantity_ret'),
                 'status',
-            ],);
+            ],$map);
         return $result;
     }
 
