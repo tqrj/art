@@ -117,7 +117,7 @@ class RoomService
                 //追码处理
                 $bool = $redis->set(self::ROOM_AFTER_FLAG . $agent_info['id'] . $nowLottery[0], '1', ['nx', 'ex' => $diff + mt_rand(20, 30)],);
                 if ($bool) {
-                    echo '进入自动追码成功'. $issue . PHP_EOL;
+                    //echo '进入自动追码成功'. $issue . PHP_EOL;
                     self::afterPay($roomInfo, $agent_info);
                 }
                 \art\db\Redis::getInstance()->close($redis);
@@ -126,7 +126,7 @@ class RoomService
             //有期号 且是上一期那么就结算 并设置为当前期
             //结算
             if (!empty($issue) and $issue === $nowLottery[3]) {
-                echo '进入结算成功' . $issue . PHP_EOL;
+                //echo '进入结算成功' . $issue . PHP_EOL;
                 art_assign_ws(200, $showIssue . '期 开' . $nowLottery[4], [], $agent_info['id']);
                 self::settleOrder($agent_info['id'], $issue, $nowLottery[4]);//结算订单
                 $redis->set(self::ROOM_ISSUE . $agent_info['id'], $nowLottery[0], $diff + mt_rand(20, 30));
@@ -175,7 +175,7 @@ class RoomService
                 [
                     'o.play_method',
                     'o.play_site',
-                    'o.play_code'=>Medoo::raw("SUBSTRING_INDEX(o.exp_msg,'|',-1)"),
+                    'play_code'=>Medoo::raw("SUBSTRING_INDEX(exp_msg,'|',-1)"),
                     'o.single_quantity',
                     'o.quantity',
                 ],
@@ -322,7 +322,6 @@ class RoomService
 
         $userOrderList = [];
 //        $quantityTemp = [];
-
         array_walk($orderList, function ($orderInfo) use ($medoo, $issue, $lotteryCode, &$userOrderList) {
             $userOrderList[$orderInfo['user_id']]['nickname'] = $orderInfo['nickname'];
             $userOrderList[$orderInfo['user_id']]['user_id'] = $orderInfo['user_id'];

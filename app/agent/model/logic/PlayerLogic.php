@@ -188,7 +188,7 @@ class PlayerLogic
         ]);
         art_validate($params,[
             'playerId'=>'require|gt:0',
-            'status'=>'require|gt:0'
+            'status'=>'require|egt:0'
         ]);
         return $params;
     }

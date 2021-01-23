@@ -56,7 +56,7 @@ class WsService
         unset($data['authInfo']['openid']);
         $data['groupSize'] = ArtWs::groupSize($this->userInfo['agent_id']);
         art_assign_ws(self::WS_HANDEL, '', $data, 0, $this->ws->artWsId);
-        art_assign_ws(200, $data['authInfo']['nickname'].'加入房间',[], 0, $this->ws->artWsId);
+        art_assign_ws(200, $data['authInfo']['nickname'].'加入房间',[], $data['authInfo']['agent_id']);
     }
 
     /**
@@ -135,7 +135,10 @@ class WsService
             $params['quantity'] = (float)$matches[2];
             UserService::pay($params);
             art_assign_ws(200, '[' . $this->userInfo['nickname'] . '] 上分受理中', [], $this->userInfo['agent_id']);
-            art_assign_ws(self::WS_PAY, '[' . $this->userInfo['nickname'] . '] 请求上分 ' . $params['quantity'], [], 0, ArtWs::uidToWsId('agent' . $this->userInfo['agent_id']));
+            $agentWsId = ArtWs::uidToWsId('agent' . $this->userInfo['agent_id']);
+            if ($agentWsId !== false){
+                art_assign_ws(self::WS_PAY, '[' . $this->userInfo['nickname'] . '] 请求上分 ' . $params['quantity'], [], 0,$agentWsId);
+            }
         } catch (HttpException $e) {
             art_assign_ws($e->getStatusCode(), $e->getMessage(), [], $this->userInfo['agent_id']);
         }
