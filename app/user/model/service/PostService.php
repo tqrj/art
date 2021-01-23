@@ -29,7 +29,7 @@ class PostService
                 'orderNo',
                 'reset_code',
                 'play_method',
-                'play_code',
+                'play_code'=>Medoo::raw("SUBSTRING_INDEX(exp_msg,'|',-1)"),
                 'play_site',
                 'quantity',
                 'single_quantity',

@@ -56,7 +56,7 @@ class WsService
         unset($data['authInfo']['openid']);
         $data['groupSize'] = ArtWs::groupSize($this->userInfo['agent_id']);
         art_assign_ws(self::WS_HANDEL, '', $data, 0, $this->ws->artWsId);
-        art_assign_ws(200, $data['nickname'].'加入房间',[], 0, $this->ws->artWsId);
+        art_assign_ws(200, $data['authInfo']['nickname'].'加入房间',[], 0, $this->ws->artWsId);
     }
 
     /**

@@ -93,7 +93,7 @@ class PlayerService
             'site_result',
             'reset_code',
             'play_method',
-            'play_code'=>Medoo::raw("SUBSTRING_INDEX(exp_msg,'|',2)"),
+            'play_code'=>Medoo::raw("SUBSTRING_INDEX(exp_msg,'|',-1)"),
             'play_site',
             'play_code_count',
             'quantity',
