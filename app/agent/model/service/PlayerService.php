@@ -20,20 +20,20 @@ class PlayerService
         if (!empty($params['keyWord'])) {
             $map['u.nickname[~]'] = $params['keyWord'] . '%';
         }
-        $map['u.status'] = [1 , 0];
+        $map['u.status'] = [1, 0];
         $map['q.status'] = [1, 0];
         $map['q.agent_id'] = $agentInfo['id'];
-        $map['ORDER'] = ['q.status'=>'DESC',];
+        $map['ORDER'] = ['q.status' => 'DESC',];
         $medoo = new Medoo();
         $result['userAllQuantity'] = $medoo->sum('user(u)',
             ['[><]user_quantity(q)' => ['u.id' => 'user_id']],
             'q.quantity',
             $map);
         $map['LIMIT'] = [$params['page'], $params['limit']];
-        $map['ORDER'] = ['q.id' => 'DESC','q.status'=>'DESC'];
+        $map['ORDER'] = ['q.id' => 'DESC', 'q.status' => 'DESC'];
         $result['userList'] = $medoo->select('user(u)',
             ['[><]user_quantity(q)' => ['u.id' => 'user_id']],
-            ['u.id', 'u.nickname','u.token', 'q.quantity', 'u.group_id','u.headimgurl', 'u.status', 'q.create_time'],
+            ['u.id', 'u.nickname', 'u.token', 'q.quantity', 'u.group_id', 'u.headimgurl', 'q.status', 'q.create_time'],
             $map);
         return $result;
     }
@@ -49,22 +49,11 @@ class PlayerService
         $medoo = new Medoo();
         $userInfo = $medoo->get('user(u)',
             ['[><]user_quantity(q)' => ['u.id' => 'user_id']],
-            ['u.id', 'u.nickname','u.token','u.headimgurl', 'q.quantity', 'u.group_id', 'q.status'],
+            ['u.id', 'u.nickname', 'u.token', 'u.headimgurl', 'q.quantity', 'u.group_id', 'q.status'],
             $map);
         if (!$userInfo) {
             art_assign(202, '用户ID错误');
         }
-//        $agentInfo = Context::get('authInfo');
-//        $map = [
-//            'agent_id' => $agentInfo['id'],
-//            'user_id' => $userInfo['id']
-//        ];
-        //$userInfo['order'] = $medoo->select('order', '*', $map);
-//        $map['ORDER'] = ['status' => 'DESC'];
-//        $map['type'] = 1;
-//        $userInfo['points_pay'] = $medoo->select('points', '*', $map);
-//        $map['type'] = -1;
-//        $userInfo['points_reject'] = $medoo->select('points', '*', $map);
         return $userInfo;
     }
 
@@ -75,42 +64,42 @@ class PlayerService
         $map = [
             'agent_id' => $agentInfo['id'],
             'user_id' => $params['playerId'],
-            'LIMIT'=> [$params['page'], $params['limit']],
-            'ORDER'=>['id'=>'DESC']
+            'LIMIT' => [$params['page'], $params['limit']],
+            'ORDER' => ['id' => 'DESC']
         ];
-        if(!empty($params['afterId'])){
+        if (!empty($params['afterId'])) {
             $map['whether_after'] = $params['afterId'];
         }
         return $medoo->select('order',
-        [
-            'game',
-            'issue',
-            'old_msg',
-            'exp_msg',
-            'orderNo',
-            'site_orderNo',
-            'site_link',
-            'site_result',
-            'reset_code',
-            'play_method',
-            'play_code'=>Medoo::raw("SUBSTRING_INDEX(exp_msg,'|',-1)"),
-            'play_site',
-            'play_code_count',
-            'quantity',
-            'single_quantity',
-            'fly_quantity',
-            'loc_quantity',
-            'fly_quantity_ret',
-            'loc_quantity_ret',
-            'profit',
-            'lottery_code',
-            'line',
-            'whether_hit',
-            'began_quantity',
-            'after_quantity',
-            'end_quantity'=>Medoo::raw('after_quantity+loc_quantity_ret+fly_quantity_ret'),
-            'status',
-        ], $map);
+            [
+                'game',
+                'issue',
+                'old_msg',
+                'exp_msg',
+                'orderNo',
+                'site_orderNo',
+                'site_link',
+                'site_result',
+                'reset_code',
+                'play_method',
+                'play_code' => Medoo::raw("SUBSTRING_INDEX(exp_msg,'|',-1)"),
+                'play_site',
+                'play_code_count',
+                'quantity',
+                'single_quantity',
+                'fly_quantity',
+                'loc_quantity',
+                'fly_quantity_ret',
+                'loc_quantity_ret',
+                'profit',
+                'lottery_code',
+                'line',
+                'whether_hit',
+                'began_quantity',
+                'after_quantity',
+                'end_quantity' => Medoo::raw('after_quantity+loc_quantity_ret+fly_quantity_ret'),
+                'status',
+            ], $map);
     }
 
     public static function quantityLog($params)
@@ -120,10 +109,10 @@ class PlayerService
         $map = [
             'agent_id' => $agentInfo['id'],
             'user_id' => $params['playerId'],
-            'LIMIT'=> [$params['page'], $params['limit']],
-            'ORDER'=>['id'=>'DESC']
+            'LIMIT' => [$params['page'], $params['limit']],
+            'ORDER' => ['id' => 'DESC']
         ];
-        return $medoo->select('quantity_log', ['mark','over','create_time','quantity'], $map);
+        return $medoo->select('quantity_log', ['mark', 'over', 'create_time', 'quantity'], $map);
     }
 
     public static function pointsPay($params)
@@ -133,8 +122,8 @@ class PlayerService
         $map = [
             'agent_id' => $agentInfo['id'],
             'user_id' => $params['playerId'],
-            'LIMIT'=> [$params['page'], $params['limit']],
-            'ORDER'=>['id' => 'DESC']
+            'LIMIT' => [$params['page'], $params['limit']],
+            'ORDER' => ['id' => 'DESC']
         ];
         return $medoo->select('points', '*', $map);
     }
@@ -146,9 +135,9 @@ class PlayerService
         $map = [
             'agent_id' => $agentInfo['id'],
             'user_id' => $params['playerId'],
-            'type'=>-1,
-            'LIMIT'=> [$params['page'], $params['limit']],
-            'ORDER'=>['status' => 'DESC']
+            'type' => -1,
+            'LIMIT' => [$params['page'], $params['limit']],
+            'ORDER' => ['status' => 'DESC']
         ];
         return $medoo->select('points', '*', $map);
     }
@@ -199,7 +188,7 @@ class PlayerService
         if (!$pdoDoc->rowCount()) {
             art_assign(202, '更新数据失败');
         }
-        QuantityLogService::push($map['user_id'], $map['agent_id'], $params['score'], $params['score'],'主动修改');
+        QuantityLogService::push($map['user_id'], $map['agent_id'], $params['score'], $params['score'], '主动修改');
         return $medoo->get('user_quantity', ['quantity'], $map);
     }
 
@@ -230,13 +219,13 @@ class PlayerService
         $agentInfo = Context::get('authInfo');
         $medoo = new Medoo();
         $map = [
-            'agent_id'=>$agentInfo['id'],
-            'user_id'=>$params['playerId'],
-            'status'=>[-2,-1,1]
+            'agent_id' => $agentInfo['id'],
+            'user_id' => $params['playerId'],
+            'status' => [-2, -1, 1]
         ];
-        $pdoDoc = $medoo->delete('order',$map);
-        if (!$pdoDoc->rowCount()){
-            art_assign(202,'清空失败');
+        $pdoDoc = $medoo->delete('order', $map);
+        if (!$pdoDoc->rowCount()) {
+            art_assign(202, '清空失败');
         }
         return [];
     }
@@ -246,12 +235,12 @@ class PlayerService
         $agentInfo = Context::get('authInfo');
         $medoo = new Medoo();
         $map = [
-            'agent_id'=>$agentInfo['id'],
-            'user_id'=>$params['playerId']
+            'agent_id' => $agentInfo['id'],
+            'user_id' => $params['playerId']
         ];
-        $pdoDoc = $medoo->delete('quantity_log',$map);
-        if (!$pdoDoc->rowCount()){
-            art_assign(202,'清空失败');
+        $pdoDoc = $medoo->delete('quantity_log', $map);
+        if (!$pdoDoc->rowCount()) {
+            art_assign(202, '清空失败');
         }
         return [];
     }
@@ -264,9 +253,9 @@ class PlayerService
             'agent_id' => $agentInfo['id'],
             'user_id' => $params['playerId'],
         ];
-        $pdoDoc = $medoo->delete('points',  $map);
-        if (!$pdoDoc->rowCount()){
-            art_assign(202,'清空失败');
+        $pdoDoc = $medoo->delete('points', $map);
+        if (!$pdoDoc->rowCount()) {
+            art_assign(202, '清空失败');
         }
         return [];
     }

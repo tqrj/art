@@ -57,7 +57,7 @@ class AfterService
     {
         $agentInfo = Context::get('authInfo');
         $medoo = new Medoo();
-        $pdoDoc =  $medoo->delete('after',['agent_id'=>$agentInfo['id'],'status'=>1]);
+        $pdoDoc =  $medoo->delete('after',['agent_id'=>$agentInfo['id'],'status'=>0]);
         if (!$pdoDoc->rowCount()){
             art_assign(202,'清空失败');
         }
