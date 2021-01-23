@@ -99,4 +99,11 @@ class Player
         art_assign(200,'清空成功',$result);
     }
 
+    public function delAllPoints()
+    {
+        $params = PlayerLogic::delAllPoints();
+        $result = PlayerService::delAllPoints($params);
+        art_assign(200,'清空成功',$result);
+    }
+
 }

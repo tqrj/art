@@ -214,4 +214,15 @@ class PlayerLogic
         ]);
         return $params;
     }
+
+    public static function delAllPoints()
+    {
+        $params = Request::only([
+            'playerId',
+        ]);
+        art_validate($params,[
+            'playerId'=>'require|gt:0'
+        ]);
+        return $params;
+    }
 }

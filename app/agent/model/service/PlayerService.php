@@ -256,4 +256,19 @@ class PlayerService
         return [];
     }
 
+    public static function delAllPoints($params)
+    {
+        $agentInfo = Context::get('authInfo');
+        $medoo = new Medoo();
+        $map = [
+            'agent_id' => $agentInfo['id'],
+            'user_id' => $params['playerId'],
+        ];
+        $pdoDoc = $medoo->delete('points',  $map);
+        if (!$pdoDoc->rowCount()){
+            art_assign(202,'清空失败');
+        }
+        return [];
+    }
+
 }
