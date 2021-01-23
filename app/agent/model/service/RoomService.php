@@ -175,7 +175,7 @@ class RoomService
                 [
                     'o.play_method',
                     'o.play_site',
-                    'o.play_code'=>Medoo::raw("SUBSTRING_INDEX(exp_msg,'|',-1)"),
+                    'o.play_code'=>Medoo::raw("SUBSTRING_INDEX(o.exp_msg,'|',-1)"),
                     'o.single_quantity',
                     'o.quantity',
                 ],
