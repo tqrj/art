@@ -220,7 +220,7 @@ class PlayerService
         $medoo = new Medoo();
         $pdoDoc = $medoo->update('user_quantity', ['status' => $params['status']], ['user_id' => $params['playerId'], 'agent_id' => $agentInfo['id']]);
         if (!$pdoDoc->rowCount()) {
-            art_assign(202, '删除失败');
+            art_assign(202, '设置失败');
         }
         return [];
     }
