@@ -11,33 +11,46 @@ date_default_timezone_set("Asia/Shanghai");
  * @param $array
  * @return array|bool
  */
-function art_unset($value,&$array)
+function art_unset($value, &$array)
 {
     $sort = array_flip($array);
-    if (isset($sort[$value])){
-        return array_splice($array,$sort[$value],1);
+    if (isset($sort[$value])) {
+        return array_splice($array, $sort[$value], 1);
     }
     return false;
 }
 
+/**
+ * @return string
+ */
 function art_rand_mobile()
 {
     $arr = array(130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 144, 147, 150, 151, 152, 153, 155, 156, 157, 158, 159, 176, 170, 173, 177, 178, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189);
     return $arr[array_rand($arr)] . mt_rand(10000000, 99999999);
 }
 
+/**
+ * @return string
+ */
 function art_rand_province()
 {
-    $arr = array('广东','上海','江苏','浙江','福建','四川','湖北','湖南','陕西','云南','安徽','广西','新疆','重庆','江西','甘肃','贵州','海南','宁夏','青海','西藏','北京','天津','山东','河南','辽宁','河北','山西','内蒙','吉林','黑龙江');
+    $arr = array('广东', '上海', '江苏', '浙江', '福建', '四川', '湖北', '湖南', '陕西', '云南', '安徽', '广西', '新疆', '重庆', '江西', '甘肃', '贵州', '海南', '宁夏', '青海', '西藏', '北京', '天津', '山东', '河南', '辽宁', '河北', '山西', '内蒙', '吉林', '黑龙江');
     return $arr[array_rand($arr)];
 }
 
+/**
+ * @return false|string
+ */
 function art_d()
 {
     return date("Y-m-d H:i:s");
 }
 
 //随机字符串，默认长度10
+/**
+ * @param int $num
+ * @return false|string
+ */
 function art_set_salt($num = 10)
 {
     $str = 'qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890';
@@ -46,6 +59,11 @@ function art_set_salt($num = 10)
 }
 
 //art加密方式
+/**
+ * @param $pwd
+ * @param $salt
+ * @return string
+ */
 function art_set_password($pwd, $salt)
 {
     return md5(md5($pwd . $salt) . $salt);
@@ -139,8 +157,8 @@ function art_validate(array $data, $validate, array $message = [], bool $batch =
     }
     try {
         $v->failException(true)->check($data);
-    }catch (\art\exception\ValidateException $e){
-        throw new \art\exception\HttpException(202,$e->getMessage());
+    } catch (\art\exception\ValidateException $e) {
+        throw new \art\exception\HttpException(202, $e->getMessage());
     }
     return true;
     //return $v->failException(true)->check($data);
@@ -155,32 +173,40 @@ function art_validate(array $data, $validate, array $message = [], bool $batch =
  * @param int $recvId
  * @param string $wsGroup
  */
-function _art_assign(int $code = 200, $msg = "success",$data = [], string $location = '',int $selfWsId = 0, int $recvId = 0, string $wsGroup = '')
+function _art_assign(int $code = 200, $msg = "success", $data = [], string $location = '', int $selfWsId = 0, int $recvId = 0, string $wsGroup = '')
 {
-    $res['code']= $code;
+    $res['code'] = $code;
     $res['msg'] = $msg;
     $res['data'] = $data;
     /*    if (is_object($data)) {
             $data = $data->toArray();
         }*/
     $response = Context::get('response');
-    if (!property_exists ($response,'artWsId')){
+    if (!property_exists($response, 'artWsId')) {
         $response->status($code);
-        $response->header('Content-type','text/json');
+        $response->header('Content-type', 'text/json');
         if (!empty($location))
             $response->status(302);
-            $response->header('Location',$location);
+        $response->header('Location', $location);
         $response->end(json_encode($res));;
         Context::delete();
     }
 }
 
-function _art_assign_ws(int $code = 200, $msg = "success",$data = [],int $selfWsId = 0, int $recvId = 0, string $wsGroup = '')
+/**
+ * @param int $code
+ * @param string $msg
+ * @param array $data
+ * @param int $selfWsId
+ * @param int $recvId
+ * @param string $wsGroup
+ */
+function _art_assign_ws(int $code = 200, $msg = "success", $data = [], int $selfWsId = 0, int $recvId = 0, string $wsGroup = '')
 {
-    $res['code']= $code;
+    $res['code'] = $code;
     $res['msg'] = $msg;
     $res['data'] = $data;
-    \art\ws\ArtWs::pushMsg(json_encode($res),$selfWsId,$recvId,$wsGroup);
+    \art\ws\ArtWs::pushMsg(json_encode($res), $selfWsId, $recvId, $wsGroup);
 }
 
 /**
@@ -188,13 +214,10 @@ function _art_assign_ws(int $code = 200, $msg = "success",$data = [],int $selfWs
  * @param string $msg
  * @param array $data
  * @param string $location
- * @param int $selfWsId
- * @param int $recvId
- * @param string $wsGroup
  */
-function art_assign(int $code = 200, $msg = "success",$data = [], string $location = '')
+function art_assign(int $code = 200, $msg = "success", $data = [], string $location = '')
 {
-    throw new \art\exception\HttpException($code,$msg,$data,$location);
+    throw new \art\exception\HttpException($code, $msg, $data, $location);
 }
 
 /**
@@ -205,12 +228,12 @@ function art_assign(int $code = 200, $msg = "success",$data = [], string $locati
  * @param int $recvId
  * @param int $selfWsId
  */
-function art_assign_ws(int $code = 200, $msg = "success",$data = [], string $wsGroup = '',int $recvId = 0,int $selfWsId = 0)
+function art_assign_ws(int $code = 200, $msg = "success", $data = [], string $wsGroup = '', int $recvId = 0, int $selfWsId = 0)
 {
-    $message['code']= $code;
+    $message['code'] = $code;
     $message['msg'] = $msg;
     $message['data'] = $data;
     $message = json_encode($message);
-    \art\ws\ArtWs::pushMsg($message,$selfWsId,$recvId,$wsGroup);
+    \art\ws\ArtWs::pushMsg($message, $selfWsId, $recvId, $wsGroup);
     //throw new \art\exception\HttpException($code,$msg,$data,'',$selfWsId,$recvId,$wsGroup);
 }

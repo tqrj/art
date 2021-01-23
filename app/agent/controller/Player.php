@@ -78,5 +78,25 @@ class Player
         art_assign(200,'success',$result);
     }
 
+    public function setStatus()
+    {
+        $params = PlayerLogic::setStatus();
+        $result = PlayerService::setStatus($params);
+        art_assign(200,'设置成功',$result);
+    }
+
+    public function delAllOrder()
+    {
+        $params = PlayerLogic::delAllOrder();
+        $result = PlayerService::delAllOrder($params);
+        art_assign(200,'清空成功',$result);
+    }
+
+    public function delAllQuantityLog()
+    {
+        $params = PlayerLogic::delAllQuantityLog();
+        $result = PlayerService::delAllQuantityLog($params);
+        art_assign(200,'清空成功',$result);
+    }
 
 }

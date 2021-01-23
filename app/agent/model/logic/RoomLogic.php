@@ -76,6 +76,17 @@ class RoomLogic
         return $params;
     }
 
+    public static function changeNoticeHelp()
+    {
+        $params = Request::only([
+            'notice_help',
+        ]);
+        art_validate($params,[
+            'notice_help'=>'require',
+        ]);
+        return $params;
+    }
+
     public static function changeSite()
     {
         $params = Request::only([

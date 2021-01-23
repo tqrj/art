@@ -14,6 +14,8 @@ use Carbon\Carbon;
  */
 class ProfitService
 {
+    const PROFIT_PASS_CODE = 1004;
+    const PROFIT_REJECT_CODE = 2004;
 
     public static function applyList($params)
     {
@@ -127,7 +129,7 @@ class ProfitService
         }
         $wsId = ArtWs::uidToWsId((int)$applyInfo['user_id']);
         if ($wsId !== false){
-            art_assign_ws(200, $mark.':'.$applyInfo['quantity'].'当前:'.$userQuantity,[], 0, (int)$wsId);
+            art_assign_ws(self::PROFIT_PASS_CODE, $mark.':'.$applyInfo['quantity'].'，现有:'.$userQuantity,[], 0, $wsId);
         }
         return [];
     }
@@ -172,7 +174,7 @@ class ProfitService
         }
         $wsId = ArtWs::uidToWsId((int)$applyInfo['user_id']);
         if ($wsId !== false){
-            art_assign_ws(200, $mark,[], 0, (int)$wsId);
+            art_assign_ws(self::PROFIT_REJECT_CODE, $mark,[], 0, (int)$wsId);
         }
         return [];
     }

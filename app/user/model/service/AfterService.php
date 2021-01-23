@@ -33,7 +33,7 @@ class AfterService
                 'a.halt_profit',
                 'a.halt_loss',
                 'a.reset_code',
-                'profit'=>Medoo::raw('-profit'),
+                'profit'=>Medoo::raw('profit'),
                 'a.status',
                 'a.create_time'
             ],$map);

@@ -49,6 +49,18 @@ class AfterService
         if (!$pdoDoc->rowCount()){
             art_assign(202,'取消失败');
         }
-        art_assign(200,'取消成功');
+        return [];
+    }
+
+
+    public static function clear()
+    {
+        $agentInfo = Context::get('authInfo');
+        $medoo = new Medoo();
+        $pdoDoc =  $medoo->delete('after',['agent_id'=>$agentInfo['id'],'status'=>1]);
+        if (!$pdoDoc->rowCount()){
+            art_assign(202,'清空失败');
+        }
+        return [];
     }
 }

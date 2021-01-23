@@ -175,7 +175,7 @@ class RoomService
                 [
                     'o.play_method',
                     'o.play_site',
-                    'o.play_code',
+                    'o.play_code'=>Medoo::raw("SUBSTRING_INDEX(exp_msg,'|',2)"),
                     'o.single_quantity',
                     'o.quantity',
                 ],
@@ -249,7 +249,7 @@ class RoomService
             }
             $medoo->beginTransaction();
             try {
-                $orderData['profit'] = bcsub($orderInfo['quantity'], $whetherScore[1], 2);
+                $orderData['profit'] = bcsub($whetherScore[1],$orderInfo['quantity'], 2);
                 $orderData['loc_quantity_ret'] = bcmul(bcdiv($whetherScore[1], $orderInfo['quantity'], 2), $orderInfo['loc_quantity'], 2);
                 $orderData['whether_hit'] = 1;
                 $orderData['status'] = 1;
@@ -348,7 +348,7 @@ class RoomService
             }
             $medoo->beginTransaction();
             try {
-                $orderData['profit'] = bcsub($orderInfo['quantity'], $whetherScore[1], 2);
+                $orderData['profit'] = bcsub($whetherScore[1],$orderInfo['quantity'], 2);
 //                $orderData['loc_quantity_ret'] = $whetherScore[1] / $orderInfo['quantity'] * $orderInfo['loc_quantity'];
                 $orderData['loc_quantity_ret'] = bcmul(bcdiv($whetherScore[1], $orderInfo['quantity'], 2), $orderInfo['loc_quantity'], 2);
                 $orderData['whether_hit'] = 1;
@@ -671,14 +671,13 @@ class RoomService
                 $orderSlimInfo['whether_hit'] = $orderSlimInfo['whether_hit'] == 1 ? 1:-1;
                 echo '中奖判断:'.$orderSlimInfo['whether_hit'].PHP_EOL;
                 //止亏 止赢
-                //因为之前的盈利 是以代理端的角色来计算的 ，与用户是相反的 所以这里需要为相反数
                 $after['profit'] = $orderSlimInfo['profit'];
-                if ($after['halt_profit'] != 0 and -$after['profit'] >= $after['halt_profit']) {
+                if ($after['halt_profit'] != 0 and $after['profit'] >= $after['halt_profit']) {
                     $after['reset_code'] = 0;
                     $after['status'] = 0;
                     return;
                 }
-                if ($after['halt_loss'] != 0 and -$after['profit'] <= -$after['halt_loss']) {
+                if ($after['halt_loss'] != 0 and $after['profit'] <= -$after['halt_loss']) {
                     $after['status'] = 0;
                     $after['reset_code'] = 0;
                     return;

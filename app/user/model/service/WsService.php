@@ -47,7 +47,6 @@ class WsService
 
     /**
      * 连接上之后加入到该房间分组
-     * @todo 我是个傻逼 直接发送到群组 有人自然能收到~
      */
     public function joinGroup()
     {
@@ -57,6 +56,7 @@ class WsService
         unset($data['authInfo']['openid']);
         $data['groupSize'] = ArtWs::groupSize($this->userInfo['agent_id']);
         art_assign_ws(self::WS_HANDEL, '', $data, 0, $this->ws->artWsId);
+        art_assign_ws(200, $data['nickname'].'加入房间',[], 0, $this->ws->artWsId);
     }
 
     /**

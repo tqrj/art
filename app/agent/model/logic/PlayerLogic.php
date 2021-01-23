@@ -179,4 +179,39 @@ class PlayerLogic
         ]);
         return $params;
     }
+
+    public static function setStatus()
+    {
+        $params = Request::only([
+            'playerId',
+            'status'
+        ]);
+        art_validate($params,[
+            'playerId'=>'require|gt:0',
+            'status'=>'require|gt:0'
+        ]);
+        return $params;
+    }
+
+    public static function delAllOrder()
+    {
+        $params = Request::only([
+            'playerId',
+        ]);
+        art_validate($params,[
+            'playerId'=>'require|gt:0'
+        ]);
+        return $params;
+    }
+
+    public static function delAllQuantityLog()
+    {
+        $params = Request::only([
+            'playerId',
+        ]);
+        art_validate($params,[
+            'playerId'=>'require|gt:0'
+        ]);
+        return $params;
+    }
 }

@@ -20,16 +20,17 @@ class PlayerService
         if (!empty($params['keyWord'])) {
             $map['u.nickname[~]'] = $params['keyWord'] . '%';
         }
-        $map['u.status'] = [1, 0];
+        $map['u.status'] = [1 , 0];
         $map['q.status'] = [1, 0];
         $map['q.agent_id'] = $agentInfo['id'];
+        $map['ORDER'] = ['q.status'=>'DESC',];
         $medoo = new Medoo();
         $result['userAllQuantity'] = $medoo->sum('user(u)',
             ['[><]user_quantity(q)' => ['u.id' => 'user_id']],
             'q.quantity',
             $map);
         $map['LIMIT'] = [$params['page'], $params['limit']];
-        $map['ORDER'] = ['q.id' => 'DESC'];
+        $map['ORDER'] = ['q.id' => 'DESC','q.status'=>'DESC'];
         $result['userList'] = $medoo->select('user(u)',
             ['[><]user_quantity(q)' => ['u.id' => 'user_id']],
             ['u.id', 'u.nickname','u.token', 'q.quantity', 'u.group_id','u.headimgurl', 'u.status', 'q.create_time'],
@@ -92,7 +93,7 @@ class PlayerService
             'site_result',
             'reset_code',
             'play_method',
-            'play_code',
+            'play_code'=>Medoo::raw("SUBSTRING_INDEX(exp_msg,'|',2)"),
             'play_site',
             'play_code_count',
             'quantity',
@@ -209,6 +210,48 @@ class PlayerService
         $pdoDoc = $medoo->update('user_quantity', ['status' => -1], ['user_id' => $params['playerId'], 'agent_id' => $agentInfo['id']]);
         if (!$pdoDoc->rowCount()) {
             art_assign(202, '删除失败');
+        }
+        return [];
+    }
+
+    public static function setStatus($params)
+    {
+        $agentInfo = Context::get('authInfo');
+        $medoo = new Medoo();
+        $pdoDoc = $medoo->update('user_quantity', ['status' => $params['status']], ['user_id' => $params['playerId'], 'agent_id' => $agentInfo['id']]);
+        if (!$pdoDoc->rowCount()) {
+            art_assign(202, '删除失败');
+        }
+        return [];
+    }
+
+    public static function delAllOrder($params)
+    {
+        $agentInfo = Context::get('authInfo');
+        $medoo = new Medoo();
+        $map = [
+            'agent_id'=>$agentInfo['id'],
+            'user_id'=>$params['playerId'],
+            'status'=>[-2,-1,1]
+        ];
+        $pdoDoc = $medoo->delete('order',$map);
+        if (!$pdoDoc->rowCount()){
+            art_assign(202,'清空失败');
+        }
+        return [];
+    }
+
+    public static function delAllQuantityLog($params)
+    {
+        $agentInfo = Context::get('authInfo');
+        $medoo = new Medoo();
+        $map = [
+            'agent_id'=>$agentInfo['id'],
+            'user_id'=>$params['playerId']
+        ];
+        $pdoDoc = $medoo->delete('quantity_log',$map);
+        if (!$pdoDoc->rowCount()){
+            art_assign(202,'清空失败');
         }
         return [];
     }

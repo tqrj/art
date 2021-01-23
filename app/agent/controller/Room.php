@@ -40,6 +40,13 @@ class Room
         art_assign(200,'success',$result);
     }
 
+    public function changeNoticeHelp()
+    {
+        $params = RoomLogic::changeNoticeHelp();
+        $result = RoomService::change($params);
+        art_assign(200,'success',$result);
+    }
+
     public function changeSite()
     {
         $params = RoomLogic::changeSite();

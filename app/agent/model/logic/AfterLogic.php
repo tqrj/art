@@ -40,4 +40,10 @@ class AfterLogic
         ]);
         return $params;
     }
+
+    public static function clear()
+    {
+
+    }
+
 }

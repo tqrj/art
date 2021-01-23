@@ -21,7 +21,14 @@ class After
     public function cancel()
     {
         $params = AfterLogic::cancel();
-        AfterService::cancel($params);
+        $result = AfterService::cancel($params);
+        art_assign(200,'success',$result);
+    }
+
+
+    public function clear()
+    {
+        art_assign(200,'success',AfterService::clear());
     }
 
 }
