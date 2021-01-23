@@ -27,7 +27,7 @@ class Auth
         }
         $data = Request::only(['token','agent_id']);
         if (empty($data['token']) or empty($data['agent_id'])) {
-            throw new HttpException(202, '无权限访问',[],'www.baidu.com');
+            throw new HttpException(202, '无权限访问',[],'https://www.baidu.com');
         }
         $token = $data['token'];
         $agent_id = $data['agent_id'];
@@ -41,8 +41,8 @@ class Auth
         $medoo = new Medoo();
         $map['u.token'] = $token;
         $map['agent_id'] = $agent_id;
-        $map['u.status'] = [1];
-        $map['q.status'] = [1];
+        $map['u.status'] = 1;
+        $map['q.status'] = 1;
         $map['expire_time[>]']= art_d();
         $result = $medoo->get('user(u)',
             [
@@ -60,7 +60,7 @@ class Auth
             $map
             );
         if (!$result) {
-            throw new HttpException(202, '账户过期或Token错误',[],'www.baidu.com');
+            throw new HttpException(202, '账户过期或Token错误',[],'https://www.baidu.com');
         }
         $redis = Redis::getInstance()->getConnection();
         $redis->setex('user_' . $token.'_'.$agent_id, 120, serialize($result));
