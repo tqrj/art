@@ -238,7 +238,7 @@ class RoomService
                 //没中奖直接滚蛋
                 $medoo->update('order',
                     [
-                        'profit' => $orderInfo['quantity'],
+                        'profit' => -$orderInfo['quantity'],
                         'lottery_code' => $lotteryCode,
                         'whether_hit' => -1,
                         'status' => 1,
@@ -335,7 +335,7 @@ class RoomService
                 //没中奖直接滚蛋
                 $medoo->update('order',
                     [
-                        'profit' => $orderInfo['quantity'],
+                        'profit' => -$orderInfo['quantity'],
                         'lottery_code' => $lotteryCode,
                         'whether_hit' => -1,
                         'status' => 1,

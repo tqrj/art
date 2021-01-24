@@ -1,8 +1,9 @@
 <?php
-$matches = [];
-$message = '追10期单20';
-$bool = preg_match("#(追码|追)(\d{1,})期(\S+)#", $message, $matches);
-var_dump($matches);
+echo bcsub(0,500, 2);
+//$matches = [];
+//$message = '追10期单20';
+//$bool = preg_match("#(追码|追)(\d{1,})期(\S+)#", $message, $matches);
+//var_dump($matches);
 //$str = '2021-01-13 11:35:00我';
 //echo strlen($str).PHP_EOL;
 //echo mb_strlen( $str , 'gbk');
