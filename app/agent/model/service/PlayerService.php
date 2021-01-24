@@ -30,7 +30,7 @@ class PlayerService
             'q.quantity',
             $map);
         $map['LIMIT'] = [$params['page'], $params['limit']];
-        $map['ORDER'] = ['q.id' => 'DESC', 'q.status' => 'DESC'];
+        $map['ORDER'] = ['q.status' => 'DESC', 'q.id' => 'DESC'];
         $result['userList'] = $medoo->select('user(u)',
             ['[><]user_quantity(q)' => ['u.id' => 'user_id']],
             ['u.id', 'u.nickname', 'u.token', 'q.quantity', 'u.group_id', 'u.headimgurl', 'q.status', 'q.create_time'],
@@ -252,6 +252,7 @@ class PlayerService
         $map = [
             'agent_id' => $agentInfo['id'],
             'user_id' => $params['playerId'],
+            'status' => [1, -1]
         ];
         $pdoDoc = $medoo->delete('points', $map);
         if (!$pdoDoc->rowCount()) {

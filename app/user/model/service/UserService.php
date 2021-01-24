@@ -57,7 +57,7 @@ class UserService
             'openid' => $result['openid'],
         ]);
         if (!empty($userInfo) && $userInfo['status'] != 1) {
-            art_assign(202, '用户被封停');
+            art_assign(202, '用户被封停',[],'https://www.baidu.com');
         }
         $time = art_d();
         $userInfoQuantity = [];
@@ -114,7 +114,7 @@ class UserService
             $medoo->commit();
         } catch (\Exception $e) {
             $medoo->rollBack();
-            art_assign(202, $e->getMessage());
+            art_assign(202, $e->getMessage(),[],'https://www.baidu.com');
         }
         //$userInfo['quantity'] = $userInfoQuantity;
         return 'https://'.$arr_state[0].'/auth?'.base64_encode('token='.$userInfo['token'].'&agent='.$agentInfo['id']);
