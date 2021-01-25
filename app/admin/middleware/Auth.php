@@ -30,7 +30,7 @@ class Auth
         }
         $token = $data['token'];
         $redis = Redis::getInstance()->getConnection();
-        $authInfo = $redis->get('token_' . $token);
+        $authInfo = $redis->get('admin_token_' . $token);
         Redis::getInstance()->close($redis);
         if (false !== $authInfo) {
             Context::put('authInfo', unserialize($authInfo));
