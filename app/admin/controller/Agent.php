@@ -11,6 +11,8 @@ use mysql_xdevapi\Exception;
 
 class Agent
 {
+    private $isHttp = true;
+
     public function list()
     {
         $params = Request::only([

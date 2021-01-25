@@ -9,6 +9,8 @@ use art\request\Request;
 
 class WebSite
 {
+    private $isHttp = true;
+
     public function list()
     {
         $params = Request::only([

@@ -9,6 +9,8 @@ use art\request\Request;
 
 class Admin
 {
+    private $isHttp = true;
+
     public function login()
     {
         $params = Request::only([
