@@ -27,7 +27,7 @@ class Lottery
             'package_length_offset' => 0,
             'package_body_offset'   => 0,
         ]);
-        if (!$client->connect('172.26.125.80', 9501))
+        if (!$client->connect('39.101.214.137', 9501))
         {
             echo "connect failed. Error: {$client->errCode}\n";
             return false;
@@ -70,7 +70,7 @@ class Lottery
             'package_length_offset' => 0,
             'package_body_offset'   => 0,
         ]);
-        if (!$client->connect('172.26.125.80', 9502))
+        if (!$client->connect('39.101.214.137', 9502))
         {
             echo "connect failed. Error: {$client->errCode}\n";
             return [];
