@@ -112,7 +112,7 @@ class Agent
         $params['update_time'] = art_d();
         $params['salt'] = art_set_salt();
         $params['pass'] = art_set_password($params['pass'], $params['salt']);
-        $params['pass_sec'] = art_set_password($params['pass_sec'], $params['salt']);
+//        $params['pass_sec'] = art_set_password($params['pass_sec'], $params['salt']);
         $params['token'] = art_set_salt(20);
         $params['status'] = 1;
         $params['code'] = art_set_salt(5);

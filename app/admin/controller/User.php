@@ -44,7 +44,7 @@ class User
         $params = Request::only(['userId','status']);
         art_validate($params,['userId'=>'require|number','status'=>'require|between:0,1']);
         $medoo = new Medoo();
-        $pdoDoc =  $medoo->update('agent',['status'=>$params['status']],['id'=>$params['userId']]);
+        $pdoDoc =  $medoo->update('user',['status'=>$params['status']],['id'=>$params['userId']]);
         if (!$pdoDoc->rowCount()){
             art_assign(202,'更新失败');
         }
