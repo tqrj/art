@@ -22,7 +22,7 @@ class Lottery
         $client = new Client(SWOOLE_SOCK_TCP);
         $client->set([
             'open_length_check'     => true,
-            'package_max_length'    => 409600,
+            'package_max_length'    => 655360,
             'package_length_type'   => 'l',
             'package_length_offset' => 0,
             'package_body_offset'   => 0,

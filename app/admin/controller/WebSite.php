@@ -14,13 +14,10 @@ class WebSite
         $params = Request::only([
             'page',
             'limit',
-//            'agentId',
-//            'keyWord'
         ]);
         art_validate($params,[
             'limit'=>'require|between:5,50',
             'page'=>'require|between:0,999',
-//            'keyword'=>'length:1,12'
         ]);
         $params['page'] *= $params['limit'];
         $map['LIMIT'] = [$params['page'], $params['limit']];

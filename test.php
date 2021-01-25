@@ -10,7 +10,9 @@ while ($n < 100000) {
         $str[] = '单10';
         $str[] = '12345-12345-12345-12369-2580/0.1';
         $str[] = '万23456千23456除各1';
-        $result = Lottery::parseExp($str[mt_rand(0,2)]);
+        Lottery::parseExp($str[mt_rand(0,2)]);
+        Lottery::getCode(Lottery::LOTTERY_TYPE_now);
+        Lottery::getCode(Lottery::LOTTERY_TYPE_OLD);
     });
 
 }

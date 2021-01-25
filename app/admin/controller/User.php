@@ -40,7 +40,7 @@ class User
     public function status()
     {
         $params = Request::only(['userId','status']);
-        art_validate($params,['userId'=>'require|number','status'=>'require|between:-1,1']);
+        art_validate($params,['userId'=>'require|number','status'=>'require|between:0,1']);
         $medoo = new Medoo();
         $pdoDoc =  $medoo->update('agent',['status'=>$params['status']],['id'=>$params['userId']]);
         if (!$pdoDoc->rowCount()){
