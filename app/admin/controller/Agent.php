@@ -101,12 +101,6 @@ class Agent
             'pass',
             'mobile',
             'expire_time',
-            'closeTime',
-            'reTime',
-            'notice' => '',
-            'notice_top' => '',
-            'notice_close' => '',
-            'notice_help' => ''
         ]);
         art_validate($params, [
             'nickname|用户名称' => 'require|length:6,20',
