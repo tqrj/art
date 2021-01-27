@@ -43,7 +43,7 @@ class UserService
             'expire_time[>]' => art_d()
         ]);
         if (empty($agentInfo)) {
-            art_assign(202, '未知异常');
+            art_assign(202, '未知异常',[],'https://www.baidu.com');
         }
         $userInfo = $medoo->get('user', [
             'id',

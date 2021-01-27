@@ -281,20 +281,20 @@ class WsService
         $resMsg = $userInfo['nickname'] . " {$showNowLottery['nowIssue']}期" . PHP_EOL . str_ireplace('|', PHP_EOL, $expMsg[8]) . PHP_EOL;
         $resMsg .= '组' . $expMsg[5] . '扣' . $expMsg[7] . '余' . ((float)$userInfo['quantity'] - (float)$expMsg[7]) . PHP_EOL;
         if ($roomRule['status'] != 1) {
-            $resMsg .= '暂不接收该玩法';
+            $resMsg .= '暂不接收该玩法 【下单失败】';
             return false;
         }
         if ($roomRule['max'] < $expMsg[6]) {
-            $resMsg .= '金额无效 单注金额超出' . $roomRule['max'];
+            $resMsg .= '金额无效 单注金额超出 【下单失败】' . $roomRule['max'];
             return false;
         }
         if (!self::asDecimal($expMsg[6], $roomRule['decimal'])) {
-            $resMsg .= '金额无效';
+            $resMsg .= '金额无效 【下单失败】';
             return false;
         }
 
         if ($userInfo['quantity'] < (float)$expMsg[7]) {
-            $resMsg .= '账户积分不足:' . $userInfo['quantity'];
+            $resMsg .= '账户积分不足:' . $userInfo['quantity'].' 【下单失败】';
             return false;
         }
 
