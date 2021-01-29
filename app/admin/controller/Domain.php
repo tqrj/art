@@ -51,7 +51,7 @@ class Domain
         $params = Request::only(['domain','status']);
         art_validate($params,['domain'=>'require','status'=>'require']);
         $medoo = new Medoo();
-        $pdoDoc = $medoo->insert('website',$params);
+        $pdoDoc = $medoo->insert('domain',$params);
         if(!$pdoDoc->rowCount()){
             art_assign(202,'添加失败');
         }
