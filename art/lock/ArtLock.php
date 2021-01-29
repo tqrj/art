@@ -62,8 +62,24 @@ class ArtLock
         return $bool;
     }
 
-    private function tryLock()
+    private function tryLock(string $lockKey,int $outTime)
     {
-
+        if ($this->lockStatus){
+            return true;
+        }
+        $redis = Redis::getInstance()->getConnection();
+        if (is_null($redis)){
+            return false;
+        }
+        $this->lockKey = $lockKey;
+        $this->lockStatus = $redis->set('ArtLock' . $this->lockKey, 'lock', ['nx', 'ex' => $outTime]);
+        if (false == $this->lockStatus){
+            Redis::getInstance()->close($redis);
+            return $this->lockStatus;
+        }
+        $this->microTime = microtime(true);
+        $this->outTime = $outTime;
+        Redis::getInstance()->close($redis);
+        return $this->lockStatus;
     }
 }

@@ -56,7 +56,7 @@ class WsService
         unset($data['authInfo']['openid']);
         $data['groupSize'] = ArtWs::groupSize($this->userInfo['agent_id']);
         art_assign_ws(self::WS_HANDEL, '', $data, 0, $this->ws->artWsId);
-        art_assign_ws(200, $data['authInfo']['nickname'].'加入房间',[], $data['authInfo']['agent_id']);
+        art_assign_ws(200, $data['authInfo']['nickname'] . '加入房间', [], $data['authInfo']['agent_id']);
     }
 
     /**
@@ -68,12 +68,13 @@ class WsService
 
         $data['authInfo'] = Context::get('authInfo');
         unset($data['authInfo']['openid']);
-        art_assign_ws(200, htmlspecialchars($params['message']), $data, $this->userInfo['agent_id'], 0, $this->ws->artWsId,);
-        if ($this->checkScore($params['message'])) { //查分
-            return;
-        } elseif ($this->checkPay($params['message'])) { //上分
+        if ($this->checkPay($params['message'])) { //上分
             return;
         } elseif ($this->checkReBack($params['message'])) { //退分
+            return;
+        }
+        art_assign_ws(200, htmlspecialchars($params['message']), $data, $this->userInfo['agent_id'], 0, $this->ws->artWsId,);
+        if ($this->checkScore($params['message'])) { //查分
             return;
         } elseif ($this->checkReOrder($params['message'])) { //退单
             return;
@@ -136,8 +137,8 @@ class WsService
             UserService::pay($params);
             art_assign_ws(200, '[' . $this->userInfo['nickname'] . '] 上分受理中', [], $this->userInfo['agent_id']);
             $agentWsId = ArtWs::uidToWsId('agent' . $this->userInfo['agent_id']);
-            if ($agentWsId !== false){
-                art_assign_ws(self::WS_PAY, '[' . $this->userInfo['nickname'] . '] 请求上分 ' . $params['quantity'], [], 0,$agentWsId);
+            if ($agentWsId !== false) {
+                art_assign_ws(self::WS_PAY, '[' . $this->userInfo['nickname'] . '] 请求上分 ' . $params['quantity'], [], 0, $agentWsId);
             }
         } catch (HttpException $e) {
             art_assign_ws($e->getStatusCode(), $e->getMessage(), [], $this->userInfo['agent_id']);
@@ -203,7 +204,7 @@ class WsService
         $resMsg = '';
         array_walk($expMsg, function ($item) use ($message, &$resMsg) {
             $temp = '';
-            self::payOrder($this->roomInfo,$this->userInfo,$item, $message, $temp);
+            self::payOrder($this->roomInfo, $this->userInfo, $item, $message, $temp);
             $resMsg .= ($temp . PHP_EOL . '----------------------' . PHP_EOL);
         });
         $resMsg = substr($resMsg, 0, strripos($resMsg, '----------------------'));
@@ -221,7 +222,7 @@ class WsService
      * @param int $whether_after
      * @return bool|int|mixed|string|null
      */
-    public static function payOrder($roomInfo,$userInfo,array $expMsg, $message, &$resMsg,$whether_after = 0)
+    public static function payOrder($roomInfo, $userInfo, array $expMsg, $message, &$resMsg, $whether_after = 0)
     {
         $medoo = new Medoo();
         $userInfo['quantity'] = (float)$medoo->get('user_quantity', 'quantity', ['user_id' => $userInfo['id'], 'agent_id' => $userInfo['agent_id']]);
@@ -285,16 +286,16 @@ class WsService
             return false;
         }
         if ($roomRule['max'] < $expMsg[6]) {
-            $resMsg .= '金额无效 单注金额超出 【下单失败】' . $roomRule['max'];
+            $resMsg .= '积分无效 单注积分超出 【下单失败】' . $roomRule['max'];
             return false;
         }
         if (!self::asDecimal($expMsg[6], $roomRule['decimal'])) {
-            $resMsg .= '金额无效 【下单失败】';
+            $resMsg .= '积分无效 【下单失败】';
             return false;
         }
 
         if ($userInfo['quantity'] < (float)$expMsg[7]) {
-            $resMsg .= '账户积分不足:' . $userInfo['quantity'].' 【下单失败】';
+            $resMsg .= '账户积分不足:' . $userInfo['quantity'] . ' 【下单失败】';
             return false;
         }
 
@@ -512,20 +513,20 @@ class WsService
         $matches = [];
         $bool = preg_match("#(输倍投|中倍投)(\d{1,2})#", $message, $matches);
         if ($bool && count($matches) == 3) {
-            $message = str_replace($matches[0],'',$message);
+            $message = str_replace($matches[0], '', $message);
             $data['rate_type'] = $matches[1] == '中倍投' ? 1 : 2;
             $data['rate'] = $matches[2];
         }
 
         $bool = preg_match("#(止赢)(\d{1,5})?#", $message, $matches);
         if ($bool && count($matches) == 3) {
-            $message = str_replace($matches[0],'',$message);
+            $message = str_replace($matches[0], '', $message);
             $data['halt_profit'] = $matches[2];
         }
 
         $bool = preg_match("#(止损|止亏)(\d{1,5})?#", $message, $matches);
         if ($bool && count($matches) == 3) {
-            $message = str_replace($matches[0],'',$message);
+            $message = str_replace($matches[0], '', $message);
             $data['halt_loss'] = $matches[2];
         }
 
@@ -554,7 +555,6 @@ class WsService
         $data['reset_code'] = $redis->incr(self::ORDER_AFTER_REST_INC . $this->userInfo['id']);
         $redis->expire(self::ORDER_AFTER_REST_INC . $this->userInfo['id'], 86400);
         Redis::getInstance()->close($redis);
-
 
 
         $pdoDoc = $medoo->insert('after', $data);

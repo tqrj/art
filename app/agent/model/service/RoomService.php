@@ -406,7 +406,7 @@ class RoomService
     }
 
     /**
-     * 是否中奖。如果中奖了就返回true和中奖金额
+     * 是否中奖。如果中奖了就返回true和中奖积分
      * @param $lotteryCode
      * @param $orderCode
      * @param $siteCode
