@@ -1,4 +1,5 @@
 <?php
+require 'vendor/autoload.php';
 use app\traits\Tape;
 
 class Ta{
