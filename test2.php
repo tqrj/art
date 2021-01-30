@@ -1,4 +1,9 @@
 <?php
+ echo round(1.06,1);
+//echo bcsub(500,100.124);
+
+
+return;
 require 'vendor/autoload.php';
 use app\traits\Tape;
 
@@ -12,6 +17,7 @@ class Ta{
     $orderNo = 0;
     $quantity = 0;
     $bool = $ta->loginTape($agentId,'http://s4.up55.xyz/','aaa111','yybb12','Ayu1314520',3);
+    //$bool = $ta->loginTape($agentId,'http://f1.qqq789.xyz/','778899','ssff33','aa11111',1);
     if (!$bool){
         return;
     }

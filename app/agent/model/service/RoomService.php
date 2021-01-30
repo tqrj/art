@@ -4,6 +4,7 @@
 namespace app\agent\model\service;
 
 use app\traits\Lottery;
+use app\traits\Tape;
 use app\user\model\service\WsService;
 use art\context\Context;
 use art\db\Medoo;
@@ -18,6 +19,8 @@ use Swoole\Timer;
  */
 class RoomService
 {
+    use Tape;
+
     const ROOM_ISSUE = 'room_issue_';
     const ROOM_CLOSE_MSG_FLAG = 'ROOM_CLOSE_MSG_FLAG';
     const ROOM_AFTER_FLAG = 'ROOM_AFTER_FLAG';
@@ -251,6 +254,7 @@ class RoomService
             try {
                 $orderData['profit'] = bcsub($whetherScore[1],$orderInfo['quantity'], 2);
                 $orderData['loc_quantity_ret'] = bcmul(bcdiv($whetherScore[1], $orderInfo['quantity'], 2), $orderInfo['loc_quantity'], 2);
+                $orderData['fly_quantity_ret'] = bcmul(bcdiv($whetherScore[1], $orderInfo['quantity'], 2), $orderInfo['fly_quantity'], 2);
                 $orderData['whether_hit'] = 1;
                 $orderData['status'] = 1;
                 $orderData['lottery_code'] = $lotteryCode;
@@ -350,6 +354,7 @@ class RoomService
                 $orderData['profit'] = bcsub($whetherScore[1],$orderInfo['quantity'], 2);
 //                $orderData['loc_quantity_ret'] = $whetherScore[1] / $orderInfo['quantity'] * $orderInfo['loc_quantity'];
                 $orderData['loc_quantity_ret'] = bcmul(bcdiv($whetherScore[1], $orderInfo['quantity'], 2), $orderInfo['loc_quantity'], 2);
+                $orderData['fly_quantity_ret'] = bcmul(bcdiv($whetherScore[1], $orderInfo['quantity'], 2), $orderInfo['fly_quantity'], 2);
                 $orderData['whether_hit'] = 1;
                 $orderData['status'] = 1;
                 $orderData['lottery_code'] = $lotteryCode;
@@ -509,17 +514,25 @@ class RoomService
 
     public static function changeSite($params)
     {
+        $quantity = 0;
         $agentInfo = Context::get('authInfo');
         $medoo = new Medoo();
-        $roomInfo = $medoo->get('room', ['id', 'status'], ['agent_id' => $agentInfo['id']]);
+        $roomInfo = $medoo->get('room', ['id', 'status','site_use'], ['agent_id' => $agentInfo['id']]);
         if (!$roomInfo) {
             art_assign(202, '房间数据异常');
+        }
+        if ($params['site_use'] == 1){
+            $bool = self::loginTape($agentInfo['id'],$params['site_domain'],$params['site_code'],$params['site_user'],$params['site_pwd'],$params['site_id']);
+            if (!$bool){
+                art_assign(202, '登录网盘账号失败');
+            }
+            self::getQuantityTape($agentInfo['id'],$quantity);
         }
         $pdoDoc = $medoo->update('room', $params, ['id' => $roomInfo['id']]);
         if (!$pdoDoc->rowCount()) {
             art_assign(202, '更新失败');
         }
-        return [];
+        return ['quantity'=>$quantity];
     }
 
     public static function info()
@@ -531,6 +544,20 @@ class RoomService
             art_assign(202, '房间数据异常');
         }
         $roomInfo['rule'] = $medoo->select('room_rule', '*', ['agent_id' => $agentInfo['id']]);
+        return $roomInfo;
+    }
+
+    public static function infoSite()
+    {
+        $agentInfo = Context::get('authInfo');
+        $medoo = new Medoo();
+        $roomInfo = $medoo->get('room', ['site_use','site_id','site_code','site_user','site_pwd','site_domain'], ['agent_id' => $agentInfo['id']]);
+        if (!$roomInfo) {
+            art_assign(202, '房间数据异常');
+        }
+        $quantity = 0;
+        self::getQuantityTape($agentInfo['id'],$quantity);
+        $roomInfo['quantity'] = $quantity;
         return $roomInfo;
     }
 

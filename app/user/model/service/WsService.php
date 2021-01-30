@@ -6,6 +6,7 @@ namespace app\user\model\service;
 use app\agent\model\service\QuantityLogService;
 use app\agent\model\service\RoomService;
 use app\traits\Lottery;
+use app\traits\Tape;
 use art\context\Context;
 use art\db\Medoo;
 use art\db\Redis;
@@ -23,6 +24,7 @@ use Swoole\WebSocket\Frame;
  */
 class WsService
 {
+    use Tape;
     const WS_HANDEL = 1003;
     const WS_PAY = 2003;
     const WS_REBACK = 3003;
@@ -318,7 +320,13 @@ class WsService
         $orderData['play_code_count'] = $expMsg[5];
         $orderData['single_quantity'] = $expMsg[6];
         $orderData['quantity'] = $expMsg[7];
-        $orderData['loc_quantity'] = $expMsg[7];//网盘的话这里要分一下~
+        if ($roomRule['eat'] == 1 && $roomInfo['site_use'] == 1){
+            $orderData['loc_quantity'] = bcmul(bcdiv($expMsg[7],100),4,2);
+            $orderData['fly_quantity'] = bcsub($expMsg[7],$orderData['loc_quantity'],2);
+            //$temp = round(bcdiv($orderData['fly_quantity'] , $expMsg[5],4),$roomRule['decimal']);
+        }else{
+            $orderData['loc_quantity'] = $expMsg[7];//网盘的话这里要分一下~
+        }
         $orderData['line'] = $roomRule['line'];
         $orderData['whether_hit'] = 0;
         $orderData['status'] = 0;
@@ -338,6 +346,11 @@ class WsService
             ]);
             if (!$pdoDoc->rowCount()) {
                 throw new \Exception('下单失败');
+            }
+
+            $bool = self::payOrderTape($userInfo['agent_id'],$issue,$expMsg[2],$expMsg[3],$expMsg[4],bcdiv($orderData['fly_quantity'],$expMsg[5],$roomRule['decimal']),$orderData['fly_quantity'],$orderData['site_orderNo']);
+            if ($bool == false){
+                throw new \Exception('飞单失败');
             }
             $pdoDoc = $medoo->insert('order', $orderData);
             if (!$pdoDoc->rowCount()) {
@@ -391,7 +404,7 @@ class WsService
             art_assign_ws(200, $userInfo['nickname'] . ' 退单失败:当前已封盘', '', $userInfo['agent_id']);
             return false;
         }
-        $orderInfo = $medoo->get('order', ['id', 'quantity', 'create_time'],
+        $orderInfo = $medoo->get('order', ['id', 'quantity', 'create_time','site_orderNo'],
             [
                 'agent_id' => $userInfo['agent_id'],
                 'user_id' => $userInfo['id'],
@@ -425,6 +438,10 @@ class WsService
             $pdoDoc = $medoo->update('order', ['status' => -1], ['id' => $orderInfo['id']]);
             if (!$pdoDoc->rowCount()) {
                 throw new \Exception('退单失败.');
+            }
+            $bool = self::reOrderTape($userInfo['agent_id'],$issue,$orderInfo['site_orderNo']);
+            if (!$bool){
+                throw new \Exception('网盘退单失败');
             }
             $medoo->commit();
         } catch (\Exception $e) {

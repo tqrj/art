@@ -102,7 +102,7 @@ class RoomLogic
             'site_user'=>'require',
             'site_pwd'=>'require',
             'site_code'=>'require',
-            'site_id'=>'require',
+            'site_id'=>'require|between:1,3',
             'site_domain'=>'require'
         ]);
         return $params;
