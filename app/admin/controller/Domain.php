@@ -50,6 +50,7 @@ class Domain
     {
         $params = Request::only(['domain','status']);
         art_validate($params,['domain'=>'require','status'=>'require']);
+        $params['create_time'] = art_d();
         $medoo = new Medoo();
         $pdoDoc = $medoo->insert('domain',$params);
         if(!$pdoDoc->rowCount()){
