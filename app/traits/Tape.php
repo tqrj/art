@@ -12,6 +12,7 @@ trait Tape
     private int $CODE_GET_ISSUE = 3003;
     private int $CODE_GET_QUANTITY = 2003;
     private int $CODE_PAY_ORDER = 4003;
+    private int $CODE_RE_ORDER = 5003;
     private string $HOST = '10.53.55.1';
     private int $PORT = 9503;
 
@@ -61,7 +62,7 @@ trait Tape
         return true;
     }
 
-    public function getIssue($agentId,&$issue)
+    public function getIssueTape($agentId,&$issue)
     {
         $client = new Client(SWOOLE_SOCK_TCP);
         $client->set([
@@ -102,7 +103,7 @@ trait Tape
         return true;
     }
 
-    public function getQuantity($agentId,&$quantity)
+    public function getQuantityTape($agentId,&$quantity)
     {
         $client = new Client(SWOOLE_SOCK_TCP);
         $client->set([
@@ -143,7 +144,7 @@ trait Tape
         return true;
     }
 
-    public function payOrder($agentId,$issue,$playMethod,$playSite,$playCode,$singleQuantity,$quantity,&$orderCode)
+    public function payOrderTape($agentId,$issue,$playMethod,$playSite,$playCode,$singleQuantity,$quantity,&$orderCode)
     {
         $client = new Client(SWOOLE_SOCK_TCP);
         $client->set([
@@ -184,6 +185,48 @@ trait Tape
         var_dump($result);
         echo '飞单返回结果'.$result['msg'].PHP_EOL;
         $orderCode = $result['msg'];
+        if ($result['code'] != 200){
+            return false;
+        }
+        return true;
+    }
+
+    public function reOrderTape($agentId,$issue,$orderNo)
+    {
+        $client = new Client(SWOOLE_SOCK_TCP);
+        $client->set([
+            'open_length_check'     => true,
+            'package_max_length'    => 81920,
+            'package_length_type'   => 'l',
+            'package_length_offset' => 0,
+            'package_body_offset'   => 0,
+        ]);
+        if (!$client->connect($this->HOST, $this->PORT))
+        {
+            echo "connect failed. Error: {$client->errCode}\n";
+            return false;
+        }
+        $data['code'] = $this->CODE_PAY_ORDER;
+        $data['data']['agentId'] = $agentId;
+        $data['data']['issue'] = $issue;
+        $data['data']['orderNo'] = $orderNo;
+
+        $data = json_encode($data);
+
+        //涉及中文 不要随意改用 mb
+        $len  = pack('i',strlen($data) + 4);
+        $client->send($len.$data);
+        $result = $client->recv();
+        $client->close();
+        if ($result == ''){
+            echo $client->errMsg;
+            return [];
+        }
+        //涉及中文 不要随意改用 mb
+        $result = iconv("gb2312//IGNORE","utf-8",substr($result,4));
+        $result = json_decode($result,true);
+        var_dump($result);
+        echo '退单返回结果'.$result['msg'].PHP_EOL;
         if ($result['code'] != 200){
             return false;
         }
