@@ -4,19 +4,21 @@ use app\traits\Tape;
 class Ta{
     use Tape;
 }
+\Co\run(function () {
+    $ta = new Ta();
+    $agentId = 123;
+    $issue = '';
+    $orderCode = 0;
+    $quantity = 0;
+    $bool = $ta->loginTape($agentId,'http://s4.up55.xyz/','aaa111','yybb12','Ayu1314520',3);
+    if (!$bool){
+        return;
+    }
+    $ta->getIssue($agentId,$issue);
+    $ta->payOrder($agentId,$issue,'一定','个','123456',1,9,$orderCode);
+    $ta->getQuantity($agentId,$quantity);
+});
 
-$ta = new Ta();
-$agentId = 123;
-$issue = '';
-$orderCode = 0;
-$quantity = 0;
-$bool = $ta->loginTape($agentId,'http://s4.up55.xyz/','aaa111','yybb12','Ayu1314520',3);
-if (!$bool){
-    return;
-}
-$ta->getIssue($agentId,$issue);
-$ta->payOrder($agentId,$issue,'一定','个','123456',1,9,$orderCode);
-$ta->getQuantity($agentId,$quantity);
 //echo bcsub(0,500, 2);
 //$matches = [];
 //$message = '追10期单20';
