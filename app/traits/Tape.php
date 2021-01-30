@@ -206,7 +206,7 @@ trait Tape
             echo "connect failed. Error: {$client->errCode}\n";
             return false;
         }
-        $data['code'] = $this->CODE_PAY_ORDER;
+        $data['code'] = $this->CODE_RE_ORDER;
         $data['data']['agentId'] = $agentId;
         $data['data']['issue'] = $issue;
         $data['data']['orderNo'] = $orderNo;
