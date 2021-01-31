@@ -416,16 +416,14 @@ class WsService
                 'reset_code' => $reCode,
                 'issue' => $issue
             ]);
+        if (empty($orderInfo)) {
+            art_assign_ws(200, $userInfo['nickname'] . ' 退单失败:没有查找到订单', '', $userInfo['agent_id']);
+            return false;
+        }
         $diff = $CarbonIssue->diffInRealSeconds($orderInfo['create_time']);
         if ((int)$diff >= (int)$this->roomInfo['reTime']) {
             echo '退单:已超时' . PHP_EOL;
             art_assign_ws(200, $userInfo['nickname'] . ' 退单失败:已经超过退单时间', '', $userInfo['agent_id']);
-            return false;
-        }
-
-
-        if (empty($orderInfo)) {
-            art_assign_ws(200, $userInfo['nickname'] . ' 退单失败:没有查找到订单', '', $userInfo['agent_id']);
             return false;
         }
         $medoo->beginTransaction();
