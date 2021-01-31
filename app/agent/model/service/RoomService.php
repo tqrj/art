@@ -521,7 +521,7 @@ class RoomService
         if (!$roomInfo) {
             art_assign(202, '房间数据异常');
         }
-        if ($params['site_use'] == 1 && $roomInfo['site_use'] == 1){
+        if ($params['site_use'] == 1 && $roomInfo['site_use'] != 1){
             $bool = self::loginTape($agentInfo['id'],$params['site_domain'],$params['site_code'],$params['site_user'],$params['site_pwd'],$params['site_id']);
             if (!$bool){
                 art_assign(202, '登录网盘账号失败');
@@ -529,9 +529,6 @@ class RoomService
             self::getQuantityTape($agentInfo['id'],$quantity);
         }elseif ($params['site_use'] == 0 && $roomInfo['site_use'] == 1){
             $bool = self::closeTape($agentInfo['id']);
-            if (!$bool){
-                art_assign(202, '退出网盘账号失败');
-            }
         }
         $pdoDoc = $medoo->update('room', $params, ['id' => $roomInfo['id']]);
         if (!$pdoDoc->rowCount()) {
