@@ -325,6 +325,8 @@ class WsService
             $orderData['loc_quantity'] = bcmul(bcdiv($expMsg[7], 100, 4), $roomRule['eatNum'], 2);
             $orderData['fly_quantity'] = bcsub($expMsg[7], $orderData['loc_quantity'], 2);
             //$temp = round(bcdiv($orderData['fly_quantity'] , $expMsg[5],4),$roomRule['decimal']);
+        } elseif ($roomRule['eat'] == 0 && $roomInfo['site_use'] == 1) {
+            $orderData['fly_quantity'] = $expMsg[7];
         } else {
             $orderData['loc_quantity'] = $expMsg[7];
         }
@@ -441,7 +443,7 @@ class WsService
             if (!$pdoDoc->rowCount()) {
                 throw new \Exception('退单失败.');
             }
-            if (!empty($orderInfo['site_orderNo'])){
+            if (!empty($orderInfo['site_orderNo'])) {
                 $bool = self::reOrderTape($userInfo['agent_id'], $issue, $orderInfo['site_orderNo']);
                 if (!$bool) {
                     throw new \Exception('网盘退单失败');
