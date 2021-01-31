@@ -355,6 +355,7 @@ class WsService
                 if ($bool == false) {
                     throw new \Exception('飞单失败');
                 }
+                $orderData['site_link'] = $roomInfo['site_domain'];
             }
             $pdoDoc = $medoo->insert('order', $orderData);
             if (!$pdoDoc->rowCount()) {

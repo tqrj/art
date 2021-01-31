@@ -150,7 +150,7 @@ trait Tape
         $client = new Client(SWOOLE_SOCK_TCP);
         $client->set([
             'open_length_check'     => true,
-            'package_max_length'    => 81920,
+            'package_max_length'    => 655360,
             'package_length_type'   => 'l',
             'package_length_offset' => 0,
             'package_body_offset'   => 0,
@@ -211,6 +211,46 @@ trait Tape
         $data['data']['agentId'] = $agentId;
         $data['data']['issue'] = $issue;
         $data['data']['orderNo'] = $orderNo;
+
+        $data = json_encode($data);
+
+        //涉及中文 不要随意改用 mb
+        $len  = pack('i',strlen($data) + 4);
+        $client->send($len.$data);
+        $result = $client->recv();
+        $client->close();
+        if ($result == ''){
+            echo $client->errMsg;
+            return [];
+        }
+        //涉及中文 不要随意改用 mb
+        $result = iconv("gb2312//IGNORE","utf-8",substr($result,4));
+        $result = json_decode($result,true);
+        //var_dump($result);
+        echo '退单返回结果'.$result['msg'].PHP_EOL;
+        if ($result['code'] != 200){
+            return false;
+        }
+        return true;
+    }
+
+    public static function closeTape($agentId)
+    {
+        $client = new Client(SWOOLE_SOCK_TCP);
+        $client->set([
+            'open_length_check'     => true,
+            'package_max_length'    => 81920,
+            'package_length_type'   => 'l',
+            'package_length_offset' => 0,
+            'package_body_offset'   => 0,
+        ]);
+        if (!$client->connect(self::$HOST, self::$PORT))
+        {
+            echo "connect failed. Error: {$client->errCode}\n";
+            return false;
+        }
+        $data['code'] = self::$CODE_RE_ORDER;
+        $data['data']['agentId'] = $agentId;
 
         $data = json_encode($data);
 

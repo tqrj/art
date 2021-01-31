@@ -51,7 +51,7 @@ class RoomService
         $redis->del(self::ROOM_ISSUE . $agentInfo['id']);
         \art\db\Redis::getInstance()->close($redis);
         //开启房间定时器
-        Timer::tick(5000, function (int $timer_id, $agent_info) {
+        Timer::tick(4000, function (int $timer_id, $agent_info) {
             //这里不要每次都去查数据库 可以redis 记录一下在等待开奖的期号，然后每次去查服务的当前期号如果不是当前期号了就查该期号的结果
             $medoo = new Medoo();
             $roomInfo = $medoo->get('room', '*', ['agent_id' => $agent_info['id']]);
@@ -527,6 +527,11 @@ class RoomService
                 art_assign(202, '登录网盘账号失败');
             }
             self::getQuantityTape($agentInfo['id'],$quantity);
+        }elseif ($params['site_use'] == 0 && $roomInfo['site_use'] == 1){
+            $bool = self::closeTape($agentInfo['id']);
+            if (!$bool){
+                art_assign(202, '退出网盘账号失败');
+            }
         }
         $pdoDoc = $medoo->update('room', $params, ['id' => $roomInfo['id']]);
         if (!$pdoDoc->rowCount()) {
