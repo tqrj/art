@@ -358,13 +358,13 @@ class WsService
             }
             $pdoDoc = $medoo->insert('order', $orderData);
             if (!$pdoDoc->rowCount()) {
-                throw new \Exception('下单失败.');
+                throw new \Exception('下单失败');
             }
             $orderId = $medoo->id();
             $medoo->commit();
         } catch (\Exception $e) {
             $medoo->rollBack();
-            $resMsg .= '【下单失败】';
+            $resMsg .= "【{$e->getMessage()}】";
             return false;
         }
         $resMsg .= '退单请发送:退' . $orderData['reset_code'];

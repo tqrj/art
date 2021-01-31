@@ -184,7 +184,7 @@ trait Tape
         $result = iconv("gb2312//IGNORE","utf-8",substr($result,4));
         $result = json_decode($result,true);
         //var_dump($result);
-        //echo '飞单返回结果'.$result['msg'].PHP_EOL;
+        echo '飞单返回结果'.$result['msg'].PHP_EOL;
         $orderCode = $result['msg'];
         if ($result['code'] != 200){
             return false;
