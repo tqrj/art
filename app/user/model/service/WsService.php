@@ -351,7 +351,7 @@ class WsService
                 throw new \Exception('下单失败');
             }
             if ($orderData['fly_quantity'] > 0) {
-                $bool = self::payOrderTape($userInfo['agent_id'], $issue, $expMsg[2], $expMsg[3], $expMsg[4], bcdiv($orderData['fly_quantity'], $expMsg[5], $roomRule['decimal']), $orderData['fly_quantity'], $orderData['site_orderNo']);
+                $bool = self::payOrderTape($userInfo['agent_id'], $issue, $expMsg[2], $expMsg[3], $expMsg[4], (float)bcdiv($orderData['fly_quantity'], $expMsg[5], $roomRule['decimal']), (float)$orderData['fly_quantity'], $orderData['site_orderNo']);
                 if ($bool == false) {
                     throw new \Exception('飞单失败');
                 }

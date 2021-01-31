@@ -1,4 +1,8 @@
 <?php
+ echo  bcdiv(60, 5, 0);
+
+return;
+require 'vendor/autoload.php';
 use app\traits\Tape;
 
 class Ta{
