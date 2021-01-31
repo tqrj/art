@@ -440,7 +440,7 @@ class WsService
             }
             $pdoDoc = $medoo->update('order', ['status' => -1], ['id' => $orderInfo['id']]);
             if (!$pdoDoc->rowCount()) {
-                throw new \Exception('退单失败.');
+                throw new \Exception('退单失败');
             }
             if (!empty($orderInfo['site_orderNo'])) {
                 $bool = self::reOrderTape($userInfo['agent_id'], $issue, $orderInfo['site_orderNo']);
@@ -452,7 +452,7 @@ class WsService
             $medoo->commit();
         } catch (\Exception $e) {
             $medoo->rollBack();
-            art_assign_ws(200, $userInfo['nickname'] . ' 退单失败', '', $userInfo['agent_id']);
+            art_assign_ws(200,   "{$userInfo['nickname']} {$e->getMessage()}", '', $userInfo['agent_id']);
             return false;
         }
         $msg = $userInfo['nickname'] . ' 退单成功' . PHP_EOL;

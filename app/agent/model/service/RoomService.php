@@ -10,7 +10,6 @@ use art\context\Context;
 use art\db\Medoo;
 use art\ws\ArtWs;
 use Carbon\Carbon;
-use Co\Redis;
 use Swoole\Timer;
 
 /**
