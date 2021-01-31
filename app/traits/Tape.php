@@ -13,6 +13,7 @@ trait Tape
     private static int $CODE_GET_QUANTITY = 2003;
     private static int $CODE_PAY_ORDER = 4003;
     private static int $CODE_RE_ORDER = 5003;
+    private static int $CODE_CLOSE = 6003;
     private static string $HOST = '10.53.55.1';
     private static int $PORT = 9503;
 
@@ -249,7 +250,7 @@ trait Tape
             echo "connect failed. Error: {$client->errCode}\n";
             return false;
         }
-        $data['code'] = self::$CODE_RE_ORDER;
+        $data['code'] = self::$CODE_CLOSE;
         $data['data']['agentId'] = $agentId;
 
         $data = json_encode($data);
