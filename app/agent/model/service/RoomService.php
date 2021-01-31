@@ -253,8 +253,8 @@ class RoomService
             $medoo->beginTransaction();
             try {
                 $orderData['profit'] = bcsub($whetherScore[1],$orderInfo['quantity'], 2);
-                $orderData['loc_quantity_ret'] = bcmul(bcdiv($whetherScore[1], $orderInfo['quantity'], 2), $orderInfo['loc_quantity'], 2);
-                $orderData['fly_quantity_ret'] = bcmul(bcdiv($whetherScore[1], $orderInfo['quantity'], 2), $orderInfo['fly_quantity'], 2);
+                $orderData['loc_quantity_ret'] = bcmul(bcdiv($whetherScore[1], $orderInfo['quantity'], 4), $orderInfo['loc_quantity'], 2);
+                $orderData['fly_quantity_ret'] = bcsub($whetherScore[1],$orderData['loc_quantity_ret'],2);
                 $orderData['whether_hit'] = 1;
                 $orderData['status'] = 1;
                 $orderData['lottery_code'] = $lotteryCode;
@@ -267,7 +267,7 @@ class RoomService
                     'agent_id' => $orderInfo['agent_id']
                 ]);
                 $pdoDoc = $medoo->update('user_quantity', [
-                    'quantity[+]' => $orderData['loc_quantity_ret']
+                    'quantity[+]' => $whetherScore[1]
                 ], [
                     'user_id' => $orderInfo['user_id'],
                     'agent_id' => $orderInfo['agent_id'],
@@ -353,8 +353,8 @@ class RoomService
             try {
                 $orderData['profit'] = bcsub($whetherScore[1],$orderInfo['quantity'], 2);
 //                $orderData['loc_quantity_ret'] = $whetherScore[1] / $orderInfo['quantity'] * $orderInfo['loc_quantity'];
-                $orderData['loc_quantity_ret'] = bcmul(bcdiv($whetherScore[1], $orderInfo['quantity'], 2), $orderInfo['loc_quantity'], 2);
-                $orderData['fly_quantity_ret'] = bcmul(bcdiv($whetherScore[1], $orderInfo['quantity'], 2), $orderInfo['fly_quantity'], 2);
+                $orderData['loc_quantity_ret'] = bcmul(bcdiv($whetherScore[1], $orderInfo['quantity'], 4), $orderInfo['loc_quantity'], 2);
+                $orderData['fly_quantity_ret'] = bcsub($whetherScore[1],$orderData['loc_quantity_ret'],2);
                 $orderData['whether_hit'] = 1;
                 $orderData['status'] = 1;
                 $orderData['lottery_code'] = $lotteryCode;
@@ -367,7 +367,7 @@ class RoomService
                     'agent_id' => $orderInfo['agent_id']
                 ]);
                 $pdoDoc = $medoo->update('user_quantity', [
-                    'quantity[+]' => $orderData['loc_quantity_ret']
+                    'quantity[+]' => $whetherScore[1]
                 ], [
                     'user_id' => $orderInfo['user_id'],
                     'agent_id' => $orderInfo['agent_id'],
