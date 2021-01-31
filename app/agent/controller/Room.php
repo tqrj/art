@@ -51,12 +51,18 @@ class Room
     {
         $params = RoomLogic::changeSite();
         $result = RoomService::changeSite($params);
-        art_assign(200,'success',$result);
+        art_assign(200,'设置成功',$result);
     }
 
     public function info()
     {
         $result = RoomService::info();
+        art_assign(200,'success',$result);
+    }
+
+    public function infoSite()
+    {
+        $result = RoomService::infoSite();
         art_assign(200,'success',$result);
     }
 
