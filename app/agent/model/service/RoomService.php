@@ -541,7 +541,7 @@ class RoomService
         if ($params['site_use'] == 1) {
             art_assign(200, '启用成功', ['quantity' => $quantity]);
         } else {
-            return art_assign(200, '关闭成功');
+            return art_assign(200, '关闭成功', ['quantity' => $quantity]);
         }
     }
 
