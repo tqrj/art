@@ -94,7 +94,7 @@ class RoomService
             //如果redis没有获取到期号就是第一次 把当前期号设置进去
             if (empty($issue)) {
 
-                $redis->set(self::ROOM_ISSUE . $agent_info['id'], $nowLottery[0], $diff + mt_rand(20,30));
+                $redis->set(self::ROOM_ISSUE . $agent_info['id'], $nowLottery[0], $diff + mt_rand(20, 30));
                 $issue = $nowLottery[0];
             }
             $showIssue = mb_strlen($issue) == 11 ? mb_substr($issue, 8, 3) : $issue;
@@ -177,7 +177,7 @@ class RoomService
                 [
                     'o.play_method',
                     'o.play_site',
-                    'play_code'=>Medoo::raw("SUBSTRING_INDEX(exp_msg,'|',-1)"),
+                    'play_code' => Medoo::raw("SUBSTRING_INDEX(exp_msg,'|',-1)"),
                     'o.single_quantity',
                     'o.quantity',
                 ],
@@ -251,9 +251,9 @@ class RoomService
             }
             $medoo->beginTransaction();
             try {
-                $orderData['profit'] = bcsub($whetherScore[1],$orderInfo['quantity'], 2);
+                $orderData['profit'] = bcsub($whetherScore[1], $orderInfo['quantity'], 2);
                 $orderData['loc_quantity_ret'] = bcmul(bcdiv($whetherScore[1], $orderInfo['quantity'], 4), $orderInfo['loc_quantity'], 2);
-                $orderData['fly_quantity_ret'] = bcsub($whetherScore[1],$orderData['loc_quantity_ret'],2);
+                $orderData['fly_quantity_ret'] = bcsub($whetherScore[1], $orderData['loc_quantity_ret'], 2);
                 $orderData['whether_hit'] = 1;
                 $orderData['status'] = 1;
                 $orderData['lottery_code'] = $lotteryCode;
@@ -350,10 +350,10 @@ class RoomService
             }
             $medoo->beginTransaction();
             try {
-                $orderData['profit'] = bcsub($whetherScore[1],$orderInfo['quantity'], 2);
+                $orderData['profit'] = bcsub($whetherScore[1], $orderInfo['quantity'], 2);
 //                $orderData['loc_quantity_ret'] = $whetherScore[1] / $orderInfo['quantity'] * $orderInfo['loc_quantity'];
                 $orderData['loc_quantity_ret'] = bcmul(bcdiv($whetherScore[1], $orderInfo['quantity'], 4), $orderInfo['loc_quantity'], 2);
-                $orderData['fly_quantity_ret'] = bcsub($whetherScore[1],$orderData['loc_quantity_ret'],2);
+                $orderData['fly_quantity_ret'] = bcsub($whetherScore[1], $orderData['loc_quantity_ret'], 2);
                 $orderData['whether_hit'] = 1;
                 $orderData['status'] = 1;
                 $orderData['lottery_code'] = $lotteryCode;
@@ -513,27 +513,36 @@ class RoomService
 
     public static function changeSite($params)
     {
-        $quantity = 0;
+        $quantity = "";
         $agentInfo = Context::get('authInfo');
         $medoo = new Medoo();
-        $roomInfo = $medoo->get('room', ['id', 'status','site_use'], ['agent_id' => $agentInfo['id']]);
+        $roomInfo = $medoo->get('room', ['id', 'status', 'site_use'], ['agent_id' => $agentInfo['id']]);
         if (!$roomInfo) {
             art_assign(202, '房间数据异常');
         }
-        if ($params['site_use'] == 1 && $roomInfo['site_use'] != 1){
-            $bool = self::loginTape($agentInfo['id'],$params['site_domain'],$params['site_code'],$params['site_user'],$params['site_pwd'],$params['site_id']);
-            if (!$bool){
+
+        if ($params['site_use'] == 1 && $roomInfo['site_use'] != 1) {
+            $bool = self::loginTape($agentInfo['id'], $params['site_domain'], $params['site_code'], $params['site_user'], $params['site_pwd'], $params['site_id'], $quantity);
+            if (!$bool) {
                 art_assign(202, '登录网盘账号失败');
             }
-            self::getQuantityTape($agentInfo['id'],$quantity);
-        }elseif ($params['site_use'] == 0 && $roomInfo['site_use'] == 1){
+        } elseif ($params['site_use'] == 0 && $roomInfo['site_use'] == 1) {
             $bool = self::closeTape($agentInfo['id']);
+            if (!$bool) {
+                art_assign(202, '关闭网盘失败');
+            }
         }
+
         $pdoDoc = $medoo->update('room', $params, ['id' => $roomInfo['id']]);
         if (!$pdoDoc->rowCount()) {
             art_assign(202, '设置失败');
         }
-        return ['quantity'=>$quantity];
+
+        if ($params['site_use'] == 1) {
+            art_assign(200, '启用成功', ['quantity' => $quantity]);
+        } else {
+            return art_assign(200, '关闭成功');
+        }
     }
 
     public static function info()
@@ -552,12 +561,12 @@ class RoomService
     {
         $agentInfo = Context::get('authInfo');
         $medoo = new Medoo();
-        $roomInfo = $medoo->get('room', ['site_use','site_id','site_code','site_user','site_pwd','site_domain'], ['agent_id' => $agentInfo['id']]);
+        $roomInfo = $medoo->get('room', ['site_use', 'site_id', 'site_code', 'site_user', 'site_pwd', 'site_domain'], ['agent_id' => $agentInfo['id']]);
         if (!$roomInfo) {
             art_assign(202, '房间数据异常');
         }
         $quantity = 0;
-        self::getQuantityTape($agentInfo['id'],$quantity);
+        self::getQuantityTape($agentInfo['id'], $quantity);
         $roomInfo['quantity'] = $quantity;
         return $roomInfo;
     }
@@ -667,7 +676,7 @@ class RoomService
                 $map
             );
             //用户被删除了就不再追码了
-            if (empty($userInfo)){
+            if (empty($userInfo)) {
                 $after['status'] = 0;
                 $after['reset_code'] = 0;
                 return;
@@ -689,14 +698,14 @@ class RoomService
                         'status' => 1
                     ])['profit'];
                 //这个只是上期的是否中奖
-                $orderSlimInfo['whether_hit'] = $medoo->get('order','whether_hit',
+                $orderSlimInfo['whether_hit'] = $medoo->get('order', 'whether_hit',
                     [
                         'id' => $after['last_order_ids'],
-                        'whether_hit'=>1,
+                        'whether_hit' => 1,
                         'status' => 1
                     ]);
-                $orderSlimInfo['whether_hit'] = $orderSlimInfo['whether_hit'] == 1 ? 1:-1;
-                echo '中奖判断:'.$orderSlimInfo['whether_hit'].PHP_EOL;
+                $orderSlimInfo['whether_hit'] = $orderSlimInfo['whether_hit'] == 1 ? 1 : -1;
+                echo '中奖判断:' . $orderSlimInfo['whether_hit'] . PHP_EOL;
                 //止亏 止赢
                 $after['profit'] = $orderSlimInfo['profit'];
                 if ($after['halt_profit'] != 0 and $after['profit'] >= $after['halt_profit']) {
@@ -720,7 +729,7 @@ class RoomService
 
                         $after['rate_count']++;
                     }
-                    if ($after['rate_count'] > 0){
+                    if ($after['rate_count'] > 0) {
 
                         $exp_msg = self::rate($exp_msg, $after['rate']);
                     }
@@ -765,8 +774,8 @@ class RoomService
             if (count($item) < 7) {
                 return;
             }
-            $item[6] = $item[6] * $rate ;
-            $item[7] = $item[7] * $rate ;
+            $item[6] = $item[6] * $rate;
+            $item[7] = $item[7] * $rate;
         });
         return $expMsg;
     }

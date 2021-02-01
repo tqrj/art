@@ -329,6 +329,7 @@ class WsService
             $orderData['fly_quantity'] = $expMsg[7];
         } else {
             $orderData['loc_quantity'] = $expMsg[7];
+            $orderData['fly_quantity'] = 0;
         }
         $orderData['line'] = $roomRule['line'];
         $orderData['whether_hit'] = 0;
