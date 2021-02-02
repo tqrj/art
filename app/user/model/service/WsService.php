@@ -322,8 +322,10 @@ class WsService
         $orderData['single_quantity'] = $expMsg[6];
         $orderData['quantity'] = $expMsg[7];
         if ($roomRule['eat'] == 1 && $roomInfo['site_use'] == 1) {
-            $orderData['loc_quantity'] = bcmul(bcdiv($expMsg[7], 100, 4), $roomRule['eatNum'],$roomRule['decimal']);
-            $orderData['fly_quantity'] = bcsub($expMsg[7], $orderData['loc_quantity'], $roomRule['decimal']);
+            $orderData['loc_quantity'] = bcmul(bcdiv($expMsg[6], 100, 4), $roomRule['eatNum'],$roomRule['decimal']);
+            $orderData['loc_quantity'] = bcmul($orderData['loc_quantity'],$expMsg[5],$roomRule['decimal']);
+            $orderData['fly_quantity'] = bcsub($expMsg[7], $orderData['loc_quantity'],$roomRule['decimal']);
+
             //$temp = round(bcdiv($orderData['fly_quantity'] , $expMsg[5],4),$roomRule['decimal']);
         } elseif ($roomRule['eat'] == 0 && $roomInfo['site_use'] == 1) {
             $orderData['fly_quantity'] = $expMsg[7];
