@@ -1,5 +1,5 @@
 <?php
- echo  bcdiv(60, 5, 0);
+ echo  bcmul(bcdiv(1, 100, 4),99,0);
 
 return;
 require 'vendor/autoload.php';
