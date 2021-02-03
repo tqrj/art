@@ -204,8 +204,12 @@ class WsService
             art_assign_ws(200, $this->userInfo['nickname'] . ': 当前已经封盘', [], $this->userInfo['agent_id']);
             return false;
         }
-        if($this->roomInfo['tape_switch'] == 1 and $this->roomInfo['site_use'] == 0) {
-            art_assign_ws(200, '下注失败 【飞单未启用】', [], 0,ArtWs::uidToWsId($this->userInfo['id']));
+        if ($this->roomInfo['tape_switch'] == 1 and $this->roomInfo['site_use'] == 0) {
+            art_assign_ws(200, '下注失败 【飞单未启用】', [], 0, ArtWs::uidToWsId($this->userInfo['id']));
+            $agentWsId = ArtWs::uidToWsId('agent' . $this->userInfo['agent_id']);
+            if ($agentWsId !== false) {
+                art_assign_ws(200, '[' . $this->userInfo['nickname'] . '] 下注失败 【飞单未启用】', [], 0, $agentWsId);
+            }
             return false;
         }
 
@@ -327,9 +331,9 @@ class WsService
         $orderData['single_quantity'] = $expMsg[6];
         $orderData['quantity'] = $expMsg[7];
         if ($roomRule['eat'] == 1 && $roomInfo['site_use'] == 1) {
-            $orderData['loc_quantity'] = bcmul(bcdiv($expMsg[6], 100, 4), $roomRule['eatNum'],$roomRule['decimal']);
-            $orderData['loc_quantity'] = bcmul($orderData['loc_quantity'],$expMsg[5],$roomRule['decimal']);
-            $orderData['fly_quantity'] = bcsub($expMsg[7], $orderData['loc_quantity'],$roomRule['decimal']);
+            $orderData['loc_quantity'] = bcmul(bcdiv($expMsg[6], 100, 4), $roomRule['eatNum'], $roomRule['decimal']);
+            $orderData['loc_quantity'] = bcmul($orderData['loc_quantity'], $expMsg[5], $roomRule['decimal']);
+            $orderData['fly_quantity'] = bcsub($expMsg[7], $orderData['loc_quantity'], $roomRule['decimal']);
 
             //$temp = round(bcdiv($orderData['fly_quantity'] , $expMsg[5],4),$roomRule['decimal']);
         } elseif ($roomRule['eat'] == 0 && $roomInfo['site_use'] == 1) {
@@ -460,7 +464,7 @@ class WsService
             $medoo->commit();
         } catch (\Exception $e) {
             $medoo->rollBack();
-            art_assign_ws(200,   "{$userInfo['nickname']} {$e->getMessage()}", '', $userInfo['agent_id']);
+            art_assign_ws(200, "{$userInfo['nickname']} {$e->getMessage()}", '', $userInfo['agent_id']);
             return false;
         }
         $msg = $userInfo['nickname'] . ' 退单成功' . PHP_EOL;
