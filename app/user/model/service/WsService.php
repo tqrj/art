@@ -205,7 +205,7 @@ class WsService
             return false;
         }
         if($this->roomInfo['tape_switch'] == 1 and $this->roomInfo['site_use'] == 0) {
-            art_assign_ws(200, '下注失败 【飞单未启用】', [], 0,$this->userInfo['id']);
+            art_assign_ws(200, '下注失败 【飞单未启用】', [], 0,ArtWs::uidToWsId($this->userInfo['id']));
             return false;
         }
 
