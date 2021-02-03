@@ -60,7 +60,7 @@ class RoomLogic
             'whether_water',
             'whether_closeInfo',
             'whether_track',
-            'site_use'
+            'tape_switch'
         ]);
         art_validate($params,[
             'title'=>'require',
@@ -71,7 +71,8 @@ class RoomLogic
             'notice_top'=>'require',
             'whether_water'=>'require|between:0,1',
             'whether_closeInfo'=>'require|between:0,1',
-            'whether_track'=>'require|between:0,1'
+            'whether_track'=>'require|between:0,1',
+            'tape_switch'=>'require|between:0,1'
         ]);
         return $params;
     }

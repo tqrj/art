@@ -204,6 +204,11 @@ class WsService
             art_assign_ws(200, $this->userInfo['nickname'] . ': 当前已经封盘', [], $this->userInfo['agent_id']);
             return false;
         }
+        if($this->roomInfo['tape_switch'] == 1 and $this->roomInfo['site_use'] == 0) {
+            art_assign_ws(200, '下注失败 【飞单未启用】', [], 0,$this->userInfo['id']);
+            return false;
+        }
+
         $resMsg = '';
         array_walk($expMsg, function ($item) use ($message, &$resMsg) {
             $temp = '';
