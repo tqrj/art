@@ -326,7 +326,7 @@ class WsService
         $orderData['play_code_count'] = $expMsg[5];
         $orderData['single_quantity'] = $expMsg[6];
         $orderData['quantity'] = $expMsg[7];
-        if ($roomRule['eat'] == 1 && $roomInfo['site_use'] == 1) {
+        if ($roomRule['eat'] == 1 && $roomInfo['site_use'] == 1 && $roomInfo['tape_switch'] == 1) {
             $orderData['loc_quantity'] = bcmul(bcdiv($expMsg[6], 100, 4), $roomRule['eatNum'],$roomRule['decimal']);
             $orderData['loc_quantity'] = bcmul($orderData['loc_quantity'],$expMsg[5],$roomRule['decimal']);
             $orderData['fly_quantity'] = bcsub($expMsg[7], $orderData['loc_quantity'],$roomRule['decimal']);
