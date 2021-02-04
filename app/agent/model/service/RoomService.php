@@ -213,7 +213,11 @@ class RoomService
             $orderResultData['user_id'] = $userInfo['id'];
             $orderResultData['order_sum_quantity'] = $orderSumQuantity;
             $orderResultData['user_quantity'] = $userInfo['quantity'];
-            art_assign_ws(self::ROOM_STATUS_CLOSE, '', $orderResultData, 0, (int)ArtWs::uidToWsId($userInfo['id']));
+
+            $wsId = ArtWs::uidToWsId((int)$userInfo['id']);
+            if ($wsId !== false) {
+                art_assign_ws(self::ROOM_STATUS_CLOSE, '', $orderResultData, 0, $wsId);
+            }
             //$result['orderResultList'][] = $orderResultData;
         });
 
@@ -403,7 +407,10 @@ class RoomService
                 'user_id' => $item['user_id'],
                 'agent_id' => $agentId
             ]);
-            art_assign_ws(self::ROOM_STATUS_SETTLE, 'success', $item, 0, (int)ArtWs::uidToWsId($item['user_id']));
+            $wsId = ArtWs::uidToWsId((int)$item['user_id']);
+            if ($wsId !== false) {
+                art_assign_ws(self::ROOM_STATUS_SETTLE, 'success', $item, 0, $wsId);
+            }
         });
         //art_assign_ws(self::ROOM_STATUS_SETTLE, '', $result, $agentId);
         return;
@@ -774,8 +781,8 @@ class RoomService
             if (count($item) < 7) {
                 return;
             }
-            $item[6] = $item[6] * $rate;
-            $item[7] = $item[7] * $rate;
+            $item[6] = bcmul($item[6], $rate, 4);
+            $item[7] = bcmul($item[7], $rate, 4);
         });
         return $expMsg;
     }
