@@ -91,20 +91,20 @@ class RoomLogic
     public static function changeSite()
     {
         $params = Request::only([
-            'site_user',
-            'site_pwd',
-            'site_code',
+            'site_user'=>'',
+            'site_pwd'=>'',
+            'site_code'=>'',
             'site_use',
             'site_id',
             'site_domain'=>''
         ]);
         art_validate($params,[
-            'site_use'=>'require|between:0,1',
-            'site_user'=>'require',
-            'site_pwd'=>'require',
-            'site_code'=>'require',
-            'site_id'=>'require|between:1,3',
-            'site_domain'=>'require'
+            'site_use|是否启用'=>'require|between:0,1',
+            'site_user|网盘账户'=>'require',
+            'site_pwd|网盘密码'=>'require',
+            'site_code|网盘搜索码'=>'require',
+            'site_id|网盘类型'=>'require|between:1,3',
+            'site_domain|网盘域名'=>'require'
         ]);
         return $params;
     }
