@@ -100,11 +100,11 @@ class RoomLogic
         ]);
         art_validate($params,[
             'site_use|是否启用'=>'require|between:0,1',
-            'site_user|网盘账户'=>'require',
-            'site_pwd|网盘密码'=>'require',
-            'site_code|网盘搜索码'=>'require',
+//            'site_user|网盘账户'=>'require',
+//            'site_pwd|网盘密码'=>'require',
+//            'site_code|网盘搜索码'=>'require',
             'site_id|网盘类型'=>'require|between:1,3',
-            'site_domain|网盘域名'=>'require'
+//            'site_domain|网盘域名'=>'activeUrl'
         ]);
         return $params;
     }
