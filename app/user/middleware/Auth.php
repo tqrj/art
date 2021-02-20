@@ -22,7 +22,7 @@ class Auth
     {
         $passAction = ['auth','new','old','baseConfig'];
         $action = HttpApp::getActionName();
-        if (false !== array_search($action, $passAction)) {
+        if (false !== in_array($action, $passAction)) {
             return true;
         }
         $data = Request::only(['token','agent_id']);

@@ -6,7 +6,6 @@ namespace app\agent\model\service;
 
 use art\db\Medoo;
 use art\db\Redis;
-use mysql_xdevapi\Exception;
 
 class AgentService
 {
@@ -63,7 +62,7 @@ class AgentService
         try {
             $result = $medoo->insert('agent', $params);
             if (!$result->rowCount()) {
-                throw new Exception('加入Agent数据失败');
+                throw new \Exception('加入Agent数据失败');
             }
             RoomService::create($medoo->id());
             $medoo->commit();

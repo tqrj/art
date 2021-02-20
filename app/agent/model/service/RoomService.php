@@ -20,7 +20,7 @@ class RoomService
 {
     use Tape;
 
-    const ROOM_ISSUE = 'room_issue_';
+    const ROOM_ISSUE = 'ROOM_ISSUE_';
     const ROOM_CLOSE_MSG_FLAG = 'ROOM_CLOSE_MSG_FLAG';
     const ROOM_AFTER_FLAG = 'ROOM_AFTER_FLAG';
     const ROOM_STATUS_SETTLE = 1002;
@@ -137,7 +137,7 @@ class RoomService
             }
             echo '开奖可能出现问题' . $issue . PHP_EOL;
             \art\db\Redis::getInstance()->close($redis);
-        }, $agentInfo, $medoo);
+        }, $agentInfo);
         return [];
     }
 
@@ -712,7 +712,7 @@ class RoomService
                         'status' => 1
                     ]);
                 $orderSlimInfo['whether_hit'] = $orderSlimInfo['whether_hit'] == 1 ? 1 : -1;
-                echo '中奖判断:' . $orderSlimInfo['whether_hit'] . PHP_EOL;
+               //echo '中奖判断:' . $orderSlimInfo['whether_hit'] . PHP_EOL;
                 //止亏 止赢
                 $after['profit'] = $orderSlimInfo['profit'];
                 if ($after['halt_profit'] != 0 and $after['profit'] >= $after['halt_profit']) {

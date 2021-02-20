@@ -6,10 +6,8 @@ namespace app\user\model\service;
 
 use app\traits\Wx;
 use art\context\Context;
-use art\db\DB;
 use art\db\Medoo;
 use art\exception\HttpException;
-use art\request\Request;
 
 class UserService
 {
@@ -241,28 +239,26 @@ class UserService
     {
         $userInfo = Context::get('authInfo');
         $medoo = new Medoo();
-        $result = $medoo->select('points','*',[
+        return $medoo->select('points','*',[
             'agent_id'=>$userInfo['agent_id'],
             'user_id'=>$userInfo['id'],
             'type'=>[1,-1],
             'LIMIT'=>[$params['page'],$params['limit']],
             'ORDER'=>['id'=>'DESC']
             ]);
-        return $result;
     }
 
     public static function reBackList($params)
     {
         $userInfo = Context::get('authInfo');
         $medoo = new Medoo();
-        $result = $medoo->select('points','*',[
+        return $medoo->select('points','*',[
             'agent_id'=>$userInfo['agent_id'],
             'user_id'=>$userInfo['id'],
             'type'=>-1,
             'LIMIT'=>[$params['page'],$params['limit']],
             'ORDER'=>['id'=>'DESC']
         ]);
-        return $result;
     }
 
 
@@ -270,7 +266,6 @@ class UserService
     {
 //        $userInfo = Context::get('authInfo');
         $medoo = new Medoo();
-        $result = $medoo->get('room',['title','notice_top','notice_help','whether_water','whether_closeInfo'],['agent_id'=>$agentId]);
-        return $result;
+        return $medoo->get('room',['title','notice_top','notice_help','whether_water','whether_closeInfo'],['agent_id'=>$agentId]);
     }
 }

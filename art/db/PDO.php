@@ -16,7 +16,7 @@ use Swoole\Database\PDOPool;
 
 class PDO
 {
-    protected $pools;
+    protected PDOPool $pools;
 
 
     private static $instance;

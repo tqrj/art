@@ -22,7 +22,7 @@ class PostService
             $map['whether_after'] = $params['afterId'];
         }
         $medoo = new Medoo();
-        $result = $medoo->select('order',
+        return $medoo->select('order',
             [
                 'game',
                 'issue' => Medoo::raw("RIGHT(issue,3)"),
@@ -41,7 +41,6 @@ class PostService
                 'end_quantity' => Medoo::raw('after_quantity+loc_quantity_ret+fly_quantity_ret'),
                 'status',
             ],$map);
-        return $result;
     }
 
     public static function postBack()

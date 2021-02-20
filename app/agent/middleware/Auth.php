@@ -21,7 +21,7 @@ class Auth
     {
         $passAction = ['sendCode', 'sign', 'login'];
         $action = HttpApp::getActionName();
-        if (false !== array_search($action, $passAction)) {
+        if (false !== in_array($action, $passAction)) {
             return true;
         }
         $data = Request::only(['token']);
