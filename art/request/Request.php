@@ -32,8 +32,10 @@ class Request
         $get = $request->get;
         $wsData = !is_null($frame)?$wsData = $frame->data:true;
         !is_array($wsData) ? $wsData = [] : true;
-        is_null($post) ? $post = [] : true;
         is_null($get) ? $get = [] : true;
+        if (is_null($post)){
+            $post = (array)json_decode($request->getContent(),true);
+        }
         $params = array_merge($get, $post,$wsData);
         $result = [];
         array_walk($keys, function ($item, $key) use ($params, &$result) {

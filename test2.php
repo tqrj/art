@@ -1,5 +1,6 @@
 <?php
- echo  bcmul(bcdiv(1, 100, 4),99,0);
+var_dump((array)json_decode('[]',true));
+ //echo  bcmul(bcdiv(1, 100, 4),99,0);
 
 return;
 require 'vendor/autoload.php';

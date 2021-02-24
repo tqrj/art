@@ -8,6 +8,7 @@ use app\traits\Tape;
 use app\user\model\service\WsService;
 use art\context\Context;
 use art\db\Medoo;
+use art\db\Redis;
 use art\ws\ArtWs;
 use Carbon\Carbon;
 use Swoole\Timer;
@@ -20,6 +21,7 @@ class RoomService
 {
     use Tape;
 
+    const ROOM_INFO = 'ROOM_INFO_';
     const ROOM_ISSUE = 'ROOM_ISSUE_';
     const ROOM_CLOSE_MSG_FLAG = 'ROOM_CLOSE_MSG_FLAG';
     const ROOM_AFTER_FLAG = 'ROOM_AFTER_FLAG';
@@ -545,7 +547,6 @@ class RoomService
         if (!$pdoDoc->rowCount()) {
             art_assign(202, '设置失败');
         }
-
         if ($params['site_use'] == 1) {
             art_assign(200, '启用成功', ['quantity' => $quantity]);
         } else {

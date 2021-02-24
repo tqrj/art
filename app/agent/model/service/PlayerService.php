@@ -178,7 +178,7 @@ class PlayerService
         return [];
     }
 
-    public static function score($params)
+    public static function score($params): bool
     {
         $agentInfo = Context::get('authInfo');
         $medoo = new Medoo();
@@ -192,7 +192,7 @@ class PlayerService
         return $medoo->get('user_quantity', ['quantity'], $map);
     }
 
-    public static function del($params)
+    public static function del($params): array
     {
         $agentInfo = Context::get('authInfo');
         $medoo = new Medoo();
@@ -203,7 +203,7 @@ class PlayerService
         return [];
     }
 
-    public static function setStatus($params)
+    public static function setStatus($params): array
     {
         $agentInfo = Context::get('authInfo');
         $medoo = new Medoo();
@@ -214,7 +214,7 @@ class PlayerService
         return [];
     }
 
-    public static function delAllOrder($params)
+    public static function delAllOrder($params): array
     {
         $agentInfo = Context::get('authInfo');
         $medoo = new Medoo();
@@ -230,7 +230,7 @@ class PlayerService
         return [];
     }
 
-    public static function delAllQuantityLog($params)
+    public static function delAllQuantityLog($params): array
     {
         $agentInfo = Context::get('authInfo');
         $medoo = new Medoo();
