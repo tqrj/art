@@ -95,7 +95,7 @@ class WsService
      * 查分识别
      * @param $message
      */
-    private function checkScore($message)
+    private function checkScore($message): bool
     {
         $exp = '历史走势图|历史图|走势图|开奖图|开奖|长条|历史';
         if ($this->_codeExp($exp, $message) != false) {
@@ -128,7 +128,7 @@ class WsService
      * 识别上分
      * @param $message
      */
-    private function checkPay($message)
+    private function checkPay($message): bool
     {
         $matches = [];
         $bool = preg_match("#(上|充|加|上分|充值|充钱|加钱|加分)(\d+)#", $message, $matches);
@@ -153,7 +153,7 @@ class WsService
      * 识别退分
      * @param $message
      */
-    private function checkReBack($message)
+    private function checkReBack($message): bool
     {
         $matches = [];
         $bool = preg_match("#(下|减|提|拿|下分|减分|提现|提钱|拿钱)(\d+)#", $message, $matches);
@@ -175,7 +175,7 @@ class WsService
     }
 
 
-    private function checkOrderEx($message)
+    private function checkOrderEx($message): bool
     {
         if (empty($message) or !preg_match("#\d{1,}#", $message)) {
             return false;
@@ -389,7 +389,7 @@ class WsService
      * 识别退单
      * @param $message
      */
-    private function checkReOrder($message)
+    private function checkReOrder($message): bool
     {
         $matches = [];
         $bool = preg_match("#^退(\d+)$#", $message, $matches);
@@ -538,7 +538,7 @@ class WsService
      * @param $message
      * @return bool
      */
-    private function afterCode($message)
+    private function afterCode($message): bool
     {
         if (!$this->roomInfo['status'] or !$this->roomInfo['whether_track']) {
             return false;

@@ -118,7 +118,7 @@ class UserService
         return 'https://'.$arr_state[0].'/auth?'.base64_encode('token='.$userInfo['token'].'&agent='.$agentInfo['id']);
     }
 
-    private static function makeUserQuantity($userInfo, $agentInfo)
+    private static function makeUserQuantity($userInfo, $agentInfo): array
     {
         $time = art_d();
         $userInfoQuantity['user_id'] = $userInfo['id'];
@@ -157,7 +157,7 @@ class UserService
         return $result;
     }
 
-    public static function pay($params)
+    public static function pay($params): array
     {
         $userInfo = Context::get('authInfo');
         $medoo = new Medoo();
@@ -182,7 +182,7 @@ class UserService
         return [];
     }
 
-    public static function reBack($params)
+    public static function reBack($params): array
     {
         $userInfo = Context::get('authInfo');
         $medoo = new Medoo();

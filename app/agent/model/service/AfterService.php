@@ -41,7 +41,7 @@ class AfterService
             ],$map);
     }
 
-    public static function cancel($params)
+    public static function cancel($params): array
     {
         $agentInfo = Context::get('authInfo');
         $medoo = new Medoo();
@@ -53,7 +53,7 @@ class AfterService
     }
 
 
-    public static function clear()
+    public static function clear(): array
     {
         $agentInfo = Context::get('authInfo');
         $medoo = new Medoo();

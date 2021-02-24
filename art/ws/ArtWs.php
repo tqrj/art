@@ -12,11 +12,6 @@ use Swoole\Timer;
 use Swoole\WebSocket\Frame;
 
 
-//把消息放在table
-//key为当前进程ID
-//msg pool status
-//进程定时读当前进程的发完状态改为1，投递消息的时候看状态，如果待处理就等待
-//问题就是这个表要维护，尽量避免遍历
 class ArtWs
 {
     private function __construct()
@@ -220,7 +215,7 @@ class ArtWs
 
     }
 
-    public static function groupSize($groupName)
+    public static function groupSize($groupName): int
     {
         if (empty(self::$wsGroup[$groupName])){
             return 0;

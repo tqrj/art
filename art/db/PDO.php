@@ -31,7 +31,8 @@ class PDO
                     ->withDbName(Database::$dbname)
                     ->withCharset(Database::$charset)
                     ->withUsername(Database::$username)
-                    ->withPassword(Database::$password),
+                    ->withPassword(Database::$password)
+                    ->withOptions([PDO::ATTR_EMULATE_PREPARES=>false]),
                 Database::$size
             );
         }

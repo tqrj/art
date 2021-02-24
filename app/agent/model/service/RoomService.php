@@ -26,10 +26,11 @@ class RoomService
     const ROOM_STATUS_SETTLE = 1002;
     const ROOM_STATUS_CLOSE = 2002;
 
+
     /**
      * @return array
      */
-    public static function switchOpen()
+    public static function switchOpen(): array
     {
         $agentInfo = Context::get('authInfo');
         $medoo = new Medoo();

@@ -18,7 +18,7 @@ class Middleware
         return 'app' . '\\' . $appName . '\\' . 'middleware' . '\\' . 'Auth';
     }
 
-    protected static function controller($appName)
+    protected static function controller($appName): ?object
     {
         //$class = $this->parseClass('controller', );
         $class= self::parseClass($appName);
