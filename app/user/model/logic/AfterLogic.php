@@ -8,7 +8,7 @@ use art\request\Request;
 
 class AfterLogic
 {
-    public static function list()
+    public static function list(): array
     {
         $params = Request::only([
             'page'=>0,
@@ -23,7 +23,7 @@ class AfterLogic
         return $params;
     }
 
-    public static function cancel()
+    public static function cancel(): array
     {
         $params = Request::only(['afterId']);
         art_validate($params,[
@@ -32,7 +32,7 @@ class AfterLogic
         return $params;
     }
 
-    public static function info()
+    public static function info(): array
     {
         $params = Request::only(['afterId']);
         art_validate($params,[

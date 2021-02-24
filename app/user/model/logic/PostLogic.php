@@ -8,7 +8,7 @@ use art\request\Request;
 
 class PostLogic
 {
-    public static function posts()
+    public static function posts(): array
     {
         $params = Request::only([
             'page'=>0,

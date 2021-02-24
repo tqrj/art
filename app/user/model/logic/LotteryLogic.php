@@ -22,7 +22,7 @@ class LotteryLogic
 
     }
 
-    public static function check()
+    public static function check(): array
     {
         $params = Request::only(['issue']);
         art_validate($params,[

@@ -8,7 +8,7 @@ use art\request\Request;
 
 class UserLogic
 {
-    public static function auth()
+    public static function auth(): array
     {
         $params = Request::only(['state','code']);
         art_validate($params,[
@@ -18,7 +18,7 @@ class UserLogic
         return $params;
     }
 
-    public static function info()
+    public static function info(): array
     {
         $params = Request::only(['token','agent_id']);
         art_validate($params,[
@@ -28,7 +28,7 @@ class UserLogic
         return $params;
     }
 
-    public static function pay()
+    public static function pay(): array
     {
         $params = Request::only(['quantity']);
         art_validate($params,[
@@ -41,7 +41,7 @@ class UserLogic
         return $params;
     }
 
-    public static function reBack()
+    public static function reBack(): array
     {
         $params = Request::only(['quantity']);
         art_validate($params,[
@@ -54,7 +54,7 @@ class UserLogic
         return $params;
     }
 
-    public static function payList()
+    public static function payList(): array
     {
         $params = Request::only([
             'page'=>0,
@@ -68,7 +68,7 @@ class UserLogic
         return $params;
     }
 
-    public static function reBackList()
+    public static function reBackList(): array
     {
         $params = Request::only([
             'page'=>0,

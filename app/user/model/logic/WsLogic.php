@@ -8,7 +8,7 @@ use art\request\Request;
 
 class WsLogic
 {
-    public static function push()
+    public static function push(): array
     {
         $params = Request::only([
             'message',

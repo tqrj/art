@@ -12,7 +12,7 @@ use art\request\Request;
 class RoomLogic
 {
 
-    public static function setRule()
+    public static function setRule(): array
     {
         $params = Request::only([
             'rules',
@@ -47,7 +47,7 @@ class RoomLogic
         return $params;
     }
 
-    public static function change()
+    public static function change(): array
     {
         $params = Request::only([
             'title',
@@ -77,7 +77,7 @@ class RoomLogic
         return $params;
     }
 
-    public static function changeNoticeHelp()
+    public static function changeNoticeHelp(): array
     {
         $params = Request::only([
             'notice_help',
@@ -88,7 +88,7 @@ class RoomLogic
         return $params;
     }
 
-    public static function changeSite()
+    public static function changeSite(): array
     {
         $params = Request::only([
             'site_user'=>'',
