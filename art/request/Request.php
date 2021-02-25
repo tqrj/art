@@ -55,5 +55,4 @@ class Request
     {
         return Context::get('request');
     }
-
 }
