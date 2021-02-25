@@ -30,19 +30,19 @@ class Request
         $frame = Context::get('frame');
         $post = $request->post;
         $get = $request->get;
-        $wsData = !is_null($frame)?$wsData = $frame->data:true;
+        $wsData = !is_null($frame) ? $wsData = $frame->data : true;
         !is_array($wsData) ? $wsData = [] : true;
         is_null($get) ? $get = [] : true;
-        if (is_null($post)){
-            $post = (array)json_decode($request->getContent(),true);
+        if (is_null($post)) {
+            $post = (array)json_decode($request->getContent(), true);
         }
-        $params = array_merge($get, $post,$wsData);
+        $params = array_merge($get, $post, $wsData);
         $result = [];
         array_walk($keys, function ($item, $key) use ($params, &$result) {
             if (is_int($key) && array_key_exists($item, $params)) {
                 $result[$item] = $params[$item];
             } elseif (!is_int($key)) {
-                array_key_exists($key, $params)?$result[$key] = $params[$key]:$result[$key] = $item;
+                array_key_exists($key, $params) ? $result[$key] = $params[$key] : $result[$key] = $item;
             }
         });
         return $result;
