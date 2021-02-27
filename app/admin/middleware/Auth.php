@@ -42,7 +42,7 @@ class Auth
             throw new HttpException(202, '账户过期或Token错误');
         }
         $redis = Redis::getInstance()->getConnection();
-        $redis->setex('token_' . $token, 3600, serialize($result));
+        $redis->setex('admin_token_' . $token, 3600, serialize($result));
         Redis::getInstance()->close($redis);
         Context::put('authInfo', $result);
         return true;

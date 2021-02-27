@@ -30,19 +30,19 @@ class Auth
         }
         $token = $data['token'];
         $redis = Redis::getInstance()->getConnection();
-        $authInfo = $redis->get('admin_token_' . $token);
+        $authInfo = $redis->get('user_token_' . $token);
         Redis::getInstance()->close($redis);
         if (false !== $authInfo) {
             Context::put('authInfo', unserialize($authInfo));
             return true;
         }
         $medoo = new Medoo();
-        $result = $medoo->get('admin', ['id', 'pwd', 'salt', 'nickname',  'status'],['token' => $token]);
+        $result = $medoo->get('user', ['id', 'pass', 'salt', 'nickname',  'status'],['token' => $token]);
         if (!$result) {
             throw new HttpException(202, '账户过期或Token错误');
         }
         $redis = Redis::getInstance()->getConnection();
-        $redis->setex('token_' . $token, 3600, serialize($result));
+        $redis->setex('user_token_' . $token, 3600, serialize($result));
         Redis::getInstance()->close($redis);
         Context::put('authInfo', $result);
         return true;

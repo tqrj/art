@@ -77,12 +77,12 @@ $pidPool->on('workerStart', function ($Pool, int $id) {
 //            }
 //        }
 //    });
-    $server->handle('/favicon.ico', function (Request $request, Response $response) {
-        $response->end('');
-    });
-    $server->handle('/MP_verify_bnp4lvg7r7RdW2jp.txt', function (Request $request, Response $response) {
-        $response->end('bnp4lvg7r7RdW2jp');
-    });
+//    $server->handle('/favicon.ico', function (Request $request, Response $response) {
+//        $response->end('');
+//    });
+//    $server->handle('/MP_verify_bnp4lvg7r7RdW2jp.txt', function (Request $request, Response $response) {
+//        $response->end('bnp4lvg7r7RdW2jp');
+//    });
     $server->start();
 });
 $pidPool->on('workerStop', function ($pidPool, $id) {

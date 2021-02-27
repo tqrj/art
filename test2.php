@@ -4,27 +4,28 @@
 
 //return;
 require 'vendor/autoload.php';
-use app\traits\Tape;
 
-class Ta{
-    use Tape;
-}
-\Co\run(function () {
-    $ta = new Ta();
-    $agentId = 123;
-    $issue = '';
-    $orderNo = 0;
-    $quantity = 0;
-    //$bool = $ta->loginTape($agentId,'http://s4.up55.xyz/','aaa111','yybb12','Ayu1314520',3);
-    $bool = $ta->loginTape($agentId,'http://f1.qqq789.xyz/','778899','ssff33','aa11111',1);
-    if (!$bool){
-        return;
-    }
-    $ta->getIssueTape($agentId,$issue);
-    $ta->payOrderTape($agentId,$issue,'一定','个','123456',1,9,$orderNo);
-    $ta->getQuantityTape($agentId,$quantity);
-    $ta->reOrderTape($agentId,$issue,$orderNo);
-});
+//use app\traits\Tape;
+//
+//class Ta{
+//    use Tape;
+//}
+//\Co\run(function () {
+//    $ta = new Ta();
+//    $agentId = 123;
+//    $issue = '';
+//    $orderNo = 0;
+//    $quantity = 0;
+//    //$bool = $ta->loginTape($agentId,'http://s4.up55.xyz/','aaa111','yybb12','Ayu1314520',3);
+//    $bool = $ta->loginTape($agentId,'http://f1.qqq789.xyz/','778899','ssff33','aa11111',1);
+//    if (!$bool){
+//        return;
+//    }
+//    $ta->getIssueTape($agentId,$issue);
+//    $ta->payOrderTape($agentId,$issue,'一定','个','123456',1,9,$orderNo);
+//    $ta->getQuantityTape($agentId,$quantity);
+//    $ta->reOrderTape($agentId,$issue,$orderNo);
+//});
 
 //echo bcsub(0,500, 2);
 //$matches = [];
