@@ -1,7 +1,7 @@
 <?php
 
 
-namespace app\agent\middleware;
+namespace app\admin\middleware;
 
 
 use art\context\Context;
@@ -19,7 +19,7 @@ class Auth
      */
     public static function hand(): bool
     {
-        $passAction = ['sendCode', 'sign', 'login'];
+        $passAction = ['login'];
         $action = HttpApp::getActionName();
         if (false !== in_array($action, $passAction)) {
             return true;
@@ -30,18 +30,17 @@ class Auth
         }
         $token = $data['token'];
         $redis = Redis::getInstance()->getConnection();
-        $authInfo = $redis->get('agent_token_' . $token);
+        $authInfo = $redis->get('admin_token_' . $token);
         Redis::getInstance()->close($redis);
         if (false !== $authInfo) {
             Context::put('authInfo', unserialize($authInfo));
             return true;
         }
         $medoo = new Medoo();
-        $result = $medoo->get('agent', ['id', 'pass', 'pass_sec','code', 'salt', 'nickname', 'quantity', 'status', 'expire_time',],['token' => $token, 'expire_time[>]' => art_d()]);
+        $result = $medoo->get('admin', ['id', 'pwd', 'salt', 'nickname',  'status'],['token' => $token]);
         if (!$result) {
             throw new HttpException(202, '账户过期或Token错误');
         }
-        $result['expire_time'] = strtotime($result['expire_time']);
         $redis = Redis::getInstance()->getConnection();
         $redis->setex('token_' . $token, 3600, serialize($result));
         Redis::getInstance()->close($redis);

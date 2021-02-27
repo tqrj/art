@@ -38,45 +38,45 @@ $pidPool->on('workerStart', function ($Pool, int $id) {
             HttpApp::end();
         }
     });
-    //websocket部分
-    ArtWs::joinPool($id);
-    $server->handle('/so', function (Request $request, Response $ws) {
-        $bool = $ws->upgrade();
-        if ($bool == false) {
-            return;
-        }
-        $wsId = ArtWs::setWs($ws);
-        while (true) {
-            $frame = $ws->recv();
-            if ($frame === '') {
-                ArtWs::delWs($ws);
-                $ws->close();
-                break;
-            } elseif ($frame === false) {
-                ArtWs::delWs($ws);
-//                echo "error : " . swoole_last_error() . "\n";
-                break;
-            } elseif ($frame->opcode == WEBSOCKET_OPCODE_PING){
-                $pingFrame = new Frame();
-                $pingFrame->opcode = WEBSOCKET_OPCODE_PONG;
-                $ws->push($pingFrame);
-            } elseif ($frame->opcode == WEBSOCKET_OPCODE_TEXT) {
-                try {
-                    WsApp::init($request, $ws, $frame);
-                    WsApp::run($request, $ws, $frame);
-                    WsApp::end();
-                } catch (HttpException $e) {
-                    _art_assign_ws($e->getStatusCode(), $e->getMessage(),$e->getData(),0,$wsId);
-                    WsApp::end();
-                } catch (ClassNotFoundException $e) {
-                    _art_assign_ws(404, $e->getMessage(),[],0,$wsId);
-                    WsApp::end();
-                }
-                //ArtWs::pushMsg($frame->data,$wsId,2);
-                //$ws->push();
-            }
-        }
-    });
+//    //websocket部分
+//    ArtWs::joinPool($id);
+//    $server->handle('/so', function (Request $request, Response $ws) {
+//        $bool = $ws->upgrade();
+//        if ($bool == false) {
+//            return;
+//        }
+//        $wsId = ArtWs::setWs($ws);
+//        while (true) {
+//            $frame = $ws->recv();
+//            if ($frame === '') {
+//                ArtWs::delWs($ws);
+//                $ws->close();
+//                break;
+//            } elseif ($frame === false) {
+//                ArtWs::delWs($ws);
+////                echo "error : " . swoole_last_error() . "\n";
+//                break;
+//            } elseif ($frame->opcode == WEBSOCKET_OPCODE_PING){
+//                $pingFrame = new Frame();
+//                $pingFrame->opcode = WEBSOCKET_OPCODE_PONG;
+//                $ws->push($pingFrame);
+//            } elseif ($frame->opcode == WEBSOCKET_OPCODE_TEXT) {
+//                try {
+//                    WsApp::init($request, $ws, $frame);
+//                    WsApp::run($request, $ws, $frame);
+//                    WsApp::end();
+//                } catch (HttpException $e) {
+//                    _art_assign_ws($e->getStatusCode(), $e->getMessage(),$e->getData(),0,$wsId);
+//                    WsApp::end();
+//                } catch (ClassNotFoundException $e) {
+//                    _art_assign_ws(404, $e->getMessage(),[],0,$wsId);
+//                    WsApp::end();
+//                }
+//                //ArtWs::pushMsg($frame->data,$wsId,2);
+//                //$ws->push();
+//            }
+//        }
+//    });
     $server->handle('/favicon.ico', function (Request $request, Response $response) {
         $response->end('');
     });
