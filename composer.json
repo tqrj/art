@@ -1,5 +1,5 @@
 {
-  "name": "porty/tinYun",
+  "name": "porty/tin-yun",
   "type": "project",
   "require": {
     "php": ">=7.4",
@@ -9,7 +9,8 @@
     "ext-bcmath": "*",
     "yi-tin/redis": "^1.0",
     "ext-json": "*",
-    "ext-iconv": "*"
+    "ext-iconv": "*",
+    "firebase/php-jwt": "^5.2"
   },
   "authors": [
     {

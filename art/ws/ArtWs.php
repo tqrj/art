@@ -132,10 +132,9 @@ class ArtWs
 
     public static function setWs(Response &$ws): int
     {
-        $wsId = self::getWsId();
-        $ws->artWsId = $wsId;
-        self::$wsObject[$wsId] = $ws;
-        return $wsId;
+        $ws->artWsId = self::getWsId();
+        self::$wsObject[$ws->artWsId] = $ws;
+        return $ws->artWsId;
     }
 
     public static function delWs(Response $ws)
