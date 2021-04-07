@@ -17,7 +17,7 @@ class Auth
     /**
      * @return bool
      */
-    public static function hand(): bool
+    public static function handle(): bool
     {
         $passAction = ['login'];
         $action = HttpApp::getActionName();

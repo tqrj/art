@@ -42,7 +42,7 @@ class Middleware
         if (is_null($instance)){
             return;
         }
-        if (!is_callable([$instance, 'hand'])) {
+        if (!is_callable([$instance, 'handle'])) {
             throw new HttpException(404, 'auth method not exists:' . get_class($instance) . '->hand()');
         }
         try {
